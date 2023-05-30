@@ -9,7 +9,19 @@ const theme = createTheme({
     secondary: {
       main: "#202020",
       light: "#252525",
-      dark: "#151515",
+      dark: "#181818",
+      contrastText: "#fff",
+    },
+    accent_green: {
+      main: "#1C8C3A",
+      light: "#49A361",
+      dark: "#136228",
+      contrastText: "#fff",
+    },
+    accent_purple: {
+      main: "#a970ff",
+      light: "#BA8CFF",
+      dark: "#764EB2",
       contrastText: "#fff",
     },
   },
@@ -46,5 +58,26 @@ const theme = createTheme({
     },
   },
 });
+
+declare module "@mui/material/styles/createPalette" {
+  interface Palette {
+    accent_green: PaletteColor;
+    accent_purple: PaletteColor;
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    accent_green?: PaletteColorOptions;
+    accent_purple?: PaletteColorOptions;
+  }
+}
+
+// @babel-ignore-comment-in-output Update the Button's color prop options
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    accent_green: true;
+    accent_purple: true;
+  }
+}
 
 export default theme;
