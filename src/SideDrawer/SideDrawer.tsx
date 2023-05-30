@@ -6,18 +6,28 @@ interface Props {
   drawerToggle: boolean;
   onDrawerToggle: (toggle: boolean) => void;
   drawerRef: RefObject<HTMLDivElement>;
+  homeButton: JSX.Element;
 }
 
-function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
+function SideDrawer({
+  drawerToggle,
+  onDrawerToggle,
+  drawerRef,
+  homeButton,
+}: Props) {
+  const toggleButton = (
+    <IconButton
+      title="Toggle side drawer"
+      aria-label="Toggle side drawer"
+      onClick={() => onDrawerToggle(!drawerToggle)}
+    >
+      <MenuOutlinedIcon />
+    </IconButton>
+  );
+
   return (
     <>
-      <IconButton
-        title="Toggle side drawer"
-        aria-label="Toggle side drawer"
-        onClick={() => onDrawerToggle(!drawerToggle)}
-      >
-        <MenuOutlinedIcon />
-      </IconButton>
+      {toggleButton}
       <Drawer
         variant="persistent"
         ModalProps={{
@@ -27,8 +37,13 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         onClose={() => onDrawerToggle(false)}
       >
         <Box ref={drawerRef}>
-          <Toolbar>dsds</Toolbar>
-          <Box paddingX={3} paddingY={4}>
+          <Toolbar disableGutters={true}>
+            <>
+              {toggleButton}
+              {homeButton}
+            </>
+          </Toolbar>
+          <Box paddingX={18 / 8} paddingY={30 / 8}>
             <Typography>Some drawer text</Typography>
           </Box>
         </Box>

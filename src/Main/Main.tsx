@@ -11,9 +11,15 @@ const StyledMain = styled(Box, {
 }>(({ theme, drawerToggle, drawerWidth }) => ({
   flexGrow: 1,
   marginLeft: drawerToggle && drawerWidth ? `${drawerWidth}px` : 0,
-  transition: theme.transitions.create(["margin"], {
+  transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(drawerToggle && {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   }),
 }));
 

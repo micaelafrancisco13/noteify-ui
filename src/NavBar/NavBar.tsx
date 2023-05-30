@@ -10,21 +10,26 @@ interface Props {
 }
 
 function NavBar({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
+  const homeButton = (
+    <IconButton title="Go home">
+      <HomeOutlinedIcon />
+    </IconButton>
+  );
+
   return (
     <>
       <AppBar elevation={0}>
-        <Toolbar>
+        <Toolbar disableGutters={true}>
           <SideDrawer
             drawerToggle={drawerToggle}
             onDrawerToggle={onDrawerToggle}
             drawerRef={drawerRef}
+            homeButton={homeButton}
           />
-          <IconButton title="Go home">
-            <HomeOutlinedIcon />
-          </IconButton>
+          {homeButton}
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      <Toolbar disableGutters={true} />
     </>
   );
 }
