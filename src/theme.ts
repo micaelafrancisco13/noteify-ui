@@ -26,6 +26,11 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiCardHeader: {
+      styleOverrides: {
+        subheader: { fontSize: "12.5px" },
+      },
+    },
     MuiAppBar: {
       styleOverrides: {
         root: (props) => ({

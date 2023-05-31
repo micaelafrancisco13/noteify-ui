@@ -19,11 +19,6 @@ const StyledListButton = styled(CustomButton)(() => ({
   textTransform: "none",
 }));
 
-const StyledButtonText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  fontSize: "14px",
-}));
-
 interface Props {
   drawerToggle: boolean;
   onDrawerToggle: (toggle: boolean) => void;
@@ -71,14 +66,24 @@ function SideDrawer({
               variant="text"
               startIcon={<TodayOutlinedIcon />}
             >
-              <StyledButtonText>Today</StyledButtonText>
+              <Typography
+                color={(theme) => theme.palette.text.primary}
+                variant="body2"
+              >
+                Today
+              </Typography>
             </StyledListButton>
             <StyledListButton
               color="accent_purple"
               variant="text"
               startIcon={<DateRangeOutlinedIcon />}
             >
-              <StyledButtonText>Upcoming</StyledButtonText>
+              <Typography
+                color={(theme) => theme.palette.text.primary}
+                variant="body2"
+              >
+                Upcoming
+              </Typography>
             </StyledListButton>
           </Stack>
         </Box>
