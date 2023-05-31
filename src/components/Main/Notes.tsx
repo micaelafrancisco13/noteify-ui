@@ -1,15 +1,17 @@
 import moment from "moment";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Masonry from "@mui/lab/Masonry";
 import {
   Avatar,
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  IconButton,
   Typography,
 } from "@mui/material";
 import notes from "../../services/notes.ts";
-import Masonry from "@mui/lab/Masonry";
 
 // interface NoteCategory {
 //   _id: string;
@@ -58,14 +60,18 @@ function Notes({ drawerToggle }: Props) {
             title={n.title}
             subheader={moment(n.dateLastModified).format("ll")}
           />
-
           <CardContent>
             <Typography variant="body2" color="text.secondary" gutterBottom>
               {n.description}
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Learn More</Button>
+            <IconButton aria-label="Modify note">
+              <EditOutlinedIcon />
+            </IconButton>
+            <IconButton aria-label="Delete note">
+              <DeleteOutlineOutlinedIcon />
+            </IconButton>
           </CardActions>
         </Card>
       ))}
