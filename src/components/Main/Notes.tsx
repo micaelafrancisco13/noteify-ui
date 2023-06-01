@@ -48,15 +48,10 @@ function Notes({ drawerToggle }: Props) {
         <Card key={n._id}>
           <CardHeader
             avatar={
-              <Avatar sx={{ background: "purple" }} aria-label="recipe">
+              <Avatar sx={{ background: "purple" }} aria-label="Note category">
                 {n.category.name.charAt(0)}
               </Avatar>
             }
-            // action={
-            //   <IconButton aria-label="settings">
-            //     <MoreVertIcon />
-            //   </IconButton>
-            // }
             title={n.title}
             subheader={moment(n.dateLastModified).format("ll")}
           />

@@ -1,13 +1,5 @@
-import {
-  Box,
-  Drawer,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { ReactElement, RefObject } from "react";
+import { Box, Drawer, Stack, Toolbar, Typography } from "@mui/material";
+import { RefObject } from "react";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { styled } from "@mui/material/styles";
@@ -23,28 +15,11 @@ interface Props {
   drawerToggle: boolean;
   onDrawerToggle: (toggle: boolean) => void;
   drawerRef: RefObject<HTMLDivElement>;
-  homeButton: ReactElement | null;
 }
 
-function SideDrawer({
-  drawerToggle,
-  onDrawerToggle,
-  drawerRef,
-  homeButton,
-}: Props) {
-  const toggleButton = (
-    <IconButton
-      title="Toggle side drawer"
-      aria-label="Toggle side drawer"
-      onClick={() => onDrawerToggle(!drawerToggle)}
-    >
-      <MenuOutlinedIcon />
-    </IconButton>
-  );
-
+function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   return (
     <>
-      {toggleButton}
       <Drawer
         variant="persistent"
         ModalProps={{
@@ -54,16 +29,12 @@ function SideDrawer({
         onClose={() => onDrawerToggle(false)}
       >
         <Box ref={drawerRef}>
-          <Toolbar disableGutters={true}>
-            <>
-              {toggleButton}
-              {homeButton}
-            </>
-          </Toolbar>
+          <Toolbar />
           <Stack paddingX={18 / 8} paddingY={30 / 8}>
             <StyledListButton
               color="accent_green"
               variant="text"
+              aria-label={`Today's notes`}
               startIcon={<TodayOutlinedIcon />}
             >
               <Typography
@@ -76,6 +47,7 @@ function SideDrawer({
             <StyledListButton
               color="accent_purple"
               variant="text"
+              aria-label={`Upcoming notes`}
               startIcon={<DateRangeOutlinedIcon />}
             >
               <Typography

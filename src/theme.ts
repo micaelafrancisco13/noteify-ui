@@ -41,7 +41,7 @@ const theme = createTheme({
     MuiToolbar: {
       styleOverrides: {
         root: (props) => ({
-          padding: "8px 16px",
+          padding: "8px 24px",
           backgroundColor: props.theme.palette.secondary.main, // Access theme.palette to get the desired color
         }),
       },

@@ -16,6 +16,7 @@ function App() {
         onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
         drawerRef={drawerRef}
       />
+      {/*<Test />*/}
       <Main drawerToggle={drawerToggle} drawerRef={drawerRef} />
     </ThemeProvider>
   );

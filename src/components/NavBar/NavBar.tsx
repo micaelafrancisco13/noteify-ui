@@ -1,7 +1,9 @@
-import { AppBar, IconButton, Toolbar } from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import { AppBar, Box, Toolbar } from "@mui/material";
 import { RefObject } from "react";
 import SideDrawer from "../SideDrawer/SideDrawer.tsx";
+import ToggleButton from "./ToggleButton.tsx";
+import HomeButton from "./HomeButton.tsx";
+import SettingsPopup from "./SettingsPopup.tsx";
 
 interface Props {
   drawerToggle: boolean;
@@ -10,25 +12,32 @@ interface Props {
 }
 
 function NavBar({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
-  const homeButton = (
-    <IconButton title="Go home">
-      <HomeOutlinedIcon />
-    </IconButton>
-  );
-
   return (
     <>
-      <AppBar elevation={0}>
-        <Toolbar disableGutters={true}>
-          <SideDrawer
-            drawerToggle={drawerToggle}
-            onDrawerToggle={onDrawerToggle}
-            drawerRef={drawerRef}
-            homeButton={homeButton}
-          />
-          {homeButton}
+      <AppBar
+        elevation={0}
+        position={"fixed"}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar
+          disableGutters={true}
+          sx={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <Box>
+            <ToggleButton
+              drawerToggle={drawerToggle}
+              onDrawerToggle={onDrawerToggle}
+            />
+            <HomeButton />
+          </Box>
+          <SettingsPopup />
         </Toolbar>
       </AppBar>
+      <SideDrawer
+        drawerToggle={drawerToggle}
+        onDrawerToggle={onDrawerToggle}
+        drawerRef={drawerRef}
+      />
       <Toolbar disableGutters={true} />
     </>
   );
