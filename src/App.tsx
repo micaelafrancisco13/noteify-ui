@@ -7,6 +7,7 @@ import Main from "./components/Main/Main.tsx";
 import NotFound from "./components/NotFound.tsx";
 import NoteForm, { NoteFormData } from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
+import { createNote } from "./services/notes.ts";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -14,6 +15,7 @@ function App() {
 
   const handleSubmitNote = (data: NoteFormData) => {
     console.log("data", data);
+    createNote(data);
   };
 
   return (

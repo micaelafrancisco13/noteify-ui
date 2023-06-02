@@ -96,7 +96,7 @@ export function getNotes() {
   return notes;
 }
 
-export function saveNote(note: NoteFormData) {
+export function createNote(note: NoteFormData) {
   const category = categoriesAPI
     .getCategories()
     .find((c) => c._id === note.categoryId);

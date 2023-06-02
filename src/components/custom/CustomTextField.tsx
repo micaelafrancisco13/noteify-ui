@@ -23,6 +23,7 @@ function CustomTextField(props: Props) {
           error={hasError}
           helperText={hasError && `${errors[fieldName]?.message}.`}
           variant="outlined"
+          sx={{ mb: 4 }}
         />
       )}
       control={control}

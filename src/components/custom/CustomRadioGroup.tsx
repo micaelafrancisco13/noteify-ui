@@ -26,7 +26,7 @@ function CustomRadioGroup(props: Props) {
     <Controller
       name={fieldName}
       render={({ field }) => (
-        <FormControl error={hasError} variant="outlined">
+        <FormControl error={hasError} variant="outlined" sx={{ mb: 4 }}>
           <FormLabel id={fieldName}>{props.label}</FormLabel>
           <RadioGroup
             row={matches}

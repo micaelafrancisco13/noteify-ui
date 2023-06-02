@@ -1,9 +1,8 @@
 import {
-  Button,
   FormControlLabel,
+  Grid,
   Radio,
   Stack,
-  Switch,
   Typography,
 } from "@mui/material";
 import { z } from "zod";
@@ -13,8 +12,10 @@ import CustomTextField from "../custom/CustomTextField.tsx";
 import { useParams } from "react-router-dom";
 import CustomRadioGroup from "../custom/CustomRadioGroup.tsx";
 import { categoryIDs, getCategories } from "../../services/categories.ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
+import SwitchComponent from "../common/SwitchComponent.tsx";
+import CustomButton from "../custom/CustomButton.tsx";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -39,6 +40,8 @@ interface Props {
 }
 
 function NoteForm({ onSubmit }: Props) {
+  const { id } = useParams();
+
   const useFormMethods = useForm<NoteFormData>({
     defaultValues: {
       title: "",
@@ -48,10 +51,15 @@ function NoteForm({ onSubmit }: Props) {
     },
     resolver: zodResolver(schema),
   });
-  const { id } = useParams();
+  const { handleSubmit, reset, setValue, setError } = useFormMethods;
+
   const [upcoming, setUpcoming] = useState(false);
 
-  const { handleSubmit, reset } = useFormMethods;
+  useEffect(() => {
+    if (!upcoming) {
+      reset({ upcomingDate: new Date() });
+    }
+  }, [upcoming]);
 
   return (
     <>
@@ -77,22 +85,23 @@ function NoteForm({ onSubmit }: Props) {
                 />
               ))}
             </CustomRadioGroup>
-            <FormControlLabel
-              control={
-                <Switch
+            <Grid container spacing={{ sm: 2 }}>
+              <Grid item sm={6} sx={{ width: "100%" }}>
+                <SwitchComponent
+                  label="Upcoming task"
                   checked={upcoming}
-                  onChange={(event) => setUpcoming(event.target.checked)}
-                  inputProps={{ "aria-label": "controlled" }}
+                  onChange={(value) => setUpcoming(value)}
                 />
-              }
-              label="Upcoming task"
-            />
-            {upcoming && (
-              <CustomDatePicker label="Date of task" name="upcomingDate" />
-            )}
-            <Button type="submit" variant="contained" sx={{ mt: 4 }}>
+              </Grid>
+              <Grid item sm={6} sx={{ width: "100%" }}>
+                {upcoming && (
+                  <CustomDatePicker label="Date of task" name="upcomingDate" />
+                )}
+              </Grid>
+            </Grid>
+            <CustomButton type="submit" variant="contained">
               Submit
-            </Button>
+            </CustomButton>
           </Stack>
         </form>
       </FormProvider>
