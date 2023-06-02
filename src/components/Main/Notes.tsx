@@ -1,15 +1,16 @@
 import Masonry from "@mui/lab/Masonry";
 import NoteCard from "../NoteCard/NoteCard.tsx";
 import { Typography } from "@mui/material";
-import { Note } from "../../services/notes.ts";
+import { getNotes } from "../../services/notes.ts";
 
 interface Props {
   drawerToggle: boolean;
-  notes: Note[];
   onDeleteNote: (_id: string) => void;
 }
 
-function Notes({ drawerToggle, notes, onDeleteNote }: Props) {
+function Notes({ drawerToggle, onDeleteNote }: Props) {
+  const notes = getNotes();
+
   return (
     <>
       <Typography>{`${notes.length} notes`}</Typography>

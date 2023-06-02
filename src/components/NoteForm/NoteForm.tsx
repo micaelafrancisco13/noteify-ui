@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
+import { createNote } from "../../services/notes.ts";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -29,11 +30,7 @@ const schema = z.object({
 
 export type NoteFormData = z.infer<typeof schema>;
 
-interface Props {
-  onSubmit: (data: NoteFormData) => void;
-}
-
-function NoteForm({ onSubmit }: Props) {
+function NoteForm() {
   const { id } = useParams();
 
   const useFormMethods = useForm<NoteFormData>({
@@ -55,12 +52,17 @@ function NoteForm({ onSubmit }: Props) {
     }
   }, [upcoming]);
 
+  const handleOnSubmitNote = (data: NoteFormData) => {
+    console.log("data", data);
+    createNote(data);
+  };
+
   return (
     <>
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
-            onSubmit(data);
+            handleOnSubmitNote(data);
             reset();
           })}
           autoComplete="off"

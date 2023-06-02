@@ -5,9 +5,9 @@ import theme from "./theme.ts";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import Main from "./components/Main/Main.tsx";
 import NotFound from "./components/NotFound.tsx";
-import NoteForm, { NoteFormData } from "./components/NoteForm/NoteForm.tsx";
+import NoteForm from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
-import { createNote, deleteNote, getNotes, Note } from "./services/notes.ts";
+import { deleteNote, getNotes, Note } from "./services/notes.ts";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -17,11 +17,6 @@ function App() {
   useEffect(() => {
     setNotes(getNotes());
   }, []);
-
-  const handleOnSubmitNote = (data: NoteFormData) => {
-    console.log("data", data);
-    createNote(data);
-  };
 
   const handleOnDeleteNote = (_id: string) => {
     // optimistic update
@@ -40,16 +35,12 @@ function App() {
         />
         <Main drawerToggle={drawerToggle} drawerRef={drawerRef}>
           <Routes>
-            <Route
-              path="/notes/:id"
-              element={<NoteForm onSubmit={handleOnSubmitNote} />}
-            />
+            <Route path="/notes/:id" element={<NoteForm />} />
             <Route
               path="/notes"
               element={
                 <Notes
                   drawerToggle={drawerToggle}
-                  notes={notes}
                   onDeleteNote={handleOnDeleteNote}
                 />
               }
