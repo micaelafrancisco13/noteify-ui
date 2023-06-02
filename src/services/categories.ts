@@ -24,4 +24,6 @@ export const categories = [
     name: "Cat_5",
     __v: 0,
   },
-];
+] as const;
+
+export const categoryIDs = categories.map((c) => c._id);

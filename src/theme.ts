@@ -4,7 +4,8 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#de4c4a",
+      // main: "#de4c4a",
+      main: "#C4B0FF",
     },
     secondary: {
       main: "#202020",
@@ -26,6 +27,9 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiFormHelperText: {
+      styleOverrides: { root: { fontSize: "12.5px" } },
+    },
     MuiCardHeader: {
       styleOverrides: {
         subheader: { fontSize: "12.5px" },

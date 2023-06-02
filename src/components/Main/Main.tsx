@@ -1,7 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { RefObject } from "react";
-import Notes from "./Notes.tsx";
+import { ReactNode, RefObject } from "react";
 
 const StyledMain = styled(Box, {
   shouldForwardProp: (prop) =>
@@ -30,18 +29,16 @@ const StyledMain = styled(Box, {
 interface Props {
   drawerToggle: boolean;
   drawerRef: RefObject<HTMLDivElement>;
+  children: ReactNode;
 }
 
-function Main({ drawerToggle, drawerRef }: Props) {
+function Main({ drawerToggle, drawerRef, children }: Props) {
   return (
     <StyledMain
       drawerToggle={drawerToggle}
       drawerWidth={drawerToggle ? drawerRef.current?.offsetWidth : 0}
     >
-      <Box sx={{ p: 2 }}>
-        <Typography>App</Typography>
-        <Notes drawerToggle={drawerToggle} />
-      </Box>
+      <Box sx={{ p: 2 }}>{children}</Box>
     </StyledMain>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AppBar, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -41,7 +41,6 @@ function Test() {
         <Toolbar />
         {/* Drawer contents */}
       </Drawer>
-      <div sx={{ flexGrow: 1, p: 3 }}>{/* Main content */}</div>
     </>
   );
 }
