@@ -30,7 +30,11 @@ const schema = z.object({
 
 export type NoteFormData = z.infer<typeof schema>;
 
-function NoteForm() {
+interface Props {
+  drawerToggle: boolean;
+}
+
+function NoteForm({ drawerToggle }: Props) {
   const { id } = useParams();
 
   const useFormMethods = useForm<NoteFormData>({
@@ -81,20 +85,35 @@ function NoteForm() {
               ))}
             </CustomRadioGroup>
             <Grid container>
-              <Grid item sm={6} sx={{ width: "100%" }}>
+              <Grid
+                item
+                sm={drawerToggle ? 12 : 6}
+                md={6}
+                sx={{ width: "100%" }}
+              >
                 <SwitchComponent
                   label="Upcoming task"
                   checked={upcoming}
                   onChange={(value) => setUpcoming(value)}
                 />
               </Grid>
-              <Grid item sm={6} sx={{ width: "100%" }}>
+              <Grid
+                item
+                sm={drawerToggle ? 12 : 6}
+                md={6}
+                sx={{ width: "100%" }}
+              >
                 {upcoming && (
                   <CustomDatePicker label="Date of task" name="upcomingDate" />
                 )}
               </Grid>
             </Grid>
-            <CustomButton type="submit" variant="contained" maxWidth="220px">
+            <CustomButton
+              type="submit"
+              variant="contained"
+              drawerToggle={drawerToggle}
+              maxWidth="220px"
+            >
               Submit
             </CustomButton>
           </Stack>

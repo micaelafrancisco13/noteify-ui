@@ -35,7 +35,10 @@ function App() {
         />
         <Main drawerToggle={drawerToggle} drawerRef={drawerRef}>
           <Routes>
-            <Route path="/notes/:id" element={<NoteForm />} />
+            <Route
+              path="/notes/:id"
+              element={<NoteForm drawerToggle={drawerToggle} />}
+            />
             <Route
               path="/notes"
               element={
