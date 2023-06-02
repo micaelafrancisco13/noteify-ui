@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import CustomTextField from "../custom/CustomTextField.tsx";
 import { useParams } from "react-router-dom";
 import CustomRadioGroup from "../custom/CustomRadioGroup.tsx";
-import { categories, categoryIDs } from "../../services/categories.ts";
+import { categoryIDs, getCategories } from "../../services/categories.ts";
 import { useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 
@@ -68,7 +68,7 @@ function NoteForm({ onSubmit }: Props) {
             <CustomTextField label="Title" />
             <CustomTextField label="Description" multiline rows={7} />
             <CustomRadioGroup label="Category" name="categoryId">
-              {categories.map((c) => (
+              {getCategories().map((c) => (
                 <FormControlLabel
                   key={c._id}
                   value={c._id}

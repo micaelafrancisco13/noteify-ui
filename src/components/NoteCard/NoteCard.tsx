@@ -10,20 +10,7 @@ import {
 import { format } from "date-fns";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-
-interface NoteCategory {
-  _id: string;
-  name: string;
-}
-
-interface Note {
-  _id: string;
-  title: string;
-  description: string;
-  category: NoteCategory;
-  dateCreated: string;
-  dateLastModified: string;
-}
+import { Note } from "../../services/notes.ts";
 
 interface Props {
   note: Note;
@@ -31,7 +18,7 @@ interface Props {
 
 function NoteCard({ note }: Props) {
   return (
-    <Card key={note._id}>
+    <Card>
       <CardHeader
         avatar={
           <Avatar sx={{ background: "purple" }} aria-label="Note category">
