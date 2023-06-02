@@ -9,7 +9,6 @@ interface Props {
 function ToggleButton({ drawerToggle, onDrawerToggle }: Props) {
   return (
     <IconButton
-      title="Toggle side drawer"
       aria-label="Toggle side drawer"
       onClick={() => onDrawerToggle(!drawerToggle)}
     >

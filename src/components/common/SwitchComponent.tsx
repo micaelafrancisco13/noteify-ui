@@ -17,7 +17,6 @@ function SwitchComponent({ label, checked, onChange }: Props) {
         />
       }
       label={label}
-      sx={{ mb: 4 }}
     />
   );
 }

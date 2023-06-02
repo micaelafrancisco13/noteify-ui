@@ -1,10 +1,4 @@
-import {
-  FormControlLabel,
-  Grid,
-  Radio,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { FormControlLabel, Grid, Radio, Stack } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -51,7 +45,7 @@ function NoteForm({ onSubmit }: Props) {
     },
     resolver: zodResolver(schema),
   });
-  const { handleSubmit, reset, setValue, setError } = useFormMethods;
+  const { handleSubmit, reset } = useFormMethods;
 
   const [upcoming, setUpcoming] = useState(false);
 
@@ -63,7 +57,6 @@ function NoteForm({ onSubmit }: Props) {
 
   return (
     <>
-      <Typography>{id}</Typography>
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
@@ -72,7 +65,7 @@ function NoteForm({ onSubmit }: Props) {
           })}
           autoComplete="off"
         >
-          <Stack>
+          <Stack spacing={4}>
             <CustomTextField label="Title" />
             <CustomTextField label="Description" multiline rows={7} />
             <CustomRadioGroup label="Category" name="categoryId">
@@ -85,7 +78,7 @@ function NoteForm({ onSubmit }: Props) {
                 />
               ))}
             </CustomRadioGroup>
-            <Grid container spacing={{ sm: 2 }}>
+            <Grid container>
               <Grid item sm={6} sx={{ width: "100%" }}>
                 <SwitchComponent
                   label="Upcoming task"
@@ -99,7 +92,7 @@ function NoteForm({ onSubmit }: Props) {
                 )}
               </Grid>
             </Grid>
-            <CustomButton type="submit" variant="contained">
+            <CustomButton type="submit" variant="contained" maxWidth="220px">
               Submit
             </CustomButton>
           </Stack>

@@ -20,9 +20,8 @@ function CustomDatePicker(props: Props) {
       name={fieldName}
       render={({ field }) => (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DemoContainer components={["DatePicker"]} sx={{ mb: 4 }}>
+          <DemoContainer components={["DatePicker"]}>
             <DatePicker
-              // sx={{ width: "100%" }}
               {...field}
               {...props}
               slotProps={{
