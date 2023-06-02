@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -14,9 +15,10 @@ import { Note } from "../../services/notes.ts";
 
 interface Props {
   note: Note;
+  onDeleteNote: (_id: string) => void;
 }
 
-function NoteCard({ note }: Props) {
+function NoteCard({ note, onDeleteNote }: Props) {
   return (
     <Card>
       <CardHeader
@@ -37,7 +39,10 @@ function NoteCard({ note }: Props) {
         <IconButton aria-label="Modify note">
           <EditOutlinedIcon />
         </IconButton>
-        <IconButton aria-label="Delete note">
+        <IconButton
+          aria-label="Delete note"
+          onClick={() => onDeleteNote(note._id)}
+        >
           <DeleteOutlineOutlinedIcon />
         </IconButton>
       </CardActions>

@@ -144,7 +144,7 @@ export function updateNote(note: NoteFormData & Note) {
 export function deleteNote(_id: string) {
   const deletedNote = notes.find((n) => n._id === _id);
 
-  notes.filter((n) => n._id !== _id);
+  if (deletedNote) notes.splice(notes.indexOf(deletedNote), 1);
 
   return deletedNote;
 }
