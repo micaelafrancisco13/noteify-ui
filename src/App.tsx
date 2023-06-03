@@ -18,11 +18,13 @@ function App() {
     setNotes(getNotes());
   }, []);
 
-  const handleOnDeleteNote = (_id: string) => {
+  const handleOnDeleteNote = (id: string) => {
     // optimistic update
-    setNotes(notes.filter((n) => n._id !== _id));
-    deleteNote(_id);
+    setNotes(notes.filter((n) => n._id !== id));
+    deleteNote(id);
   };
+
+  console.log("App");
 
   return (
     <BrowserRouter>

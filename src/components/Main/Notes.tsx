@@ -5,7 +5,7 @@ import { getNotes } from "../../services/notes.ts";
 
 interface Props {
   drawerToggle: boolean;
-  onDeleteNote: (_id: string) => void;
+  onDeleteNote: (id: string) => void;
 }
 
 function Notes({ drawerToggle, onDeleteNote }: Props) {

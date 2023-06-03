@@ -3,21 +3,26 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import CustomTextField from "../custom/CustomTextField.tsx";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomRadioGroup from "../custom/CustomRadioGroup.tsx";
 import { categoryIDs, getCategories } from "../../services/categories.ts";
 import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { createNote } from "../../services/notes.ts";
+import {
+  createNote,
+  getSpecificNote,
+  Note,
+  updateNote,
+} from "../../services/notes.ts";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
   description: z
     .string()
     .min(1, { message: "Description is required" })
-    .max(255),
+    .max(255_000),
   categoryId: z.enum(categoryIDs, {
     errorMap: () => ({ message: "A category must be selected" }),
   }),
@@ -36,6 +41,7 @@ interface Props {
 
 function NoteForm({ drawerToggle }: Props) {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const useFormMethods = useForm<NoteFormData>({
     defaultValues: {
@@ -46,19 +52,39 @@ function NoteForm({ drawerToggle }: Props) {
     },
     resolver: zodResolver(schema),
   });
-  const { handleSubmit, reset } = useFormMethods;
+  const { handleSubmit, reset, resetField, setValue } = useFormMethods;
 
   const [upcoming, setUpcoming] = useState(false);
 
   useEffect(() => {
-    if (!upcoming) {
-      reset({ upcomingDate: new Date() });
+    if (id) {
+      if (id === "new") return;
+
+      const currentNote = getSpecificNote(id);
+      if (!currentNote) return navigate("/not-found");
+
+      populateForm(currentNote);
+
+      console.log(currentNote);
     }
-  }, [upcoming]);
+
+    if (!upcoming) {
+      resetField("upcomingDate");
+    }
+  }, [id, upcoming]);
+
+  const populateForm = (note: Note) => {
+    setValue("title", note.title);
+    setValue("description", note.description);
+    setValue("categoryId", note.category._id);
+    setValue("upcomingDate", new Date(note.upcomingDate));
+  };
 
   const handleOnSubmitNote = (data: NoteFormData) => {
     console.log("data", data);
-    createNote(data);
+    if (id === "new") createNote(data);
+    else updateNote({ id, ...data });
+    navigate("/");
   };
 
   return (

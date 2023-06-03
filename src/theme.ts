@@ -25,6 +25,12 @@ const theme = createTheme({
       dark: "#764EB2",
       contrastText: "#fff",
     },
+    accent_brown: {
+      main: "#82541A",
+      light: "#9B7647",
+      dark: "#5B3A12",
+      contrastText: "#fff",
+    },
   },
   components: {
     MuiFormHelperText: {
@@ -72,12 +78,14 @@ declare module "@mui/material/styles/createPalette" {
   interface Palette {
     accent_green: PaletteColor;
     accent_purple: PaletteColor;
+    accent_brown: PaletteColor;
   }
 
   // allow configuration using `createTheme`
   interface PaletteOptions {
     accent_green?: PaletteColorOptions;
     accent_purple?: PaletteColorOptions;
+    accent_brown?: PaletteColorOptions;
   }
 }
 
@@ -86,6 +94,7 @@ declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     accent_green: true;
     accent_purple: true;
+    accent_brown: true;
   }
 }
 

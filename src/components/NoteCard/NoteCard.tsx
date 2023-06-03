@@ -11,10 +11,11 @@ import { format } from "date-fns";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Note } from "../../services/notes.ts";
+import { Link } from "react-router-dom";
 
 interface Props {
   note: Note;
-  onDeleteNote: (_id: string) => void;
+  onDeleteNote: (id: string) => void;
 }
 
 function NoteCard({ note, onDeleteNote }: Props) {
@@ -35,7 +36,11 @@ function NoteCard({ note, onDeleteNote }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <IconButton aria-label="Modify note">
+        <IconButton
+          aria-label="Modify note"
+          component={Link}
+          to={`/notes/${note._id}`}
+        >
           <EditOutlinedIcon />
         </IconButton>
         <IconButton

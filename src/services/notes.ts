@@ -119,13 +119,13 @@ export function createNote(note: NoteFormData) {
   }
 }
 
-export function updateNote(note: NoteFormData & Note) {
+export function updateNote(note: NoteFormData & { id: string | undefined }) {
   const category = categoriesAPI
     .getCategories()
     .find((c) => c._id === note.categoryId);
 
   if (category) {
-    const currentNote = notes.find((n) => n._id === note._id);
+    const currentNote = notes.find((n) => n._id === note.id);
 
     if (currentNote) {
       const dateNow = new Date().toISOString();
@@ -138,17 +138,18 @@ export function updateNote(note: NoteFormData & Note) {
 
       return currentNote;
     }
+    console.log("updated note", currentNote);
   }
 }
 
-export function deleteNote(_id: string) {
-  const deletedNote = notes.find((n) => n._id === _id);
+export function deleteNote(id: string) {
+  const deletedNote = notes.find((n) => n._id === id);
 
   if (deletedNote) notes.splice(notes.indexOf(deletedNote), 1);
 
   return deletedNote;
 }
 
-export function getSpecificNote(_id: string) {
-  return notes.find((n) => n._id === _id);
+export function getSpecificNote(id: string) {
+  return notes.find((n) => n._id === id);
 }
