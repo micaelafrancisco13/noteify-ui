@@ -12,6 +12,7 @@ import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { styled } from "@mui/material/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { Link } from "react-router-dom";
 import CustomButton from "../custom/CustomButton.tsx";
 
@@ -77,6 +78,18 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
                 variant="body2"
               >
                 Upcoming
+              </Typography>
+            </StyledListButton>
+            <StyledListButton
+              color="accent_brown"
+              aria-label={`Past notes`}
+              startIcon={<CalendarMonthOutlinedIcon />}
+            >
+              <Typography
+                color={(theme) => theme.palette.text.primary}
+                variant="body2"
+              >
+                Past
               </Typography>
             </StyledListButton>
           </Stack>

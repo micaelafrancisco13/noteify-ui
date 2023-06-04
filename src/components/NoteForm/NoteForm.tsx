@@ -16,6 +16,7 @@ import {
   Note,
   updateNote,
 } from "../../services/notes.ts";
+import { startOfDay } from "date-fns";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -30,7 +31,9 @@ const schema = z.object({
     .date({
       invalid_type_error: "Upcoming date of task is required",
     })
-    .min(new Date(), { message: "Date from the past is not valid" }),
+    .min(startOfDay(new Date()), {
+      message: "Date from the past is not valid",
+    }),
 });
 
 export type NoteFormData = z.infer<typeof schema>;
@@ -48,7 +51,7 @@ function NoteForm({ drawerToggle }: Props) {
       title: "",
       description: "",
       categoryId: "",
-      upcomingDate: new Date(),
+      upcomingDate: startOfDay(new Date()),
     },
     resolver: zodResolver(schema),
   });
