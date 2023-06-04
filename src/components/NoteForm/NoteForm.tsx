@@ -1,4 +1,10 @@
-import { FormControlLabel, Grid, Radio, Stack } from "@mui/material";
+import {
+  FormControlLabel,
+  Grid,
+  Radio,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -16,7 +22,7 @@ import {
   Note,
   updateNote,
 } from "../../services/notes.ts";
-import { startOfDay } from "date-fns";
+import { format, startOfDay } from "date-fns";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -27,6 +33,8 @@ const schema = z.object({
   categoryId: z.enum(categoryIDs, {
     errorMap: () => ({ message: "A category must be selected" }),
   }),
+  dateCreated: z.date().optional(),
+  dateLastModified: z.date().optional(),
   upcomingDate: z
     .date({
       invalid_type_error: "Upcoming date of task is required",
@@ -55,7 +63,7 @@ function NoteForm({ drawerToggle }: Props) {
     },
     resolver: zodResolver(schema),
   });
-  const { handleSubmit, reset, resetField, setValue } = useFormMethods;
+  const { handleSubmit, reset, resetField, setValue, watch } = useFormMethods;
 
   const [upcoming, setUpcoming] = useState(false);
 
@@ -67,8 +75,6 @@ function NoteForm({ drawerToggle }: Props) {
       if (!currentNote) return navigate("/not-found");
 
       populateForm(currentNote);
-
-      console.log(currentNote);
     }
 
     if (!upcoming) {
@@ -80,15 +86,22 @@ function NoteForm({ drawerToggle }: Props) {
     setValue("title", note.title);
     setValue("description", note.description);
     setValue("categoryId", note.category._id);
+    setValue("dateCreated", new Date(note.dateCreated));
+    setValue("dateLastModified", new Date(note.dateLastModified));
     setValue("upcomingDate", new Date(note.upcomingDate));
   };
 
   const handleOnSubmitNote = (data: NoteFormData) => {
-    console.log("data", data);
+    console.log("Saved note: ", data);
+
     if (id === "new") createNote(data);
     else updateNote({ id, ...data });
+
     navigate("/");
   };
+
+  const dateCreated = watch("dateCreated");
+  const dateLastModified = watch("dateLastModified");
 
   return (
     <>
@@ -102,7 +115,25 @@ function NoteForm({ drawerToggle }: Props) {
         >
           <Stack spacing={4}>
             <CustomTextField label="Title" />
-            <CustomTextField label="Description" multiline rows={7} />
+            <Stack spacing={1}>
+              <CustomTextField label="Description" multiline rows={7} />
+              {dateCreated && dateLastModified && (
+                <Stack sx={{ color: (theme) => theme.palette.text.secondary }}>
+                  <Typography variant="caption">
+                    {`Created on: ${format(
+                      new Date(dateCreated),
+                      "EEE MMMM dd, yyyy 'at' hh:mm a"
+                    )}`}
+                  </Typography>
+                  <Typography variant="caption">
+                    {`Last modified on: ${format(
+                      new Date(dateLastModified),
+                      "EEE MMMM dd, yyyy 'at' hh:mm a"
+                    )}`}
+                  </Typography>
+                </Stack>
+              )}
+            </Stack>
             <CustomRadioGroup label="Category" name="categoryId">
               {getCategories().map((c) => (
                 <FormControlLabel

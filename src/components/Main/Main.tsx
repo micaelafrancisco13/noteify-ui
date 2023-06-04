@@ -38,7 +38,7 @@ function Main({ drawerToggle, drawerRef, children }: Props) {
       drawerToggle={drawerToggle}
       drawerWidth={drawerToggle ? drawerRef.current?.offsetWidth : 0}
     >
-      <Box sx={{ p: 2 }}>{children}</Box>
+      <Box sx={{ py: 4, px: 2 }}>{children}</Box>
     </StyledMain>
   );
 }
