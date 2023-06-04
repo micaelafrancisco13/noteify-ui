@@ -1,6 +1,6 @@
 import Masonry from "@mui/lab/Masonry";
 import NoteCard from "../NoteCard/NoteCard.tsx";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import { getNotes } from "../../services/notes.ts";
 import CustomButton from "../custom/CustomButton.tsx";
 import AnchorMenu from "../common/AnchorMenu.tsx";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import _ from "lodash";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { getCategories } from "../../services/categories.ts";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -24,10 +25,11 @@ interface Props {
 
 function Notes({ drawerToggle, onDeleteNote }: Props) {
   const notes = getNotes();
+  const categories = getCategories();
   const numberOfNotes = notes.length;
   const [sortedOrFilteredNotes, setSortedOrFilteredNotes] = useState(notes);
 
-  const menu = [
+  const sortMenu = [
     {
       name: "Title",
       execute() {
@@ -76,11 +78,24 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
     },
   ];
 
+  const filterMenu = categories.map((category) => ({
+    name: category.name,
+    execute: () =>
+      setSortedOrFilteredNotes(
+        _.filter(notes, (note) => note.category.name === category.name)
+      ),
+  }));
+
   return (
     <>
       {numberOfNotes >= 1 && (
-        <Grid container>
-          <Grid item sx={{ display: "flex", alignItems: "center" }} xs={6}>
+        <Grid container alignItems="center">
+          <Grid
+            item
+            sx={{ display: "flex", alignItems: "center" }}
+            xs={3}
+            sm={6}
+          >
             <Typography>{`${numberOfNotes} notes`}</Typography>
           </Grid>
           <Grid
@@ -90,15 +105,25 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
               alignItems: "center",
               justifyContent: "flex-end",
             }}
-            xs={6}
+            xs
+            sm={6}
           >
-            <AnchorMenu
-              buttonChildren={
-                <StyledButton variant="text">Sort by</StyledButton>
-              }
-              title={"Sort notes"}
-              menu={menu}
-            />
+            <Stack direction="row" spacing={1}>
+              <AnchorMenu
+                buttonChildren={
+                  <StyledButton variant="text">Sort by</StyledButton>
+                }
+                title={"Sort notes"}
+                menu={sortMenu}
+              />
+              <AnchorMenu
+                buttonChildren={
+                  <StyledButton variant="text">Filter by</StyledButton>
+                }
+                title={"Filter notes"}
+                menu={filterMenu}
+              />
+            </Stack>
           </Grid>
         </Grid>
       )}

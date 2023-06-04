@@ -18,8 +18,8 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   color: "#5A967E",
 }));
 
-function getMenu() {
-  return [
+function SettingsPopup() {
+  const menu = [
     {
       name: "Settings",
       execute() {
@@ -33,10 +33,6 @@ function getMenu() {
       },
     },
   ];
-}
-
-function SettingsPopup() {
-  const menu = getMenu();
 
   return (
     <AnchorMenu
