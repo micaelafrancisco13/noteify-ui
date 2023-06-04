@@ -172,7 +172,7 @@ function NoteForm({ drawerToggle }: Props) {
                 ))}
               </CustomRadioGroup>
             ) : (
-              <Typography>Category: {categoryName}</Typography>
+              <Typography variant="body2">Category: {categoryName}</Typography>
             )}
             <Grid container>
               {(id === "new" || !past) && (

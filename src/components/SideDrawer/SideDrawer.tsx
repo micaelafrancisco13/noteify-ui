@@ -6,14 +6,17 @@ import {
   Stack,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { RefObject } from "react";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { styled } from "@mui/material/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BeenhereIcon from "@mui/icons-material/Beenhere";
-import { Link, useNavigate } from "react-router-dom";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import CustomButton from "../custom/CustomButton.tsx";
 
 const StyledListButton = styled(CustomButton)(() => ({
@@ -30,10 +33,16 @@ interface Props {
 
 function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
+  const searchParams = useSearchParams()[0];
+  const { date } = Object.fromEntries([...searchParams]);
+  const match = useMediaQuery(useTheme().breakpoints.down("sm"));
 
   const handleAppendQueryParam = (value: string) => {
+    onDrawerToggle(!match);
     navigate(`/notes?date=${value}`);
   };
+
+  console.log("date", date);
 
   return (
     <>
@@ -56,6 +65,7 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               }
               component={Link}
               to="/notes/new"
+              onClick={() => onDrawerToggle(!match)}
             >
               <Typography color={(theme) => theme.palette.text.primary}>
                 New note
@@ -68,12 +78,23 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               startIcon={<TodayOutlinedIcon />}
               onClick={() => handleAppendQueryParam("today")}
             >
-              <Typography
-                color={(theme) => theme.palette.text.primary}
-                variant="body2"
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
               >
-                Today
-              </Typography>
+                <Typography
+                  color={(theme) => theme.palette.text.primary}
+                  variant="body2"
+                >
+                  Today
+                </Typography>
+                {"today" === date && (
+                  <BeenhereIcon fontSize="small" sx={{ color: "white" }} />
+                )}
+              </Box>
             </StyledListButton>
             <StyledListButton
               color="accent_purple"
@@ -81,25 +102,47 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               startIcon={<DateRangeOutlinedIcon />}
               onClick={() => handleAppendQueryParam("upcoming")}
             >
-              <Typography
-                color={(theme) => theme.palette.text.primary}
-                variant="body2"
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
               >
-                Upcoming
-              </Typography>
+                <Typography
+                  color={(theme) => theme.palette.text.primary}
+                  variant="body2"
+                >
+                  Upcoming
+                </Typography>
+                {"upcoming" === date && (
+                  <BeenhereIcon fontSize="small" sx={{ color: "white" }} />
+                )}
+              </Box>
             </StyledListButton>
             <StyledListButton
               color="accent_brown"
               aria-label={`Archived notes`}
-              startIcon={<BeenhereIcon />}
+              startIcon={<EventAvailableIcon />}
               onClick={() => handleAppendQueryParam("archived")}
             >
-              <Typography
-                color={(theme) => theme.palette.text.primary}
-                variant="body2"
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
               >
-                Archived
-              </Typography>
+                <Typography
+                  color={(theme) => theme.palette.text.primary}
+                  variant="body2"
+                >
+                  Archived
+                </Typography>
+                {"archived" === date && (
+                  <BeenhereIcon fontSize="small" sx={{ color: "white" }} />
+                )}
+              </Box>
             </StyledListButton>
           </Stack>
         </Box>
