@@ -17,8 +17,8 @@ const notes: Note[] = [
     title: "Title 2",
     description: "Description 2",
     category: {
-      _id: "64734fb3ecf85f7bb37ccf81",
-      name: "Cat_2",
+      _id: "64734985e6106c7e56ca9983",
+      name: "Cat_1",
     },
     upcomingDate: "2023-06-03T00:00:00.000Z",
     dateCreated: "2023-06-03T06:11:28.833Z",

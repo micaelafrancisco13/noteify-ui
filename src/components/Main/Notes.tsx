@@ -1,7 +1,7 @@
 import Masonry from "@mui/lab/Masonry";
 import NoteCard from "../NoteCard/NoteCard.tsx";
 import { Button, Grid, Stack, Typography } from "@mui/material";
-import { getNotes } from "../../services/notes.ts";
+import { getNotes, Note } from "../../services/notes.ts";
 import CustomButton from "../custom/CustomButton.tsx";
 import AnchorMenu, { AnchorMenuItemProps } from "../common/AnchorMenu.tsx";
 import { styled } from "@mui/material/styles";
@@ -27,20 +27,23 @@ interface Props {
 function Notes({ drawerToggle, onDeleteNote }: Props) {
   const navigate = useNavigate();
   const searchParams = useSearchParams()[0];
-  const { sortBy, orderBy } = Object.fromEntries([...searchParams]);
+  const { filterBy, sortBy, orderBy } = Object.fromEntries([...searchParams]);
 
-  const notes = getNotes();
   const categories = getCategories();
+  const allNotes = getNotes();
 
   const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
-  const [sortedOrFilteredNotes, setSortedOrFilteredNotes] = useState(notes);
-  const numberOfNotes = sortedOrFilteredNotes.length;
-
-  console.log("<Notes/>");
+  const [filteredNotes, setFilteredNotes] = useState<Note[]>(allNotes);
+  const numberOfNotes = filteredNotes.length;
 
   useEffect(() => {
+    const newFilteredNotes = filterBy
+      ? allNotes.filter((note) => _.camelCase(note.category.name) === filterBy)
+      : allNotes;
+    setFilteredNotes(newFilteredNotes);
+
     if (orderBy === "asc" || orderBy === "desc")
-      setSortedOrFilteredNotes(_.orderBy(notes, [sortBy], [orderBy]));
+      setFilteredNotes(_.orderBy(newFilteredNotes, [sortBy], [orderBy]));
 
     const newSortMenu: AnchorMenuItemProps[] = [
       "Title",
@@ -64,20 +67,21 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
           if (orderBy === "asc") queryOrder = "orderBy=desc";
           else if (!orderBy || orderBy === "desc") queryOrder = "orderBy=asc";
 
-          navigate(`/notes?sortBy=${_.camelCase(menu)}&${queryOrder}`);
+          navigate(
+            `/notes?${
+              filterBy ? `filterBy=${filterBy}` : ""
+            }&sortBy=${_.camelCase(menu)}&${queryOrder}`
+          );
         },
       };
     });
 
     setSortMenu(newSortMenu);
-  }, [notes, notes.length, sortBy, orderBy]);
+  }, [allNotes.length, filterBy, sortBy, orderBy]);
 
   const filterMenu = categories.map((category) => ({
     name: category.name,
-    execute: () =>
-      setSortedOrFilteredNotes(
-        _.filter(notes, ["category.name", category.name])
-      ),
+    execute: () => navigate(`/notes?filterBy=${_.camelCase(category.name)}`),
   }));
 
   return (
@@ -127,7 +131,7 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
         spacing={2}
         sx={{ width: "auto", mt: 2 }}
       >
-        {sortedOrFilteredNotes.map((n) => (
+        {filteredNotes.map((n) => (
           <NoteCard key={n._id} note={n} onDeleteNote={onDeleteNote} />
         ))}
       </Masonry>
