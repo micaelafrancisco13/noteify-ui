@@ -10,7 +10,8 @@ import _ from "lodash";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { getCategories } from "../../services/categories.ts";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -25,9 +26,12 @@ interface Props {
 }
 
 function Notes({ drawerToggle, onDeleteNote }: Props) {
-  const navigate = useNavigate();
-  const searchParams = useSearchParams()[0];
-  const { filterBy, sortBy, orderBy } = Object.fromEntries([...searchParams]);
+  console.log("<Notes/>");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { category, date, sortBy, orderBy } = Object.fromEntries([
+    ...searchParams,
+  ]);
+  const existingParams = Object.fromEntries(searchParams.entries());
 
   const categories = getCategories();
   const allNotes = getNotes();
@@ -37,9 +41,27 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
   const numberOfNotes = filteredNotes.length;
 
   useEffect(() => {
-    const newFilteredNotes = filterBy
-      ? allNotes.filter((note) => _.camelCase(note.category.name) === filterBy)
-      : allNotes;
+    let newFilteredNotes = allNotes;
+
+    if (category)
+      newFilteredNotes = allNotes.filter(
+        (note) => _.camelCase(note.category.name) === category
+      );
+
+    const currentDate = startOfDay(new Date());
+    if (date === "today")
+      newFilteredNotes = allNotes.filter((n) =>
+        isEqual(startOfDay(new Date(n.upcomingDate)), currentDate)
+      );
+    else if (date === "upcoming")
+      newFilteredNotes = allNotes.filter((n) =>
+        isAfter(startOfDay(new Date(n.upcomingDate)), currentDate)
+      );
+    else if (date === "past")
+      newFilteredNotes = allNotes.filter((n) =>
+        isBefore(startOfDay(new Date(n.upcomingDate)), currentDate)
+      );
+
     setFilteredNotes(newFilteredNotes);
 
     if (orderBy === "asc" || orderBy === "desc")
@@ -64,24 +86,28 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
           ),
         execute: function () {
           let queryOrder = "";
-          if (orderBy === "asc") queryOrder = "orderBy=desc";
-          else if (!orderBy || orderBy === "desc") queryOrder = "orderBy=asc";
+          if (orderBy === "asc") queryOrder = "desc";
+          else if (!orderBy || orderBy === "desc") queryOrder = "asc";
 
-          navigate(
-            `/notes?${
-              filterBy ? `filterBy=${filterBy}` : ""
-            }&sortBy=${_.camelCase(menu)}&${queryOrder}`
-          );
+          setSearchParams({
+            ...existingParams,
+            sortBy: _.camelCase(menu),
+            orderBy: queryOrder,
+          });
         },
       };
     });
 
     setSortMenu(newSortMenu);
-  }, [allNotes.length, filterBy, sortBy, orderBy]);
+  }, [allNotes.length, category, date, sortBy, orderBy]);
 
   const filterMenu = categories.map((category) => ({
     name: category.name,
-    execute: () => navigate(`/notes?filterBy=${_.camelCase(category.name)}`),
+    execute: () =>
+      setSearchParams({
+        ...existingParams,
+        category: _.camelCase(category.name),
+      }),
   }));
 
   return (

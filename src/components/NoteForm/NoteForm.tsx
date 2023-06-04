@@ -69,10 +69,8 @@ function NoteForm({ drawerToggle }: Props) {
 
   useEffect(() => {
     if (id) {
-      if (id === "new") {
-        reset();
-        return;
-      }
+      reset();
+      if (id === "new") return;
 
       const currentNote = getSpecificNote(id);
       if (!currentNote) return navigate("/not-found");

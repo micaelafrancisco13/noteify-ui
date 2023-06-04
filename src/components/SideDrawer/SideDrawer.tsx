@@ -13,7 +13,7 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { styled } from "@mui/material/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import CustomButton from "../custom/CustomButton.tsx";
 
 const StyledListButton = styled(CustomButton)(() => ({
@@ -29,6 +29,13 @@ interface Props {
 }
 
 function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleAppendQueryParam = (value: string) => {
+    navigate(`/notes?date=${value}`);
+  };
+
   return (
     <>
       <Drawer
@@ -60,6 +67,7 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               color="accent_green"
               aria-label={`Today's notes`}
               startIcon={<TodayOutlinedIcon />}
+              onClick={() => handleAppendQueryParam("today")}
             >
               <Typography
                 color={(theme) => theme.palette.text.primary}
@@ -72,6 +80,7 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               color="accent_purple"
               aria-label={`Upcoming notes`}
               startIcon={<DateRangeOutlinedIcon />}
+              onClick={() => handleAppendQueryParam("upcoming")}
             >
               <Typography
                 color={(theme) => theme.palette.text.primary}
@@ -84,6 +93,7 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
               color="accent_brown"
               aria-label={`Past notes`}
               startIcon={<CalendarMonthOutlinedIcon />}
+              onClick={() => handleAppendQueryParam("past")}
             >
               <Typography
                 color={(theme) => theme.palette.text.primary}
