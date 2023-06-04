@@ -22,6 +22,11 @@ function NoteCard({ note, onDeleteNote }: Props) {
   return (
     <Card>
       <CardHeader
+        sx={{
+          "& .MuiCardHeader-content": {
+            wordBreak: "break-all",
+          },
+        }}
         avatar={
           <Avatar sx={{ background: "purple" }} aria-label="Note category">
             {note.category.name.charAt(0)}

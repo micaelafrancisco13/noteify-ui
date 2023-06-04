@@ -69,7 +69,10 @@ function NoteForm({ drawerToggle }: Props) {
 
   useEffect(() => {
     if (id) {
-      if (id === "new") return;
+      if (id === "new") {
+        reset();
+        return;
+      }
 
       const currentNote = getSpecificNote(id);
       if (!currentNote) return navigate("/not-found");
@@ -118,7 +121,7 @@ function NoteForm({ drawerToggle }: Props) {
             <Stack spacing={1}>
               <CustomTextField label="Description" multiline rows={7} />
               {dateCreated && dateLastModified && (
-                <Stack sx={{ color: (theme) => theme.palette.text.secondary }}>
+                <Stack sx={{ color: "#E0E0E0" }}>
                   <Typography variant="caption">
                     {`Created on: ${format(
                       new Date(dateCreated),
