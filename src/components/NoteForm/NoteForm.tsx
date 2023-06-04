@@ -22,7 +22,7 @@ import {
   Note,
   updateNote,
 } from "../../services/notes.ts";
-import { format, startOfDay } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -66,10 +66,14 @@ function NoteForm({ drawerToggle }: Props) {
   const { handleSubmit, reset, resetField, setValue, watch } = useFormMethods;
 
   const [upcoming, setUpcoming] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
   useEffect(() => {
     if (id) {
-      reset();
+      console.log("<NoteForm/>");
+      setInitialFormState();
+
       if (id === "new") return;
 
       const currentNote = getSpecificNote(id);
@@ -77,11 +81,20 @@ function NoteForm({ drawerToggle }: Props) {
 
       populateForm(currentNote);
     }
+  }, [id]);
 
+  useEffect(() => {
     if (!upcoming) {
       resetField("upcomingDate");
     }
-  }, [id, upcoming]);
+  }, [upcoming]);
+
+  const setInitialFormState = () => {
+    reset();
+    setUpcoming(false);
+    setCategoryName("");
+    setOriginalUpcomingDate("");
+  };
 
   const populateForm = (note: Note) => {
     setValue("title", note.title);
@@ -90,6 +103,9 @@ function NoteForm({ drawerToggle }: Props) {
     setValue("dateCreated", new Date(note.dateCreated));
     setValue("dateLastModified", new Date(note.dateLastModified));
     setValue("upcomingDate", new Date(note.upcomingDate));
+    setUpcoming(true);
+    setCategoryName(note.category.name);
+    setOriginalUpcomingDate(note.upcomingDate);
   };
 
   const handleOnSubmitNote = (data: NoteFormData) => {
@@ -103,6 +119,10 @@ function NoteForm({ drawerToggle }: Props) {
 
   const dateCreated = watch("dateCreated");
   const dateLastModified = watch("dateLastModified");
+  const past = isBefore(
+    startOfDay(new Date(originalUpcomingDate)),
+    startOfDay(new Date())
+  );
 
   return (
     <>
@@ -115,9 +135,14 @@ function NoteForm({ drawerToggle }: Props) {
           autoComplete="off"
         >
           <Stack spacing={4}>
-            <CustomTextField label="Title" />
+            <CustomTextField label="Title" past={past} />
             <Stack spacing={1}>
-              <CustomTextField label="Description" multiline rows={7} />
+              <CustomTextField
+                label="Description"
+                multiline
+                rows={7}
+                past={past}
+              />
               {dateCreated && dateLastModified && (
                 <Stack sx={{ color: "#E0E0E0" }}>
                   <Typography variant="caption">
@@ -135,29 +160,35 @@ function NoteForm({ drawerToggle }: Props) {
                 </Stack>
               )}
             </Stack>
-            <CustomRadioGroup label="Category" name="categoryId">
-              {getCategories().map((c) => (
-                <FormControlLabel
-                  key={c._id}
-                  value={c._id}
-                  control={<Radio />}
-                  label={c.name}
-                />
-              ))}
-            </CustomRadioGroup>
+            {!past ? (
+              <CustomRadioGroup label="Category" name="categoryId">
+                {getCategories().map((c) => (
+                  <FormControlLabel
+                    key={c._id}
+                    value={c._id}
+                    control={<Radio />}
+                    label={c.name}
+                  />
+                ))}
+              </CustomRadioGroup>
+            ) : (
+              <Typography>Category: {categoryName}</Typography>
+            )}
             <Grid container>
-              <Grid
-                item
-                sm={drawerToggle ? 12 : 6}
-                md={6}
-                sx={{ width: "100%" }}
-              >
-                <SwitchComponent
-                  label="Upcoming task"
-                  checked={upcoming}
-                  onChange={(value) => setUpcoming(value)}
-                />
-              </Grid>
+              {(id === "new" || !past) && (
+                <Grid
+                  item
+                  sm={drawerToggle ? 12 : 6}
+                  md={6}
+                  sx={{ width: "100%" }}
+                >
+                  <SwitchComponent
+                    label="Upcoming task"
+                    checked={upcoming}
+                    onChange={(value) => setUpcoming(value)}
+                  />
+                </Grid>
+              )}
               <Grid
                 item
                 sm={drawerToggle ? 12 : 6}
@@ -165,7 +196,11 @@ function NoteForm({ drawerToggle }: Props) {
                 sx={{ width: "100%" }}
               >
                 {upcoming && (
-                  <CustomDatePicker label="Date of task" name="upcomingDate" />
+                  <CustomDatePicker
+                    label="Date of task"
+                    name="upcomingDate"
+                    past={past}
+                  />
                 )}
               </Grid>
             </Grid>
@@ -174,6 +209,7 @@ function NoteForm({ drawerToggle }: Props) {
               variant="contained"
               drawerToggle={drawerToggle}
               maxWidth="220px"
+              disabled={past}
             >
               Submit
             </CustomButton>

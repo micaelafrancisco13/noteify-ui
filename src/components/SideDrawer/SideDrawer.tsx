@@ -12,8 +12,8 @@ import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { styled } from "@mui/material/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import BeenhereIcon from "@mui/icons-material/Beenhere";
+import { Link, useNavigate } from "react-router-dom";
 import CustomButton from "../custom/CustomButton.tsx";
 
 const StyledListButton = styled(CustomButton)(() => ({
@@ -30,7 +30,6 @@ interface Props {
 
 function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleAppendQueryParam = (value: string) => {
     navigate(`/notes?date=${value}`);
@@ -91,15 +90,15 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
             </StyledListButton>
             <StyledListButton
               color="accent_brown"
-              aria-label={`Past notes`}
-              startIcon={<CalendarMonthOutlinedIcon />}
-              onClick={() => handleAppendQueryParam("past")}
+              aria-label={`Archived notes`}
+              startIcon={<BeenhereIcon />}
+              onClick={() => handleAppendQueryParam("archived")}
             >
               <Typography
                 color={(theme) => theme.palette.text.primary}
                 variant="body2"
               >
-                Past
+                Archived
               </Typography>
             </StyledListButton>
           </Stack>

@@ -4,7 +4,11 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-type Props = DatePickerProps<Date> & { label: string; name?: string };
+type Props = DatePickerProps<Date> & {
+  label: string;
+  name?: string;
+  past?: boolean;
+};
 
 function CustomDatePicker(props: Props) {
   const {
@@ -32,6 +36,7 @@ function CustomDatePicker(props: Props) {
                     : null,
                 },
               }}
+              readOnly={props.past}
             />
           </DemoContainer>
         </LocalizationProvider>

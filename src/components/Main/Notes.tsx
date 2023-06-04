@@ -57,7 +57,7 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
       newFilteredNotes = allNotes.filter((n) =>
         isAfter(startOfDay(new Date(n.upcomingDate)), currentDate)
       );
-    else if (date === "past")
+    else if (date === "archived")
       newFilteredNotes = allNotes.filter((n) =>
         isBefore(startOfDay(new Date(n.upcomingDate)), currentDate)
       );
