@@ -28,11 +28,16 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
+export interface AnchorMenuItemProps {
+  name: string;
+  icon?: ReactNode;
+  execute: () => void;
+}
+
 interface Props {
   buttonChildren: ReactNode;
-  // menuItemChildren: ReactNode;
   title: string;
-  menu: { name: string; execute(): void; icon?: ReactNode }[];
+  menu: AnchorMenuItemProps[];
 }
 
 function AnchorMenu({ buttonChildren, title, menu }: Props) {

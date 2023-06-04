@@ -3,13 +3,14 @@ import NoteCard from "../NoteCard/NoteCard.tsx";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { getNotes } from "../../services/notes.ts";
 import CustomButton from "../custom/CustomButton.tsx";
-import AnchorMenu from "../common/AnchorMenu.tsx";
+import AnchorMenu, { AnchorMenuItemProps } from "../common/AnchorMenu.tsx";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { getCategories } from "../../services/categories.ts";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -24,109 +25,97 @@ interface Props {
 }
 
 function Notes({ drawerToggle, onDeleteNote }: Props) {
+  const navigate = useNavigate();
+  const searchParams = useSearchParams()[0];
+  const { sortBy, orderBy } = Object.fromEntries([...searchParams]);
+
   const notes = getNotes();
   const categories = getCategories();
-  const numberOfNotes = notes.length;
-  const [sortedOrFilteredNotes, setSortedOrFilteredNotes] = useState(notes);
 
-  const sortMenu = [
-    {
-      name: "Title",
-      execute() {
-        setSortedOrFilteredNotes(_.orderBy(notes, ["title"], ["asc"]));
-      },
-      icon: <KeyboardArrowUpIcon fontSize="small" />,
-    },
-    {
-      name: "Title",
-      execute() {
-        setSortedOrFilteredNotes(_.orderBy(notes, ["title"], ["desc"]));
-      },
-      icon: <KeyboardArrowDownIcon fontSize="small" />,
-    },
-    {
-      name: "Date created",
-      execute() {
-        setSortedOrFilteredNotes(_.orderBy(notes, ["dateCreated"], ["asc"]));
-      },
-      icon: <KeyboardArrowUpIcon fontSize="small" />,
-    },
-    {
-      name: "Date created",
-      execute() {
-        setSortedOrFilteredNotes(_.orderBy(notes, ["dateCreated"], ["desc"]));
-      },
-      icon: <KeyboardArrowDownIcon fontSize="small" />,
-    },
-    {
-      name: "Date last modified",
-      execute() {
-        setSortedOrFilteredNotes(
-          _.orderBy(notes, ["dateLastModified"], ["asc"])
-        );
-      },
-      icon: <KeyboardArrowUpIcon fontSize="small" />,
-    },
-    {
-      name: "Date last modified",
-      execute() {
-        setSortedOrFilteredNotes(
-          _.orderBy(notes, ["dateLastModified"], ["desc"])
-        );
-      },
-      icon: <KeyboardArrowDownIcon fontSize="small" />,
-    },
-  ];
+  const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
+  const [sortedOrFilteredNotes, setSortedOrFilteredNotes] = useState(notes);
+  const numberOfNotes = sortedOrFilteredNotes.length;
+
+  console.log("<Notes/>");
+
+  useEffect(() => {
+    if (orderBy === "asc" || orderBy === "desc")
+      setSortedOrFilteredNotes(_.orderBy(notes, [sortBy], [orderBy]));
+
+    const newSortMenu: AnchorMenuItemProps[] = [
+      "Title",
+      "Date created",
+      "Date last modified",
+    ].map((menu) => {
+      return {
+        name: menu,
+        icon:
+          _.camelCase(menu) === sortBy ? (
+            orderBy === "asc" ? (
+              <KeyboardArrowDownIcon />
+            ) : (
+              <KeyboardArrowUpIcon />
+            )
+          ) : (
+            <KeyboardArrowUpIcon />
+          ),
+        execute: function () {
+          let queryOrder = "";
+          if (orderBy === "asc") queryOrder = "orderBy=desc";
+          else if (!orderBy || orderBy === "desc") queryOrder = "orderBy=asc";
+
+          navigate(`/notes?sortBy=${_.camelCase(menu)}&${queryOrder}`);
+        },
+      };
+    });
+
+    setSortMenu(newSortMenu);
+  }, [notes, notes.length, sortBy, orderBy]);
 
   const filterMenu = categories.map((category) => ({
     name: category.name,
     execute: () =>
       setSortedOrFilteredNotes(
-        _.filter(notes, (note) => note.category.name === category.name)
+        _.filter(notes, ["category.name", category.name])
       ),
   }));
 
   return (
     <>
-      {numberOfNotes >= 1 && (
-        <Grid container alignItems="center">
-          <Grid
-            item
-            sx={{ display: "flex", alignItems: "center" }}
-            xs={3}
-            sm={6}
-          >
-            <Typography>{`${numberOfNotes} notes`}</Typography>
-          </Grid>
-          <Grid
-            item
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-            xs
-            sm={6}
-          >
-            <Stack direction="row" spacing={1}>
-              <AnchorMenu
-                buttonChildren={
-                  <StyledButton variant="text">Sort by</StyledButton>
-                }
-                title={"Sort notes"}
-                menu={sortMenu}
-              />
-              <AnchorMenu
-                buttonChildren={
-                  <StyledButton variant="text">Filter by</StyledButton>
-                }
-                title={"Filter notes"}
-                menu={filterMenu}
-              />
-            </Stack>
-          </Grid>
+      <Grid container alignItems="center">
+        <Grid item sx={{ display: "flex", alignItems: "center" }} xs={3} sm={6}>
+          <Typography>{`${numberOfNotes} ${
+            numberOfNotes <= 1 ? "note" : "notes"
+          }`}</Typography>
         </Grid>
-      )}
+        <Grid
+          item
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+          xs
+          sm={6}
+        >
+          <Stack direction="row" spacing={1}>
+            <AnchorMenu
+              buttonChildren={
+                <StyledButton variant="text">Sort by</StyledButton>
+              }
+              title={"Sort notes"}
+              menu={sortMenu}
+            />
+            <AnchorMenu
+              buttonChildren={
+                <StyledButton variant="text">Filter by</StyledButton>
+              }
+              title={"Filter notes"}
+              menu={filterMenu}
+            />
+          </Stack>
+        </Grid>
+      </Grid>
       <Masonry
         columns={{
           xs: 1,
