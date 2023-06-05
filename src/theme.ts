@@ -98,4 +98,12 @@ declare module "@mui/material/Button" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyPropsColorOverrides {
+    accent_green: true;
+    accent_purple: true;
+    accent_brown: true;
+  }
+}
+
 export default theme;

@@ -20,6 +20,13 @@ const StyledButton = styled(CustomButton)(({ theme }) => ({
   textTransform: "none",
 })) as typeof Button;
 
+const StyledHeadingOne = styled(Typography)(({ theme }) => ({
+  fontSize: `${14 / 8}rem`,
+  borderBottom: `2px solid ${theme.palette.primary.main}`,
+  mb: 4,
+  display: "inline-block",
+})) as typeof Typography;
+
 interface Props {
   drawerToggle: boolean;
   onDeleteNote: (id: string) => void;
@@ -112,6 +119,9 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
 
   return (
     <>
+      {date && (
+        <StyledHeadingOne component="h1">{_.capitalize(date)}</StyledHeadingOne>
+      )}
       <Grid container alignItems="center">
         <Grid item sx={{ display: "flex", alignItems: "center" }} xs={3} sm={6}>
           <Typography>{`${numberOfNotes} ${
