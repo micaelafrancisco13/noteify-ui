@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CustomButton from "../custom/CustomButton.tsx";
 import { ReactNode } from "react";
@@ -25,7 +25,12 @@ interface Props {
 function SideDrawerMenuItems({ dominantItem, menuItems }: Props) {
   return (
     <Stack paddingX={18 / 8} paddingY={30 / 8}>
-      {dominantItem}
+      {dominantItem && (
+        <>
+          {dominantItem}
+          <Divider sx={{ my: 2 }} />
+        </>
+      )}
       {menuItems.map((menuItem) => (
         <StyledListButton
           color={menuItem.color}

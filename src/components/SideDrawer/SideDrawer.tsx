@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Divider,
   Drawer,
   Toolbar,
   Typography,
@@ -27,6 +26,12 @@ const StyledListButton = styled(CustomButton)(() => ({
   textTransform: "none",
 })) as typeof Button;
 
+const StyledBox = styled(Box)(() => ({
+  display: "flex",
+  width: "100%",
+  justifyContent: "space-between",
+})) as typeof Box;
+
 interface Props {
   drawerToggle: boolean;
   onDrawerToggle: (toggle: boolean) => void;
@@ -48,23 +53,15 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
     navigate(`/notes?date=${value}`);
   };
 
-  console.log("date", date);
-
   const buttonChildren = ["Today", "Upcoming", "Archived"].map((value) => (
-    <Box
-      sx={{
-        display: "flex",
-        width: "100%",
-        justifyContent: "space-between",
-      }}
-    >
+    <StyledBox>
       <Typography color={(theme) => theme.palette.text.primary} variant="body2">
         {value}
       </Typography>
       {_.camelCase(value) === date && (
         <BeenhereIcon fontSize="small" sx={{ color: "white" }} />
       )}
-    </Box>
+    </StyledBox>
   ));
 
   const sideDrawerMenu: DrawerMenuItem[] = [
@@ -105,23 +102,20 @@ function SideDrawer({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
           <Toolbar />
           <SideDrawerMenuItems
             dominantItem={
-              <>
-                <StyledListButton
-                  color="primary"
-                  aria-label={`Create new notes`}
-                  startIcon={
-                    <AddCircleIcon sx={{ width: "24px", height: "24px" }} />
-                  }
-                  component={Link}
-                  to="/notes/new"
-                  onClick={handleDrawerClose}
-                >
-                  <Typography color={(theme) => theme.palette.text.primary}>
-                    New note
-                  </Typography>
-                </StyledListButton>
-                <Divider sx={{ my: 2 }} />
-              </>
+              <StyledListButton
+                color="primary"
+                aria-label={`Create new notes`}
+                startIcon={
+                  <AddCircleIcon sx={{ width: "24px", height: "24px" }} />
+                }
+                component={Link}
+                to="/notes/new"
+                onClick={handleDrawerClose}
+              >
+                <Typography color={(theme) => theme.palette.text.primary}>
+                  New note
+                </Typography>
+              </StyledListButton>
             }
             menuItems={sideDrawerMenu}
           />
