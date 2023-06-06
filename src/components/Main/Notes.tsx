@@ -56,15 +56,15 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
 
     const currentDate = startOfDay(new Date());
     if (date === "today")
-      newFilteredNotes = allNotes.filter((n) =>
+      newFilteredNotes = newFilteredNotes.filter((n) =>
         isEqual(startOfDay(new Date(n.upcomingDate)), currentDate)
       );
     else if (date === "upcoming")
-      newFilteredNotes = allNotes.filter((n) =>
+      newFilteredNotes = newFilteredNotes.filter((n) =>
         isAfter(startOfDay(new Date(n.upcomingDate)), currentDate)
       );
     else if (date === "archived")
-      newFilteredNotes = allNotes.filter((n) =>
+      newFilteredNotes = newFilteredNotes.filter((n) =>
         isBefore(startOfDay(new Date(n.upcomingDate)), currentDate)
       );
 
