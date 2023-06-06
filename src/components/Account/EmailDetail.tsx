@@ -63,7 +63,7 @@ function EmailDetail({ submitButton }: Props) {
         <Typography>Email address</Typography>
         <IconButton
           size="small"
-          aria-label="Edit personal details"
+          aria-label="Edit email address"
           onClick={() => {
             setIsEditable(!isEditable);
           }}
@@ -84,7 +84,9 @@ function EmailDetail({ submitButton }: Props) {
               name="email"
               variant="filled"
               type="email"
-              readOnly={!isEditable}
+              InputProps={{
+                readOnly: !isEditable,
+              }}
             />
             {isEditable && submitButton}
           </Stack>
