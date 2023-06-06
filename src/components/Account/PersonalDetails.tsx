@@ -12,8 +12,8 @@ import {
 } from "../../services/userDetails.ts";
 
 const schema = z.object({
-  firstName: z.string().min(2, { message: "First name is required" }).max(255),
-  lastName: z.string().min(2, { message: "Last name is required" }).max(255),
+  firstName: z.string().min(1, { message: "First name is required" }).max(255),
+  lastName: z.string().min(1, { message: "Last name is required" }).max(255),
 });
 
 export type PersonalDetailsFormData = z.infer<typeof schema>;
