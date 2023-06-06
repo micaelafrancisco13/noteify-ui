@@ -11,7 +11,6 @@ import {
   updatePersonalDetails,
 } from "../../services/userDetails.ts";
 import { styled } from "@mui/material/styles";
-import { Simulate } from "react-dom/test-utils";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
