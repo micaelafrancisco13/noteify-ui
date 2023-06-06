@@ -10,6 +10,7 @@ export function getPersonalDetails() {
 }
 
 export function updatePersonalDetails(data: PersonalDetailsFormData) {
+  console.log("update");
   personalDetails.firstName = data.firstName;
   personalDetails.lastName = data.lastName;
 }

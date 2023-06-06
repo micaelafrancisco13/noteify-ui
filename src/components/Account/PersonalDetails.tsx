@@ -24,6 +24,7 @@ interface Props {
 
 function PersonalDetails({ submitButton }: Props) {
   const [isEditable, setIsEditable] = useState(false);
+  const [initialValue, setInitialValue] = useState<PersonalDetailsFormData>();
 
   const useFormMethods = useForm<PersonalDetailsFormData>({
     defaultValues: { firstName: "", lastName: "" },
@@ -33,15 +34,23 @@ function PersonalDetails({ submitButton }: Props) {
   const { handleSubmit, setValue } = useFormMethods;
 
   useEffect(() => {
-    setTimeout(() => {
-      const { firstName, lastName } = getPersonalDetails();
-      setValue("firstName", firstName);
-      setValue("lastName", lastName);
-    }, 1000);
+    if (!isEditable) {
+      setTimeout(() => {
+        const { firstName, lastName } = getPersonalDetails();
+        setInitialValue({ firstName, lastName });
+        setValue("firstName", firstName);
+        setValue("lastName", lastName);
+      }, 1000);
+    }
   }, [isEditable]);
 
   const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
     setIsEditable(false);
+    if (
+      initialValue?.firstName === data.firstName &&
+      initialValue?.lastName === data.lastName
+    )
+      return;
     updatePersonalDetails(data);
   };
 
