@@ -6,12 +6,11 @@ import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditOffIcon from "@mui/icons-material/EditOff";
-import {
-  getPersonalDetails,
-  updatePersonalDetails,
-} from "../../services/userDetails.ts";
 import { styled } from "@mui/material/styles";
-import { Simulate } from "react-dom/test-utils";
+import {
+  getEmailDetail,
+  updateEmailDetail,
+} from "../../services/emailDetail.ts";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
@@ -20,22 +19,21 @@ const StyledBox = styled(Box)(() => ({
 }));
 
 const schema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }).max(255),
-  lastName: z.string().min(1, { message: "Last name is required" }).max(255),
+  email: z.string().email({ message: "Invalid email address" }),
 });
 
-export type PersonalDetailsFormData = z.infer<typeof schema>;
+export type EmailDetailFormData = z.infer<typeof schema>;
 
 interface Props {
   submitButton: ReactNode;
 }
 
-function PersonalDetails({ submitButton }: Props) {
+function EmailDetail({ submitButton }: Props) {
   const [isEditable, setIsEditable] = useState(false);
-  const [initialValue, setInitialValue] = useState<PersonalDetailsFormData>();
+  const [initialValue, setInitialValue] = useState<EmailDetailFormData>();
 
-  const useFormMethods = useForm<PersonalDetailsFormData>({
-    defaultValues: { firstName: "", lastName: "" },
+  const useFormMethods = useForm<EmailDetailFormData>({
+    defaultValues: { email: "" },
     resolver: zodResolver(schema),
   });
 
@@ -46,28 +44,23 @@ function PersonalDetails({ submitButton }: Props) {
       reset();
 
       setTimeout(() => {
-        const { firstName, lastName } = getPersonalDetails();
-        setInitialValue({ firstName, lastName });
-        setValue("firstName", firstName);
-        setValue("lastName", lastName);
+        const { email } = getEmailDetail();
+        setInitialValue({ email });
+        setValue("email", email);
       }, 1000);
     }
   }, [isEditable]);
 
-  const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
+  const handleOnUpdateUser = (data: EmailDetailFormData) => {
     setIsEditable(false);
-    if (
-      initialValue?.firstName === data.firstName &&
-      initialValue?.lastName === data.lastName
-    )
-      return;
-    updatePersonalDetails(data);
+    if (initialValue?.email === data.email) return;
+    updateEmailDetail(data);
   };
 
   return (
     <Box>
       <StyledBox>
-        <Typography>Personal Details</Typography>
+        <Typography>Email address</Typography>
         <IconButton
           size="small"
           aria-label="Edit personal details"
@@ -83,18 +76,14 @@ function PersonalDetails({ submitButton }: Props) {
         <form
           onSubmit={handleSubmit((data) => handleOnUpdateUser(data))}
           autoComplete="off"
+          noValidate={true}
         >
           <Stack spacing={4}>
             <CustomTextField
-              label="First name"
-              name="firstName"
+              label="Email address"
+              name="email"
               variant="filled"
-              readOnly={!isEditable}
-            />
-            <CustomTextField
-              label="Last name"
-              name="lastName"
-              variant="filled"
+              type="email"
               readOnly={!isEditable}
             />
             {isEditable && submitButton}
@@ -105,4 +94,4 @@ function PersonalDetails({ submitButton }: Props) {
   );
 }
 
-export default PersonalDetails;
+export default EmailDetail;
