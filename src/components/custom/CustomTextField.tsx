@@ -1,7 +1,7 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 
-type Props = TextFieldProps & { label: string; past?: boolean };
+type Props = TextFieldProps & { label: string; readOnly?: boolean };
 
 function CustomTextField(props: Props) {
   const {
@@ -11,7 +11,7 @@ function CustomTextField(props: Props) {
 
   const fieldName = props.name ? props.name : props.label.toLowerCase();
   const hasError = Boolean(errors[fieldName]);
-  const { past, ...originalProps } = props;
+  const { readOnly, ...originalProps } = props;
 
   return (
     <Controller
@@ -23,9 +23,9 @@ function CustomTextField(props: Props) {
           id={fieldName}
           error={hasError}
           helperText={hasError && `${errors[fieldName]?.message}.`}
-          variant="outlined"
+          variant={props.variant ? props.variant : "outlined"}
           InputProps={{
-            readOnly: past,
+            readOnly: readOnly,
           }}
         />
       )}

@@ -31,8 +31,9 @@ function SideDrawerMenuItems({ dominantItem, menuItems }: Props) {
           <Divider sx={{ my: 2 }} />
         </>
       )}
-      {menuItems.map((menuItem) => (
+      {menuItems.map((menuItem, index) => (
         <StyledListButton
+          key={index}
           color={menuItem.color}
           aria-label={menuItem.ariaLabel}
           startIcon={menuItem.startIcon}

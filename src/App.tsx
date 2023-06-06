@@ -8,6 +8,7 @@ import NotFound from "./components/NotFound.tsx";
 import NoteForm from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
 import { deleteNote, getNotes, Note } from "./services/notes.ts";
+import Account from "./components/Account/Account.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -49,6 +50,10 @@ function App() {
                   onDeleteNote={handleOnDeleteNote}
                 />
               }
+            />
+            <Route
+              path="/account"
+              element={<Account drawerToggle={drawerToggle} />}
             />
             <Route path="/not-found" element={<NotFound />} />
             <Route path="/" element={<Navigate to={`/notes`} replace />} />

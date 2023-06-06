@@ -13,6 +13,12 @@ const theme = createTheme({
       dark: "#181818",
       contrastText: "#fff",
     },
+    accent_pale_green: {
+      main: "#5A967E",
+      light: "#7BAB97",
+      dark: "#3E6958",
+      contrastText: "#fff",
+    },
     accent_green: {
       main: "#1C8C3A",
       light: "#49A361",
@@ -76,6 +82,7 @@ const theme = createTheme({
 
 declare module "@mui/material/styles/createPalette" {
   interface Palette {
+    accent_pale_green: PaletteColor;
     accent_green: PaletteColor;
     accent_purple: PaletteColor;
     accent_brown: PaletteColor;
@@ -83,6 +90,7 @@ declare module "@mui/material/styles/createPalette" {
 
   // allow configuration using `createTheme`
   interface PaletteOptions {
+    accent_pale_green?: PaletteColorOptions;
     accent_green?: PaletteColorOptions;
     accent_purple?: PaletteColorOptions;
     accent_brown?: PaletteColorOptions;
@@ -92,6 +100,7 @@ declare module "@mui/material/styles/createPalette" {
 // @babel-ignore-comment-in-output Update the Button's color prop options
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
+    accent_pale_green: true;
     accent_green: true;
     accent_purple: true;
     accent_brown: true;
@@ -100,6 +109,7 @@ declare module "@mui/material/Button" {
 
 declare module "@mui/material/Typography" {
   interface TypographyPropsColorOverrides {
+    accent_pale_green: true;
     accent_green: true;
     accent_purple: true;
     accent_brown: true;

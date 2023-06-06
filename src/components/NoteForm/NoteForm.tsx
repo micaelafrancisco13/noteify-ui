@@ -135,13 +135,13 @@ function NoteForm({ drawerToggle }: Props) {
           autoComplete="off"
         >
           <Stack spacing={4}>
-            <CustomTextField label="Title" past={past} />
+            <CustomTextField label="Title" readOnly={past} />
             <Stack spacing={1}>
               <CustomTextField
                 label="Description"
                 multiline
                 rows={7}
-                past={past}
+                readOnly={past}
               />
               {dateCreated && dateLastModified && (
                 <Stack sx={{ color: "#E0E0E0" }}>
