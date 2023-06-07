@@ -11,7 +11,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import CustomTextField from "../custom/CustomTextField.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomRadioGroup from "../custom/CustomRadioGroup.tsx";
-import { categoryIDs, getCategories } from "../../services/categories.ts";
 import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
@@ -19,6 +18,7 @@ import CustomButton from "../custom/CustomButton.tsx";
 import { format, isBefore, startOfDay } from "date-fns";
 import { Note } from "../../services/note-service.ts";
 import useNotes from "../../hooks/useNotes.ts";
+import useCategories from "../../hooks/useCategories.ts";
 
 const schema = z.object({
   _id: z.string().optional(),
@@ -27,9 +27,17 @@ const schema = z.object({
     .string()
     .min(1, { message: "Description is required" })
     .max(255_000),
-  categoryId: z.enum(categoryIDs, {
-    errorMap: () => ({ message: "A category must be selected" }),
-  }),
+  categoryId: z.enum(
+    [
+      "6480a60e62d3456b1289f58a", // Personal
+      "6480a62a62d3456b1289f58c", // Work
+      "6480a64562d3456b1289f592", // School
+      "6480a66262d3456b1289f594", // Home
+    ],
+    {
+      errorMap: () => ({ message: "A category must be selected" }),
+    }
+  ),
   dateCreated: z.date().optional(),
   dateLastModified: z.date().optional(),
   upcomingDate: z
@@ -55,7 +63,7 @@ function NoteForm({ drawerToggle }: Props) {
     defaultValues: {
       title: "",
       description: "",
-      categoryId: "",
+      categoryId: "6480a66262d3456b1289f594",
       upcomingDate: startOfDay(new Date()),
     },
     resolver: zodResolver(schema),
@@ -66,14 +74,15 @@ function NoteForm({ drawerToggle }: Props) {
   const [categoryName, setCategoryName] = useState("");
   const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
+  const { categories } = useCategories();
   const {
     currentNote,
     createNote,
     isCreatingNote,
     updateNote,
     isUpdatingNote,
-    errorMessage,
-    statusCode,
+    noteErrorMessage,
+    noteStatusCode,
   } = useNotes(id);
 
   useEffect(() => {
@@ -83,11 +92,11 @@ function NoteForm({ drawerToggle }: Props) {
 
       if (id === "new") return;
 
-      if (statusCode === 404) return navigate("/not-found");
+      if (noteStatusCode === 404) return navigate("/not-found");
 
-      if (!errorMessage && currentNote) populateForm(currentNote);
+      if (!noteErrorMessage && currentNote) populateForm(currentNote);
     }
-  }, [id, currentNote, errorMessage, statusCode]);
+  }, [id, currentNote, noteErrorMessage, noteStatusCode]);
 
   useEffect(() => {
     if (!upcoming) {
@@ -106,7 +115,7 @@ function NoteForm({ drawerToggle }: Props) {
     setValue("_id", note._id);
     setValue("title", note.title);
     setValue("description", note.description);
-    setValue("categoryId", note.category._id);
+    setValue("categoryId", note.category._id as NoteFormData["categoryId"]);
     setValue("dateCreated", new Date(note.dateCreated));
     setValue("dateLastModified", new Date(note.dateLastModified));
     setValue("upcomingDate", new Date(note.upcomingDate));
@@ -172,7 +181,7 @@ function NoteForm({ drawerToggle }: Props) {
             </Stack>
             {!past ? (
               <CustomRadioGroup label="Category" name="categoryId">
-                {getCategories().map((c) => (
+                {categories.map((c) => (
                   <FormControlLabel
                     key={c._id}
                     value={c._id}

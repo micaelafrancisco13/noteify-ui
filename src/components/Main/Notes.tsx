@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 import _ from "lodash";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { getCategories } from "../../services/categories.ts";
 import { useSearchParams } from "react-router-dom";
 import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
 import useNotes from "../../hooks/useNotes.ts";
 import { Note } from "../../services/note-service.ts";
 import CardSkeleton from "../NoteCard/CardSkeleton.tsx";
 import NoteCard from "../NoteCard/NoteCard.tsx";
+import useCategories from "../../hooks/useCategories.ts";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -40,11 +40,10 @@ function Notes({ drawerToggle }: Props) {
   ]);
   const existingParams = Object.fromEntries(searchParams.entries());
 
-  const categories = getCategories();
-
+  const { categories } = useCategories();
   const {
     notes: allNotes,
-    errorMessage,
+    noteErrorMessage,
     isFetchingNotes,
     deleteNote,
   } = useNotes();
@@ -134,9 +133,9 @@ function Notes({ drawerToggle }: Props) {
       {date && (
         <StyledHeadingOne component="h1">{_.capitalize(date)}</StyledHeadingOne>
       )}
-      {errorMessage && (
+      {noteErrorMessage && (
         <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>
-          {`ERROR: ${errorMessage}.`}
+          {`ERROR: ${noteErrorMessage}.`}
         </Typography>
       )}
       <Grid container alignItems="center" sx={{ my: date ? 4 : 0 }}>

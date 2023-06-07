@@ -89,8 +89,8 @@ function useNotes(id?: string | undefined) {
       });
   };
 
-  const errorMessage = error?.message;
-  const statusCode = error?.response?.status;
+  const noteErrorMessage = error?.message;
+  const noteStatusCode = error?.response?.status;
 
   return {
     notes,
@@ -107,8 +107,8 @@ function useNotes(id?: string | undefined) {
     deleteNote,
     isDeletingNote,
 
-    errorMessage,
-    statusCode,
+    noteErrorMessage,
+    noteStatusCode,
   };
 }
 
