@@ -71,11 +71,10 @@ function NoteForm({ drawerToggle }: Props) {
     createNote,
     isCreatingNote,
     updateNote,
+    isUpdatingNote,
     errorMessage,
     statusCode,
   } = useNotes(id);
-
-  console.log("current", currentNote);
 
   useEffect(() => {
     if (id) {
@@ -117,8 +116,6 @@ function NoteForm({ drawerToggle }: Props) {
   };
 
   const handleOnSubmitNote = (data: NoteFormData) => {
-    console.log("Saved note: ", data);
-
     if (id === "new") createNote(data, navigate);
     else updateNote(data, navigate);
   };
@@ -222,9 +219,9 @@ function NoteForm({ drawerToggle }: Props) {
               variant="contained"
               drawerToggle={drawerToggle}
               maxWidth="220px"
-              disabled={past || isCreatingNote}
+              disabled={past || isCreatingNote || isUpdatingNote}
             >
-              {isCreatingNote ? "Submitting..." : "Submit"}
+              {isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}
             </CustomButton>
           </Stack>
         </form>
