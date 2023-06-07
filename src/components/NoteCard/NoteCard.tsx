@@ -10,8 +10,8 @@ import {
 import { format } from "date-fns";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { Note } from "../../services/notes.ts";
 import { Link } from "react-router-dom";
+import { Note } from "../../services/note-service.ts";
 
 interface Props {
   note: Note;

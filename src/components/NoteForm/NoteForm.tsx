@@ -16,13 +16,10 @@ import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import {
-  createNote,
-  getSpecificNote,
-  Note,
-  updateNote,
-} from "../../services/notes.ts";
+import { createNote, updateNote } from "../../services/notes.ts";
 import { format, isBefore, startOfDay } from "date-fns";
+import { Note } from "../../services/note-service.ts";
+import useNote from "../../hooks/useNote.tsx";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -69,6 +66,8 @@ function NoteForm({ drawerToggle }: Props) {
   const [categoryName, setCategoryName] = useState("");
   const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
+  const { note: currentNote, error } = useNote(id);
+
   useEffect(() => {
     if (id) {
       console.log("<NoteForm/>");
@@ -76,12 +75,11 @@ function NoteForm({ drawerToggle }: Props) {
 
       if (id === "new") return;
 
-      const currentNote = getSpecificNote(id);
-      if (!currentNote) return navigate("/not-found");
+      if (error) return navigate("/not-found");
 
-      populateForm(currentNote);
+      if (currentNote) populateForm(currentNote);
     }
-  }, [id]);
+  }, [id, currentNote, error]);
 
   useEffect(() => {
     if (!upcoming) {

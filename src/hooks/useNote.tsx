@@ -2,35 +2,36 @@ import { useEffect, useState } from "react";
 import noteService, { Note } from "../services/note-service.ts";
 import { CanceledError } from "axios";
 
-function useNotes() {
-  const [notes, setNotes] = useState<Note[]>([]);
+function useNote(id: string | undefined) {
+  const [note, setNote] = useState<Note>();
   const [error, setError] = useState("");
-  const [isFetchingNotes, setIsFetchingNotes] = useState(false);
+  const [isFetchingNote, setIsFetchingNote] = useState(false);
 
   useEffect(() => {
-    setIsFetchingNotes(true);
-    const { response, cancel } = noteService.getAll<Note>();
+    setIsFetchingNote(true);
+    const { response, cancel } = noteService.getOne<Note>(id);
     response
       .then((res) => {
-        setNotes(res.data);
-        setIsFetchingNotes(false);
+        setNote(res.data);
+        setIsFetchingNote(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-        setIsFetchingNotes(false);
+        setIsFetchingNote(false);
       });
 
     return () => cancel();
   }, []);
 
   return {
-    notes,
-    setNotes,
+    note,
+    setNote,
     error,
     setError,
-    isFetchingNotes,
+    isFetchingNote,
+    setIsFetchingNote,
   };
 }
 
-export default useNotes;
+export default useNote;
