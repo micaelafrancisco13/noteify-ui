@@ -5,26 +5,33 @@ import { CanceledError } from "axios";
 function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingNotes, setIsFetchingNotes] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsFetchingNotes(true);
     const { response, cancel } = noteService.getAll<Note>();
     response
       .then((res) => {
         setNotes(res.data);
-        setIsLoading(false);
+        setIsFetchingNotes(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-        setIsLoading(false);
+        setIsFetchingNotes(false);
       });
 
     return () => cancel();
   }, []);
 
-  return { notes, setNotes, error, setError, isLoading, setIsLoading };
+  return {
+    notes,
+    setNotes,
+    error,
+    setError,
+    isFetchingNotes,
+    setIsLoading: setIsFetchingNotes,
+  };
 }
 
 export default useNotes;

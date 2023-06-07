@@ -47,8 +47,7 @@ function Notes({ drawerToggle }: Props) {
     setNotes,
     error,
     setError,
-    isLoading,
-    setIsLoading,
+    isFetchingNotes,
   } = useNotes();
 
   const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
@@ -140,6 +139,11 @@ function Notes({ drawerToggle }: Props) {
       {date && (
         <StyledHeadingOne component="h1">{_.capitalize(date)}</StyledHeadingOne>
       )}
+      {error && (
+        <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>
+          {`ERROR: ${error}.`}
+        </Typography>
+      )}
       <Grid container alignItems="center" sx={{ my: date ? 4 : 0 }}>
         <Grid item sx={{ display: "flex", alignItems: "center" }} xs={3} sm={6}>
           <Typography>{`${numberOfNotes} ${
@@ -185,7 +189,7 @@ function Notes({ drawerToggle }: Props) {
         spacing={2}
         sx={{ width: "auto", mt: 2 }}
       >
-        {isLoading
+        {isFetchingNotes
           ? [...Array(4)].map((_, index) => <CardSkeleton key={index} />)
           : filteredNotes.map((n) => (
               <NoteCard
