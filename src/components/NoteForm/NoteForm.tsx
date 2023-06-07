@@ -19,7 +19,6 @@ import CustomButton from "../custom/CustomButton.tsx";
 import { updateNote } from "../../services/notes.ts";
 import { format, isBefore, startOfDay } from "date-fns";
 import { Note } from "../../services/note-service.ts";
-import useNote from "../../hooks/useNote.ts";
 import useNotes from "../../hooks/useNotes.ts";
 
 const schema = z.object({
@@ -67,8 +66,10 @@ function NoteForm({ drawerToggle }: Props) {
   const [categoryName, setCategoryName] = useState("");
   const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
-  const { note: currentNote, getNoteErrorMessage, statusCode } = useNote(id);
-  const { notes, createNote, isCreatingNote } = useNotes();
+  const { currentNote, createNote, isCreatingNote, errorMessage, statusCode } =
+    useNotes(id);
+
+  console.log("current", currentNote);
 
   useEffect(() => {
     if (id) {
@@ -79,9 +80,9 @@ function NoteForm({ drawerToggle }: Props) {
 
       if (statusCode === 404) return navigate("/not-found");
 
-      if (!getNoteErrorMessage && currentNote) populateForm(currentNote);
+      if (!errorMessage && currentNote) populateForm(currentNote);
     }
-  }, [id, currentNote, getNoteErrorMessage, statusCode]);
+  }, [id, currentNote, errorMessage, statusCode]);
 
   useEffect(() => {
     if (!upcoming) {
@@ -124,11 +125,11 @@ function NoteForm({ drawerToggle }: Props) {
 
   return (
     <>
-      {getNoteErrorMessage && (
-        <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>
-          {`ERROR: ${getNoteErrorMessage}.`}
-        </Typography>
-      )}
+      {/*{getNoteErrorMessage && (*/}
+      {/*  <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>*/}
+      {/*    {`ERROR: ${getNoteErrorMessage}.`}*/}
+      {/*  </Typography>*/}
+      {/*)}*/}
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
