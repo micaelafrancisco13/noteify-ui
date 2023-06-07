@@ -11,7 +11,7 @@ import { getCategories } from "../../services/categories.ts";
 import { useSearchParams } from "react-router-dom";
 import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
 import useNotes from "../../hooks/useNotes.ts";
-import noteService, { Note } from "../../services/note-service.ts";
+import { Note } from "../../services/note-service.ts";
 import CardSkeleton from "../NoteCard/CardSkeleton.tsx";
 import NoteCard from "../NoteCard/NoteCard.tsx";
 
@@ -44,10 +44,10 @@ function Notes({ drawerToggle }: Props) {
 
   const {
     notes: allNotes,
-    setNotes,
     errorMessage,
-    setErrorMessage,
     isFetchingNotes,
+    deleteNote,
+    isDeletingNote,
   } = useNotes();
 
   const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
@@ -125,13 +125,7 @@ function Notes({ drawerToggle }: Props) {
   }));
 
   const handleOnDeleteNote = (id: string) => {
-    // optimistic update
-    const originalNotes = [...allNotes];
-    setNotes(allNotes.filter((n) => n._id !== id));
-    noteService.delete(id).catch((err) => {
-      setErrorMessage(err.message);
-      setNotes(originalNotes);
-    });
+    deleteNote(id);
   };
 
   return (
@@ -189,7 +183,7 @@ function Notes({ drawerToggle }: Props) {
         spacing={2}
         sx={{ width: "auto", mt: 2 }}
       >
-        {isFetchingNotes
+        {isFetchingNotes || isDeletingNote
           ? [...Array(4)].map((_, index) => <CardSkeleton key={index} />)
           : filteredNotes.map((n) => (
               <NoteCard

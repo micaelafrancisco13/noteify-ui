@@ -8,6 +8,7 @@ function useNotes(id?: string | undefined) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentNote, setCurrentNote] = useState<Note>();
   const [error, setError] = useState<AxiosError>();
+  const originalNotes = [...notes];
 
   const [isFetchingNotes, setIsFetchingNotes] = useState(false);
   useEffect(() => {
@@ -37,7 +38,6 @@ function useNotes(id?: string | undefined) {
 
   const [isCreatingNote, setIsCreatingNote] = useState(false);
   const createNote = (data: NoteFormData, navigate: NavigateFunction) => {
-    const originalNotes = [...notes];
     setIsCreatingNote(true);
     noteService
       .create(data)
@@ -53,6 +53,22 @@ function useNotes(id?: string | undefined) {
       });
   };
 
+  const [isDeletingNote, setIsDeletingNote] = useState(false);
+  const deleteNote = (idToBeDeleted: string) => {
+    setIsDeletingNote(true);
+    setNotes(notes.filter((n) => n._id !== idToBeDeleted));
+    noteService
+      .delete(idToBeDeleted)
+      .then(() => {
+        setIsDeletingNote(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setNotes(originalNotes);
+        setIsDeletingNote(false);
+      });
+  };
+
   const errorMessage = error?.message;
   const statusCode = error?.response?.status;
 
@@ -64,6 +80,9 @@ function useNotes(id?: string | undefined) {
 
     createNote,
     isCreatingNote,
+
+    deleteNote,
+    isDeletingNote,
 
     errorMessage,
     statusCode,

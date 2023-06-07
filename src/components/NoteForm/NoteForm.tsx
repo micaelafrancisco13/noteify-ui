@@ -125,11 +125,6 @@ function NoteForm({ drawerToggle }: Props) {
 
   return (
     <>
-      {/*{getNoteErrorMessage && (*/}
-      {/*  <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>*/}
-      {/*    {`ERROR: ${getNoteErrorMessage}.`}*/}
-      {/*  </Typography>*/}
-      {/*)}*/}
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
@@ -215,16 +210,6 @@ function NoteForm({ drawerToggle }: Props) {
                 )}
               </Grid>
             </Grid>
-            {/*{createNoteErrorMessage && (*/}
-            {/*  <Typography*/}
-            {/*    sx={{*/}
-            {/*      color: (theme) => theme.palette.error.main,*/}
-            {/*      fontSize: "12.5px",*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    {`ERROR: ${createNoteErrorMessage}.`}*/}
-            {/*  </Typography>*/}
-            {/*)}*/}
             <CustomButton
               type="submit"
               variant="contained"
