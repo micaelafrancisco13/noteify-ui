@@ -1,5 +1,4 @@
 import Masonry from "@mui/lab/Masonry";
-import NoteCard from "../NoteCard/NoteCard.tsx";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import CustomButton from "../custom/CustomButton.tsx";
 import AnchorMenu, { AnchorMenuItemProps } from "../common/AnchorMenu.tsx";
@@ -13,6 +12,8 @@ import { useSearchParams } from "react-router-dom";
 import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
 import useNotes from "../../hooks/useNotes.tsx";
 import noteService, { Note } from "../../services/note-service.ts";
+import CardSkeleton from "../NoteCard/CardSkeleton.tsx";
+import NoteCard from "../NoteCard/NoteCard.tsx";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -184,14 +185,15 @@ function Notes({ drawerToggle }: Props) {
         spacing={2}
         sx={{ width: "auto", mt: 2 }}
       >
-        {filteredNotes.map((n) => (
-          <NoteCard
-            key={n._id}
-            isLoading={isLoading}
-            note={n}
-            onDeleteNote={() => handleOnDeleteNote(n._id)}
-          />
-        ))}
+        {isLoading
+          ? [...Array(4)].map((_, index) => <CardSkeleton key={index} />)
+          : filteredNotes.map((n) => (
+              <NoteCard
+                key={n._id}
+                note={n}
+                onDeleteNote={() => handleOnDeleteNote(n._id)}
+              />
+            ))}
       </Masonry>
     </>
   );

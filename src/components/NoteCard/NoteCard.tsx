@@ -5,7 +5,6 @@ import {
   CardContent,
   CardHeader,
   IconButton,
-  Skeleton,
   Typography,
 } from "@mui/material";
 import { format } from "date-fns";
@@ -15,13 +14,11 @@ import { Note } from "../../services/notes.ts";
 import { Link } from "react-router-dom";
 
 interface Props {
-  isLoading: boolean;
   note: Note;
   onDeleteNote: (id: string) => void;
 }
 
 function NoteCard({ note, onDeleteNote }: Props) {
-  const isLoading = true;
   return (
     <Card>
       <CardHeader
@@ -31,50 +28,17 @@ function NoteCard({ note, onDeleteNote }: Props) {
           },
         }}
         avatar={
-          isLoading ? (
-            <Skeleton
-              animation="wave"
-              variant="circular"
-              width={40}
-              height={40}
-            />
-          ) : (
-            <Avatar sx={{ background: "purple" }} aria-label="Note category">
-              {note.category.name.charAt(0)}
-            </Avatar>
-          )
+          <Avatar sx={{ background: "purple" }} aria-label="Note category">
+            {note.category.name.charAt(0)}
+          </Avatar>
         }
-        title={
-          isLoading ? (
-            <Skeleton
-              animation="wave"
-              variant="text"
-              sx={{ fontSize: "14px" }}
-            />
-          ) : (
-            note.title
-          )
-        }
-        subheader={
-          isLoading ? (
-            <Skeleton
-              animation="wave"
-              variant="text"
-              sx={{ fontSize: "12.5px" }}
-            />
-          ) : (
-            format(new Date(note.dateLastModified), "MMMM dd, yyyy")
-          )
-        }
+        title={note.title}
+        subheader={format(new Date(note.dateLastModified), "MMMM dd, yyyy")}
       />
       <CardContent>
-        {isLoading ? (
-          <Skeleton animation="wave" variant="text" sx={{ fontSize: "14px" }} />
-        ) : (
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            {note.description}
-          </Typography>
-        )}
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          {note.description}
+        </Typography>
       </CardContent>
       <CardActions>
         <IconButton
@@ -82,31 +46,13 @@ function NoteCard({ note, onDeleteNote }: Props) {
           component={Link}
           to={`/notes/${note._id}`}
         >
-          {isLoading ? (
-            <Skeleton
-              animation="wave"
-              variant="rectangular"
-              width={24}
-              height={24}
-            />
-          ) : (
-            <EditOutlinedIcon />
-          )}
+          <EditOutlinedIcon />
         </IconButton>
         <IconButton
           aria-label="Delete note"
           onClick={() => onDeleteNote(note._id)}
         >
-          {isLoading ? (
-            <Skeleton
-              animation="wave"
-              variant="rectangular"
-              width={24}
-              height={24}
-            />
-          ) : (
-            <DeleteOutlineOutlinedIcon />
-          )}
+          <DeleteOutlineOutlinedIcon />
         </IconButton>
       </CardActions>
     </Card>
