@@ -7,8 +7,9 @@ import Main from "./components/Main/Main.tsx";
 import NotFound from "./components/NotFound.tsx";
 import NoteForm from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
-import { deleteNote, getNotes, Note } from "./services/notes.ts";
+import { deleteNote, Note } from "./services/notes.ts";
 import Account from "./components/Account/Account.tsx";
+import noteService from "./services/note-service.ts";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -16,7 +17,17 @@ function App() {
   const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
-    setNotes(getNotes());
+    const { response, cancel } = noteService.getAll<Note>();
+
+    response
+      .then((res) => {
+        console.log("data", res.data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+
+    // setNotes();
   }, []);
 
   const handleOnDeleteNote = (id: string) => {
