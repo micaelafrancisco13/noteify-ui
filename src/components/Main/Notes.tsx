@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { getCategories } from "../../services/categories.ts";
 import { useSearchParams } from "react-router-dom";
 import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
-import useNotes from "../../hooks/useNotes.tsx";
+import useNotes from "../../hooks/useNotes.ts";
 import noteService, { Note } from "../../services/note-service.ts";
 import CardSkeleton from "../NoteCard/CardSkeleton.tsx";
 import NoteCard from "../NoteCard/NoteCard.tsx";
@@ -45,8 +45,8 @@ function Notes({ drawerToggle }: Props) {
   const {
     notes: allNotes,
     setNotes,
-    error,
-    setError,
+    errorMessage,
+    setErrorMessage,
     isFetchingNotes,
   } = useNotes();
 
@@ -113,7 +113,7 @@ function Notes({ drawerToggle }: Props) {
     });
 
     setSortMenu(newSortMenu);
-  }, [allNotes, category, date, sortBy, orderBy]);
+  }, [allNotes, allNotes.length, category, date, sortBy, orderBy]);
 
   const filterMenu = categories.map((category) => ({
     name: category.name,
@@ -129,7 +129,7 @@ function Notes({ drawerToggle }: Props) {
     const originalNotes = [...allNotes];
     setNotes(allNotes.filter((n) => n._id !== id));
     noteService.delete(id).catch((err) => {
-      setError(err.message);
+      setErrorMessage(err.message);
       setNotes(originalNotes);
     });
   };
@@ -139,9 +139,9 @@ function Notes({ drawerToggle }: Props) {
       {date && (
         <StyledHeadingOne component="h1">{_.capitalize(date)}</StyledHeadingOne>
       )}
-      {error && (
+      {errorMessage && (
         <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>
-          {`ERROR: ${error}.`}
+          {`ERROR: ${errorMessage}.`}
         </Typography>
       )}
       <Grid container alignItems="center" sx={{ my: date ? 4 : 0 }}>

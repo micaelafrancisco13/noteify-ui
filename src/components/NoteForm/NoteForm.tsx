@@ -16,10 +16,11 @@ import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { createNote, updateNote } from "../../services/notes.ts";
+import { updateNote } from "../../services/notes.ts";
 import { format, isBefore, startOfDay } from "date-fns";
 import { Note } from "../../services/note-service.ts";
-import useNote from "../../hooks/useNote.tsx";
+import useNote from "../../hooks/useNote.ts";
+import useNotes from "../../hooks/useNotes.ts";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(255),
@@ -66,7 +67,8 @@ function NoteForm({ drawerToggle }: Props) {
   const [categoryName, setCategoryName] = useState("");
   const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
-  const { note: currentNote, error } = useNote(id);
+  const { note: currentNote, getNoteErrorMessage, statusCode } = useNote(id);
+  const { notes, createNote, isCreatingNote } = useNotes();
 
   useEffect(() => {
     if (id) {
@@ -75,11 +77,11 @@ function NoteForm({ drawerToggle }: Props) {
 
       if (id === "new") return;
 
-      if (error) return navigate("/not-found");
+      if (statusCode === 404) return navigate("/not-found");
 
-      if (currentNote) populateForm(currentNote);
+      if (!getNoteErrorMessage && currentNote) populateForm(currentNote);
     }
-  }, [id, currentNote, error]);
+  }, [id, currentNote, getNoteErrorMessage, statusCode]);
 
   useEffect(() => {
     if (!upcoming) {
@@ -109,10 +111,8 @@ function NoteForm({ drawerToggle }: Props) {
   const handleOnSubmitNote = (data: NoteFormData) => {
     console.log("Saved note: ", data);
 
-    if (id === "new") createNote(data);
+    if (id === "new") createNote(data, navigate);
     else updateNote({ id, ...data });
-
-    navigate("/");
   };
 
   const dateCreated = watch("dateCreated");
@@ -124,6 +124,11 @@ function NoteForm({ drawerToggle }: Props) {
 
   return (
     <>
+      {getNoteErrorMessage && (
+        <Typography sx={{ color: (theme) => theme.palette.error.main, mb: 2 }}>
+          {`ERROR: ${getNoteErrorMessage}.`}
+        </Typography>
+      )}
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
@@ -209,14 +214,24 @@ function NoteForm({ drawerToggle }: Props) {
                 )}
               </Grid>
             </Grid>
+            {/*{createNoteErrorMessage && (*/}
+            {/*  <Typography*/}
+            {/*    sx={{*/}
+            {/*      color: (theme) => theme.palette.error.main,*/}
+            {/*      fontSize: "12.5px",*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    {`ERROR: ${createNoteErrorMessage}.`}*/}
+            {/*  </Typography>*/}
+            {/*)}*/}
             <CustomButton
               type="submit"
               variant="contained"
               drawerToggle={drawerToggle}
               maxWidth="220px"
-              disabled={past}
+              disabled={past || isCreatingNote}
             >
-              Submit
+              {isCreatingNote ? "Submitting..." : "Submit"}
             </CustomButton>
           </Stack>
         </form>

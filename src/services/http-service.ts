@@ -20,11 +20,13 @@ class HttpService {
   }
 
   getOne<T>(id: string | undefined) {
-    const controller = new AbortController();
-    const response = apiClient.get<T>(this.endpoint + "/" + id, {
-      signal: controller.signal,
-    });
-    return { response, cancel: () => controller.abort() };
+    if (id !== "new") {
+      const controller = new AbortController();
+      const response = apiClient.get<T>(this.endpoint + "/" + id, {
+        signal: controller.signal,
+      });
+      return { response, cancel: () => controller.abort() };
+    }
   }
 
   delete(id: string) {
