@@ -1,7 +1,7 @@
 import apiClient from "./api-client.ts";
 
 interface Entity {
-  _id: string;
+  _id?: string;
 }
 
 class HttpService {
@@ -38,7 +38,8 @@ class HttpService {
   }
 
   update<T extends Entity>(entity: T) {
-    return apiClient.patch(this.endpoint + "/" + entity._id, entity);
+    const { _id, ...newEntity } = entity;
+    return apiClient.put(this.endpoint + "/" + _id, newEntity);
   }
 }
 

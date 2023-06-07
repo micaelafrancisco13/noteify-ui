@@ -16,12 +16,12 @@ import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { updateNote } from "../../services/notes.ts";
 import { format, isBefore, startOfDay } from "date-fns";
 import { Note } from "../../services/note-service.ts";
 import useNotes from "../../hooks/useNotes.ts";
 
 const schema = z.object({
+  _id: z.string().optional(),
   title: z.string().min(1, { message: "Title is required" }).max(255),
   description: z
     .string()
@@ -66,8 +66,14 @@ function NoteForm({ drawerToggle }: Props) {
   const [categoryName, setCategoryName] = useState("");
   const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
 
-  const { currentNote, createNote, isCreatingNote, errorMessage, statusCode } =
-    useNotes(id);
+  const {
+    currentNote,
+    createNote,
+    isCreatingNote,
+    updateNote,
+    errorMessage,
+    statusCode,
+  } = useNotes(id);
 
   console.log("current", currentNote);
 
@@ -98,6 +104,7 @@ function NoteForm({ drawerToggle }: Props) {
   };
 
   const populateForm = (note: Note) => {
+    setValue("_id", note._id);
     setValue("title", note.title);
     setValue("description", note.description);
     setValue("categoryId", note.category._id);
@@ -113,7 +120,7 @@ function NoteForm({ drawerToggle }: Props) {
     console.log("Saved note: ", data);
 
     if (id === "new") createNote(data, navigate);
-    else updateNote({ id, ...data });
+    else updateNote(data, navigate);
   };
 
   const dateCreated = watch("dateCreated");

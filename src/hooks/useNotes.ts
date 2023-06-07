@@ -12,6 +12,7 @@ function useNotes(id?: string | undefined) {
 
   const [isFetchingNotes, setIsFetchingNotes] = useState(false);
   useEffect(() => {
+    setIsFetchingNotes(true);
     let result;
 
     if (!id) result = noteService.getAll<Note>();
@@ -41,14 +42,33 @@ function useNotes(id?: string | undefined) {
     setIsCreatingNote(true);
     noteService
       .create(data)
-      .then((res) => {
-        setNotes([...originalNotes, res.data]);
+      .then(() => {
         setIsCreatingNote(false);
         navigate("/");
       })
       .catch((err) => {
-        setNotes(originalNotes);
         setIsCreatingNote(false);
+        setError(err);
+      });
+  };
+
+  const [isUpdatingNote, setIsUpdatingNote] = useState(false);
+  const updateNote = (note: NoteFormData, navigate: NavigateFunction) => {
+    setIsUpdatingNote(true);
+    noteService
+      .update({
+        _id: note._id,
+        title: note.title,
+        description: note.description,
+        categoryId: note.categoryId,
+        upcomingDate: note.upcomingDate,
+      })
+      .then(() => {
+        setIsUpdatingNote(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        setIsUpdatingNote(false);
         setError(err);
       });
   };
@@ -80,6 +100,9 @@ function useNotes(id?: string | undefined) {
 
     createNote,
     isCreatingNote,
+
+    updateNote,
+    isUpdatingNote,
 
     deleteNote,
     isDeletingNote,

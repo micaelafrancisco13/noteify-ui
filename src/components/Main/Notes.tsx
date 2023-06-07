@@ -47,7 +47,6 @@ function Notes({ drawerToggle }: Props) {
     errorMessage,
     isFetchingNotes,
     deleteNote,
-    isDeletingNote,
   } = useNotes();
 
   const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
@@ -128,6 +127,8 @@ function Notes({ drawerToggle }: Props) {
     deleteNote(id);
   };
 
+  console.log("is fetching", isFetchingNotes);
+
   return (
     <>
       {date && (
@@ -183,7 +184,7 @@ function Notes({ drawerToggle }: Props) {
         spacing={2}
         sx={{ width: "auto", mt: 2 }}
       >
-        {isFetchingNotes || isDeletingNote
+        {isFetchingNotes
           ? [...Array(4)].map((_, index) => <CardSkeleton key={index} />)
           : filteredNotes.map((n) => (
               <NoteCard
