@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme.ts";
@@ -7,34 +7,11 @@ import Main from "./components/Main/Main.tsx";
 import NotFound from "./components/NotFound.tsx";
 import NoteForm from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
-import { deleteNote, Note } from "./services/notes.ts";
 import Account from "./components/Account/Account.tsx";
-import noteService from "./services/note-service.ts";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
-  const [notes, setNotes] = useState<Note[]>([]);
-
-  useEffect(() => {
-    const { response, cancel } = noteService.getAll<Note>();
-
-    response
-      .then((res) => {
-        console.log("data", res.data);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-
-    // setNotes();
-  }, []);
-
-  const handleOnDeleteNote = (id: string) => {
-    // optimistic update
-    setNotes(notes.filter((n) => n._id !== id));
-    deleteNote(id);
-  };
 
   console.log("App");
 
@@ -55,12 +32,7 @@ function App() {
             />
             <Route
               path="/notes"
-              element={
-                <Notes
-                  drawerToggle={drawerToggle}
-                  onDeleteNote={handleOnDeleteNote}
-                />
-              }
+              element={<Notes drawerToggle={drawerToggle} />}
             />
             <Route
               path="/account"

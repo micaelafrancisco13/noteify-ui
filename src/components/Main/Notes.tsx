@@ -1,7 +1,6 @@
 import Masonry from "@mui/lab/Masonry";
 import NoteCard from "../NoteCard/NoteCard.tsx";
 import { Button, Grid, Stack, Typography } from "@mui/material";
-import { getNotes, Note } from "../../services/notes.ts";
 import CustomButton from "../custom/CustomButton.tsx";
 import AnchorMenu, { AnchorMenuItemProps } from "../common/AnchorMenu.tsx";
 import { styled } from "@mui/material/styles";
@@ -12,6 +11,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { getCategories } from "../../services/categories.ts";
 import { useSearchParams } from "react-router-dom";
 import { isAfter, isBefore, isEqual, startOfDay } from "date-fns";
+import useNotes from "../../hooks/useNotes.tsx";
+import noteService, { Note } from "../../services/note-service.ts";
 
 const StyledButton = styled(CustomButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -28,10 +29,9 @@ const StyledHeadingOne = styled(Typography)(({ theme }) => ({
 
 interface Props {
   drawerToggle: boolean;
-  onDeleteNote: (id: string) => void;
 }
 
-function Notes({ drawerToggle, onDeleteNote }: Props) {
+function Notes({ drawerToggle }: Props) {
   console.log("<Notes/>");
   const [searchParams, setSearchParams] = useSearchParams();
   const { category, date, sortBy, orderBy } = Object.fromEntries([
@@ -40,10 +40,18 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
   const existingParams = Object.fromEntries(searchParams.entries());
 
   const categories = getCategories();
-  const allNotes = getNotes();
+
+  const {
+    notes: allNotes,
+    setNotes,
+    error,
+    setError,
+    isLoading,
+    setIsLoading,
+  } = useNotes();
 
   const [sortMenu, setSortMenu] = useState<AnchorMenuItemProps[] | []>([]);
-  const [filteredNotes, setFilteredNotes] = useState<Note[]>(allNotes);
+  const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   const numberOfNotes = filteredNotes.length;
 
   useEffect(() => {
@@ -105,7 +113,7 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
     });
 
     setSortMenu(newSortMenu);
-  }, [allNotes.length, category, date, sortBy, orderBy]);
+  }, [allNotes, category, date, sortBy, orderBy]);
 
   const filterMenu = categories.map((category) => ({
     name: category.name,
@@ -115,6 +123,16 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
         category: _.camelCase(category.name),
       }),
   }));
+
+  const handleOnDeleteNote = (id: string) => {
+    // optimistic update
+    const originalNotes = [...allNotes];
+    setNotes(allNotes.filter((n) => n._id !== id));
+    noteService.delete(id).catch((err) => {
+      setError(err.message);
+      setNotes(originalNotes);
+    });
+  };
 
   return (
     <>
@@ -167,7 +185,11 @@ function Notes({ drawerToggle, onDeleteNote }: Props) {
         sx={{ width: "auto", mt: 2 }}
       >
         {filteredNotes.map((n) => (
-          <NoteCard key={n._id} note={n} onDeleteNote={onDeleteNote} />
+          <NoteCard
+            key={n._id}
+            note={n}
+            onDeleteNote={() => handleOnDeleteNote(n._id)}
+          />
         ))}
       </Masonry>
     </>

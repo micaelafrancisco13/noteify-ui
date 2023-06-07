@@ -1,7 +1,7 @@
 import apiClient from "./api-client.ts";
 
 interface Entity {
-  id: number;
+  _id: string;
 }
 
 class HttpService {
@@ -19,7 +19,7 @@ class HttpService {
     return { response, cancel: () => controller.abort() };
   }
 
-  delete(id: number) {
+  delete(id: string) {
     return apiClient.delete(this.endpoint + "/" + id);
   }
 
@@ -28,10 +28,12 @@ class HttpService {
   }
 
   update<T extends Entity>(entity: T) {
-    return apiClient.patch(this.endpoint + "/" + entity.id, entity);
+    return apiClient.patch(this.endpoint + "/" + entity._id, entity);
   }
 }
 
-const create = (endpoint: string) => new HttpService(endpoint);
+function create(endpoint: string) {
+  return new HttpService(endpoint);
+}
 
 export default create;
