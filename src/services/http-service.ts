@@ -5,15 +5,15 @@ interface Entity {
 }
 
 class HttpService {
-  endpoint: string;
+  private _endpoint: string;
 
   constructor(endpoint: string) {
-    this.endpoint = endpoint;
+    this._endpoint = endpoint;
   }
 
   getAll<T>() {
     const controller = new AbortController();
-    const response = apiClient.get<T[]>(this.endpoint, {
+    const response = apiClient.get<T[]>(this._endpoint, {
       signal: controller.signal,
     });
     return { response, cancel: () => controller.abort() };
@@ -22,7 +22,7 @@ class HttpService {
   getOne<T>(id: string | undefined) {
     if (id !== "new") {
       const controller = new AbortController();
-      const response = apiClient.get<T>(this.endpoint + "/" + id, {
+      const response = apiClient.get<T>(this._endpoint + "/" + id, {
         signal: controller.signal,
       });
       return { response, cancel: () => controller.abort() };
@@ -30,16 +30,20 @@ class HttpService {
   }
 
   delete(id: string) {
-    return apiClient.delete(this.endpoint + "/" + id);
+    return apiClient.delete(this._endpoint + "/" + id);
   }
 
   create<T>(entity: T) {
-    return apiClient.post(this.endpoint, entity);
+    return apiClient.post(this._endpoint, entity);
   }
 
   update<T extends Entity>(entity: T) {
     const { _id, ...newEntity } = entity;
-    return apiClient.put(this.endpoint + "/" + _id, newEntity);
+    return apiClient.put(this._endpoint + "/" + _id, newEntity);
+  }
+
+  set endpoint(value: string) {
+    this._endpoint = value;
   }
 }
 
