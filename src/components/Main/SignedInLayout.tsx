@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ReactNode, RefObject } from "react";
+import NavBar from "../NavBar/NavBar.tsx";
 
-const StyledMain = styled(Box, {
+const StyledBox = styled(Box, {
   shouldForwardProp: (prop) =>
     prop !== "drawerToggle" && prop !== "drawerWidth",
 })<{
@@ -30,17 +31,30 @@ interface Props {
   drawerToggle: boolean;
   drawerRef: RefObject<HTMLDivElement>;
   children: ReactNode;
+  onDrawerToggle: (value: boolean) => void;
 }
 
-function Main({ drawerToggle, drawerRef, children }: Props) {
+function SignedInLayout({
+  drawerToggle,
+  drawerRef,
+  children,
+  onDrawerToggle,
+}: Props) {
   return (
-    <StyledMain
-      drawerToggle={drawerToggle}
-      drawerWidth={drawerToggle ? drawerRef.current?.offsetWidth : 0}
-    >
-      <Box sx={{ py: 4, px: 2 }}>{children}</Box>
-    </StyledMain>
+    <>
+      <NavBar
+        drawerToggle={drawerToggle}
+        onDrawerToggle={(toggle) => onDrawerToggle(toggle)}
+        drawerRef={drawerRef}
+      />
+      <StyledBox
+        drawerToggle={drawerToggle}
+        drawerWidth={drawerToggle ? drawerRef.current?.offsetWidth : 0}
+      >
+        <Box sx={{ py: 4, px: 2 }}>{children}</Box>
+      </StyledBox>
+    </>
   );
 }
 
-export default Main;
+export default SignedInLayout;

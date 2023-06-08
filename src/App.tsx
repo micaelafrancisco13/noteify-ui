@@ -1,13 +1,17 @@
-import { useRef, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ReactNode, useRef, useState } from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme.ts";
-import NavBar from "./components/NavBar/NavBar.tsx";
-import Main from "./components/Main/Main.tsx";
-import NotFound from "./components/NotFound.tsx";
+import SignedInLayout from "./components/Main/SignedInLayout.tsx";
 import NoteForm from "./components/NoteForm/NoteForm.tsx";
 import Notes from "./components/Main/Notes.tsx";
 import Account from "./components/Account/Account.tsx";
+import Homepage from "./components/Main/Homepage.tsx";
+import NotFound from "./components/NotFound.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -15,36 +19,50 @@ function App() {
 
   console.log("App");
 
+  function withLayout(childNode: ReactNode) {
+    return (
+      <SignedInLayout
+        drawerToggle={drawerToggle}
+        drawerRef={drawerRef}
+        onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
+      >
+        {childNode}
+      </SignedInLayout>
+    );
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Homepage />,
+    },
+    {
+      path: "/account",
+      element: withLayout(<Account drawerToggle={drawerToggle} />),
+    },
+    {
+      path: "/notes",
+      element: withLayout(<Notes drawerToggle={drawerToggle} />),
+    },
+    {
+      path: "/notes/:id",
+      element: withLayout(<NoteForm drawerToggle={drawerToggle} />),
+    },
+    {
+      path: "/not-found",
+      element: <NotFound />,
+    },
+    {
+      path: "*",
+      element: <Navigate to={`/not-found`} replace />,
+    },
+  ]);
+
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <NavBar
-          drawerToggle={drawerToggle}
-          onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
-          drawerRef={drawerRef}
-        />
-        <Main drawerToggle={drawerToggle} drawerRef={drawerRef}>
-          <Routes>
-            <Route
-              path="/notes/:id"
-              element={<NoteForm drawerToggle={drawerToggle} />}
-            />
-            <Route
-              path="/notes"
-              element={<Notes drawerToggle={drawerToggle} />}
-            />
-            <Route
-              path="/account"
-              element={<Account drawerToggle={drawerToggle} />}
-            />
-            <Route path="/not-found" element={<NotFound />} />
-            <Route path="/" element={<Navigate to={`/notes`} replace />} />
-            <Route path="*" element={<Navigate to={`/not-found`} replace />} />
-          </Routes>
-        </Main>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 
