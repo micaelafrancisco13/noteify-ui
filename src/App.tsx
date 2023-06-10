@@ -21,8 +21,6 @@ function App() {
   console.log("App");
 
   function withLayout(childNode: ReactNode) {
-    console.log("drawerRef - withLayout", drawerRef);
-
     return (
       <SignedInLayout
         drawerToggle={drawerToggle}

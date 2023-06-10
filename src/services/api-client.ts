@@ -4,4 +4,8 @@ export default axios.create({
   baseURL: "http://localhost:3000/api",
 });
 
-export { CanceledError };
+function setJwt(jwt: string) {
+  axios.defaults.headers.common["Authorization"] = jwt;
+}
+
+export { CanceledError, setJwt };
