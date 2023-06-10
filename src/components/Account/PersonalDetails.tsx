@@ -88,13 +88,17 @@ function PersonalDetails({ submitButton }: Props) {
               label="First name"
               name="firstName"
               variant="filled"
-              readOnly={!isEditable}
+              InputProps={{
+                readOnly: !isEditable,
+              }}
             />
             <CustomTextField
               label="Last name"
               name="lastName"
               variant="filled"
-              readOnly={!isEditable}
+              InputProps={{
+                readOnly: !isEditable,
+              }}
             />
             {isEditable && submitButton}
           </Stack>

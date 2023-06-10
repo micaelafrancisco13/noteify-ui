@@ -1,10 +1,26 @@
 import { Navigate } from "react-router-dom";
+import SignedInLayout from "./SignedInLayout.tsx";
+import { RefObject } from "react";
 
-function Homepage() {
+interface Props {
+  drawerToggle: boolean;
+  drawerRef: RefObject<HTMLDivElement>;
+  onDrawerToggle: (value: boolean) => void;
+}
+
+function Homepage({ drawerToggle, drawerRef, onDrawerToggle }: Props) {
   // if (!user) return <LandingPage />
   // otherwise,
 
-  return <Navigate to={"/notes"} />;
+  return (
+    <SignedInLayout
+      drawerToggle={drawerToggle}
+      drawerRef={drawerRef}
+      onDrawerToggle={(toggle) => onDrawerToggle(toggle)}
+    >
+      <Navigate to={"/notes"} />
+    </SignedInLayout>
+  );
 }
 
 export default Homepage;

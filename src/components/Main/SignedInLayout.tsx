@@ -40,6 +40,12 @@ function SignedInLayout({
   children,
   onDrawerToggle,
 }: Props) {
+  const drawerWidth = drawerRef.current?.offsetWidth;
+
+  // useEffect(() => {
+  //   if (drawerWidth === undefined) onDrawerToggle(false);
+  // }, [drawerWidth]);
+
   return (
     <>
       <NavBar
@@ -49,7 +55,7 @@ function SignedInLayout({
       />
       <StyledBox
         drawerToggle={drawerToggle}
-        drawerWidth={drawerToggle ? drawerRef.current?.offsetWidth : 0}
+        drawerWidth={drawerToggle ? drawerWidth : 0}
       >
         <Box sx={{ py: 4, px: 2 }}>{children}</Box>
       </StyledBox>

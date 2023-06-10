@@ -12,6 +12,7 @@ import Notes from "./components/Main/Notes.tsx";
 import Account from "./components/Account/Account.tsx";
 import Homepage from "./components/Main/Homepage.tsx";
 import NotFound from "./components/NotFound.tsx";
+import SignInForm from "./components/AuthForm/SignInForm.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -20,6 +21,8 @@ function App() {
   console.log("App");
 
   function withLayout(childNode: ReactNode) {
+    console.log("drawerRef - withLayout", drawerRef);
+
     return (
       <SignedInLayout
         drawerToggle={drawerToggle}
@@ -31,10 +34,22 @@ function App() {
     );
   }
 
+  console.log("drawerRef", drawerRef);
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Homepage />,
+      element: (
+        <Homepage
+          drawerToggle={drawerToggle}
+          drawerRef={drawerRef}
+          onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
+        />
+      ),
+    },
+    {
+      path: "/auth/login",
+      element: <SignInForm />,
     },
     {
       path: "/account",
