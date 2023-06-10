@@ -17,6 +17,18 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const StyledImageContainer = styled(Box)(({ theme }) => ({
+  display: "none",
+  width: "100%",
+  maxWidth: "420px",
+  height: "210px",
+  border: "1px solid green",
+  [theme.breakpoints.up("md")]: {
+    marginLeft: "80px",
+    display: "block",
+  },
+}));
+
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(1, {
@@ -50,101 +62,115 @@ function SignInForm() {
       />
       <Box
         sx={{
-          height: "100vh",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Typography
-          fontWeight="700"
-          fontSize="30px"
-          // sx={{ my: "96px", mb: "32px" }}
+        <Box
+          sx={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
         >
-          Sign in
-        </Typography>
-        <FormProvider {...useFormMethods}>
-          <form
-            onSubmit={handleSubmit((data) => {
-              handleOnSubmitNote(data);
-              reset();
-            })}
-            autoComplete="off"
+          <Typography
+            fontWeight="700"
+            fontSize="30px"
+            // sx={{ my: "96px", mb: "32px" }}
           >
-            <Stack spacing={4}>
-              <CustomTextField
-                label="Email address"
-                name="email"
-                type="email"
-              />
-              <CustomTextField
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                InputProps={{
-                  endAdornment: (
-                    <PasswordEyeIcon
-                      showPassword={showPassword}
-                      hasInput={watch("password") !== ""}
-                      setShowPassword={(value) => setShowPassword(value)}
-                    />
-                  ),
-                }}
-              />
-              <Stack spacing={2}>
-                <CustomButton
-                  type="submit"
-                  variant="contained"
-                  maxWidth="400px"
-                  fullWidth
-                  sx={{ textTransform: "none", fontWeight: 700 }}
-                  // disabled={past || isCreatingNote || isUpdatingNote}
-                >
-                  {/*{isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}*/}
-                  Sign in
-                </CustomButton>
-                <Typography
-                  component={Link}
-                  to={"/some-forgot-password-page"}
-                  sx={{ fontSize: "13px", textDecoration: "underline" }}
-                >
-                  Forgot your password?
-                </Typography>
-                <Typography sx={{ fontSize: "13px" }}>
-                  By signing in, you agree to NoteIfy's{" "}
-                  <span
-                    style={{ textDecoration: "underline", cursor: "pointer" }}
-                  >
-                    Terms of Service
-                  </span>{" "}
-                  and{" "}
-                  <span
-                    style={{ textDecoration: "underline", cursor: "pointer" }}
-                  >
-                    Privacy Policy
-                  </span>
-                  .
-                </Typography>
-              </Stack>
-            </Stack>
-            <Typography
-              sx={{ fontSize: "13px", textAlign: "center", py: "32px" }}
+            Sign in
+          </Typography>
+          <FormProvider {...useFormMethods}>
+            <form
+              onSubmit={handleSubmit((data) => {
+                handleOnSubmitNote(data);
+                reset();
+              })}
+              autoComplete="off"
             >
-              Don't have an account?{" "}
-              <Box component={Link} to={"/auth/sign-up"}>
-                <span
-                  style={{
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                    fontSize: "14px",
+              <Stack spacing={4}>
+                <CustomTextField
+                  label="Email address"
+                  name="email"
+                  type="email"
+                />
+                <CustomTextField
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <PasswordEyeIcon
+                        showPassword={showPassword}
+                        hasInput={watch("password") !== ""}
+                        setShowPassword={(value) => setShowPassword(value)}
+                      />
+                    ),
                   }}
-                >
-                  Sign up
-                </span>
-              </Box>
-            </Typography>
-          </form>
-        </FormProvider>
+                />
+                <Stack spacing={2}>
+                  <CustomButton
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    sx={{ textTransform: "none", fontWeight: 700 }}
+                    // disabled={past || isCreatingNote || isUpdatingNote}
+                  >
+                    {/*{isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}*/}
+                    Sign in
+                  </CustomButton>
+                  <Typography
+                    component={Link}
+                    to={"/some-forgot-password-page"}
+                    sx={{ fontSize: "13px", textDecoration: "underline" }}
+                  >
+                    Forgot your password?
+                  </Typography>
+                  <Typography sx={{ fontSize: "13px" }}>
+                    By signing in, you agree to NoteIfy's{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Terms of Service
+                    </span>{" "}
+                    and{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Privacy Policy
+                    </span>
+                    .
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Typography
+                sx={{ fontSize: "13px", textAlign: "center", py: "32px" }}
+              >
+                Don't have an account?{" "}
+                <Box component={Link} to={"/auth/sign-up"}>
+                  <span
+                    style={{
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                    }}
+                  >
+                    Sign up
+                  </span>
+                </Box>
+              </Typography>
+            </form>
+          </FormProvider>
+        </Box>
+        <StyledImageContainer />
       </Box>
     </StyledBox>
   );
