@@ -1,3 +1,8 @@
 ::-ms-reveal {
     display: none;
 }
+
+a {
+    color: inherit;
+}
+

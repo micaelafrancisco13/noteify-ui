@@ -48,7 +48,7 @@ function App() {
       ),
     },
     {
-      path: "/auth/login",
+      path: "/auth/sign-in",
       element: <SignInForm />,
     },
     {
