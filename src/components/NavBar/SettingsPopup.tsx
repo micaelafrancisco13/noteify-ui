@@ -32,7 +32,7 @@ function SettingsPopup() {
     {
       name: "Log out",
       execute() {
-        console.log("some log out func");
+        navigate("/auth/sign-out");
       },
     },
   ];

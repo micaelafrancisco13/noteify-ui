@@ -13,20 +13,11 @@ import Account from "./components/Account/Account.tsx";
 import Homepage from "./components/Main/Homepage.tsx";
 import NotFound from "./components/NotFound.tsx";
 import SignInForm from "./components/AuthForm/SignInForm.tsx";
-import axios from "axios";
+import SignOut from "./components/AuthForm/SignOut.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
-  // const { getCurrentUser } = useAuth();
-  //
-  // useEffect(() => {
-  //   getCurrentUser();
-  // }, []);
-
-  console.log("axios.defaults.headers.common", axios.defaults.headers.common);
-
-  console.log("App");
 
   function withLayout(childNode: ReactNode) {
     return (
@@ -54,6 +45,10 @@ function App() {
     {
       path: "/auth/sign-in",
       element: <SignInForm />,
+    },
+    {
+      path: "/auth/sign-out",
+      element: <SignOut />,
     },
     {
       path: "/account",

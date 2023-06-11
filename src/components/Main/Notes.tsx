@@ -33,7 +33,6 @@ interface Props {
 }
 
 function Notes({ drawerToggle }: Props) {
-  console.log("<Notes/>");
   const [searchParams, setSearchParams] = useSearchParams();
   const { category, date, sortBy, orderBy } = Object.fromEntries([
     ...searchParams,
@@ -125,8 +124,6 @@ function Notes({ drawerToggle }: Props) {
   const handleOnDeleteNote = (id: string) => {
     deleteNote(id);
   };
-
-  console.log("is fetching", isFetchingNotes);
 
   return (
     <>

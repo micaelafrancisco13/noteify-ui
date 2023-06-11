@@ -24,6 +24,10 @@ function useAuth() {
       });
   };
 
+  const signOut = () => {
+    localStorage.removeItem(TOKEN_KEY);
+  };
+
   const getCurrentUser = () => {
     authService.endpoint = "/users/me";
 
@@ -42,6 +46,7 @@ function useAuth() {
 
   return {
     signIn,
+    signOut,
     getCurrentUser,
     isLoggingIn,
     authErrorMessage,
