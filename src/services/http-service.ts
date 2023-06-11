@@ -33,7 +33,7 @@ class HttpService {
     return apiClient.delete(this._endpoint + "/" + id);
   }
 
-  create<T>(entity: T) {
+  create<T>(entity?: T) {
     return apiClient.post(this._endpoint, entity);
   }
 

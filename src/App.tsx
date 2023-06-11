@@ -13,10 +13,18 @@ import Account from "./components/Account/Account.tsx";
 import Homepage from "./components/Main/Homepage.tsx";
 import NotFound from "./components/NotFound.tsx";
 import SignInForm from "./components/AuthForm/SignInForm.tsx";
+import axios from "axios";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
+  // const { getCurrentUser } = useAuth();
+  //
+  // useEffect(() => {
+  //   getCurrentUser();
+  // }, []);
+
+  console.log("axios.defaults.headers.common", axios.defaults.headers.common);
 
   console.log("App");
 
