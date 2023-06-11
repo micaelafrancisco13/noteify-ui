@@ -9,6 +9,7 @@ import { useState } from "react";
 import PasswordEyeIcon from "../common/PasswordEyeIcon.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -47,9 +48,10 @@ function SignInForm() {
   });
 
   const { handleSubmit, watch, reset } = useFormMethods;
+  const { signIn, isLoggingIn } = useAuth();
 
   const handleOnSubmitNote = (data: SignInFormData) => {
-    console.log("login data", data);
+    signIn(data);
   };
 
   return (
@@ -92,11 +94,13 @@ function SignInForm() {
             >
               <Stack spacing={4}>
                 <CustomTextField
+                  autoComplete="username"
                   label="Email address"
                   name="email"
                   type="email"
                 />
                 <CustomTextField
+                  autoComplete="current-password"
                   label="Password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -116,10 +120,9 @@ function SignInForm() {
                     variant="contained"
                     fullWidth
                     sx={{ textTransform: "none", fontWeight: 700 }}
-                    // disabled={past || isCreatingNote || isUpdatingNote}
+                    disabled={isLoggingIn}
                   >
-                    {/*{isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}*/}
-                    Sign in
+                    {isLoggingIn ? "Signing in..." : "Sign in"}
                   </CustomButton>
                   <Typography
                     component={Link}

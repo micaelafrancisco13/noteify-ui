@@ -32,8 +32,6 @@ function App() {
     );
   }
 
-  console.log("drawerRef", drawerRef);
-
   const router = createBrowserRouter([
     {
       path: "/",
