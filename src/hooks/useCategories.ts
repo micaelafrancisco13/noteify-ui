@@ -30,12 +30,14 @@ function useCategories() {
   }, []);
 
   const categoryErrorMessage = error?.message;
+  const categoryStatusCode = error?.response?.status;
 
   return {
     categories,
     categoryIDs,
     isFetchingCategories,
     categoryErrorMessage,
+    categoryStatusCode,
   };
 }
 
