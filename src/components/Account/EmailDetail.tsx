@@ -80,6 +80,7 @@ function EmailDetail({ submitButton }: Props) {
         >
           <Stack spacing={4}>
             <CustomTextField
+              autoComplete="username"
               label="Email address"
               name="email"
               variant="filled"

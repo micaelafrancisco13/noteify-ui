@@ -22,7 +22,8 @@ class HttpService {
   getOne<T>(id?: string | undefined) {
     if (id !== "new") {
       const controller = new AbortController();
-      const response = apiClient.get<T>(this._endpoint + "/" + id, {
+      const endpoint = id ? this._endpoint + "/" + id : this._endpoint;
+      const response = apiClient.get<T>(endpoint, {
         signal: controller.signal,
       });
       return { response, cancel: () => controller.abort() };

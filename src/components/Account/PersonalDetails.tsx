@@ -6,11 +6,8 @@ import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditOffIcon from "@mui/icons-material/EditOff";
-import {
-  getPersonalDetails,
-  updatePersonalDetails,
-} from "../../services/userDetails.ts";
 import { styled } from "@mui/material/styles";
+import accountService from "../../services/account-service.ts";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
@@ -27,11 +24,14 @@ export type PersonalDetailsFormData = z.infer<typeof schema>;
 
 interface Props {
   submitButton: ReactNode;
+  firstName: string;
+  lastName: string;
 }
 
-function PersonalDetails({ submitButton }: Props) {
+function PersonalDetails({ submitButton, firstName, lastName }: Props) {
   const [isEditable, setIsEditable] = useState(false);
   const [initialValue, setInitialValue] = useState<PersonalDetailsFormData>();
+  const [submitted, setSubmitted] = useState(false);
 
   const useFormMethods = useForm<PersonalDetailsFormData>({
     defaultValues: { firstName: "", lastName: "" },
@@ -41,17 +41,15 @@ function PersonalDetails({ submitButton }: Props) {
   const { handleSubmit, setValue, reset } = useFormMethods;
 
   useEffect(() => {
-    if (!isEditable) {
+    if (!isEditable && !submitted) {
       reset();
 
-      setTimeout(() => {
-        const { firstName, lastName } = getPersonalDetails();
-        setInitialValue({ firstName, lastName });
-        setValue("firstName", firstName);
-        setValue("lastName", lastName);
-      }, 1000);
+      setInitialValue({ firstName, lastName });
+      setValue("firstName", firstName);
+      setValue("lastName", lastName);
     }
-  }, [isEditable]);
+    setSubmitted(false);
+  }, [isEditable, firstName, lastName]);
 
   const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
     setIsEditable(false);
@@ -60,7 +58,12 @@ function PersonalDetails({ submitButton }: Props) {
       initialValue?.lastName === data.lastName
     )
       return;
-    updatePersonalDetails(data);
+
+    setSubmitted(true);
+    accountService.update({
+      _id: "personal",
+      ...data,
+    });
   };
 
   return (

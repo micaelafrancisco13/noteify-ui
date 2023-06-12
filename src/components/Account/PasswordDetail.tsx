@@ -40,7 +40,7 @@ function PasswordDetail({ submitButton }: Props) {
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, reset } = useFormMethods;
+  const { handleSubmit, reset, watch } = useFormMethods;
 
   useEffect(() => {
     if (!isEditable) {
@@ -77,6 +77,7 @@ function PasswordDetail({ submitButton }: Props) {
         >
           <Stack spacing={4}>
             <CustomTextField
+              autoComplete="current-password"
               label="Current password"
               name="currentPassword"
               variant="filled"
@@ -85,6 +86,7 @@ function PasswordDetail({ submitButton }: Props) {
                 readOnly: !isEditable,
                 endAdornment: isEditable && (
                   <PasswordEyeIcon
+                    hasInput={watch("currentPassword") !== ""}
                     showPassword={showPassword}
                     setShowPassword={(value) => setShowPassword(value)}
                   />
@@ -92,6 +94,7 @@ function PasswordDetail({ submitButton }: Props) {
               }}
             />
             <CustomTextField
+              autoComplete="new-password"
               label="New password"
               name="newPassword"
               variant="filled"
@@ -100,6 +103,7 @@ function PasswordDetail({ submitButton }: Props) {
                 readOnly: !isEditable,
                 endAdornment: isEditable && (
                   <PasswordEyeIcon
+                    hasInput={watch("newPassword") !== ""}
                     showPassword={showPassword}
                     setShowPassword={(value) => setShowPassword(value)}
                   />
