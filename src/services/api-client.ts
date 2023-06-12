@@ -18,7 +18,6 @@ instance.interceptors.response.use(null, (error) => {
 });
 
 function setJwt(jwt: string | null) {
-  console.log("setJwt()", jwt);
   instance.defaults.headers.common["Authorization"] = jwt;
 }
 

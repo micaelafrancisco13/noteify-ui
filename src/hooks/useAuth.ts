@@ -29,6 +29,7 @@ function useAuth() {
       .then((res) => {
         localStorage.setItem(TOKEN_KEY, res.data);
         setIsLoggingIn(false);
+        window.location.assign("/");
       })
       .catch((err) => {
         setError(err);
