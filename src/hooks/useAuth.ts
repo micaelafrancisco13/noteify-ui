@@ -31,7 +31,6 @@ function useAuth() {
         setIsLoggingIn(false);
       })
       .catch((err) => {
-        console.log("Error signing-in", err);
         setError(err);
         setIsLoggingIn(false);
       });
