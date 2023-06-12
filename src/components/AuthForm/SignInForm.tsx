@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import PasswordEyeIcon from "../common/PasswordEyeIcon.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -53,6 +53,9 @@ function SignInForm() {
   const handleOnSubmitNote = (data: SignInFormData) => {
     signIn(data);
   };
+
+  const { currentUser } = useAuth();
+  if (currentUser) return <Navigate to="/" />;
 
   return (
     <StyledBox>

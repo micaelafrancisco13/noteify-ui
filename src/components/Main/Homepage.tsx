@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
 import SignedInLayout from "./SignedInLayout.tsx";
 import { RefObject } from "react";
+import useAuth from "../../hooks/useAuth.ts";
+import LandingPage from "./LandingPage.tsx";
 
 interface Props {
   drawerToggle: boolean;
@@ -9,8 +11,9 @@ interface Props {
 }
 
 function Homepage({ drawerToggle, drawerRef, onDrawerToggle }: Props) {
-  // if (!user) return <LandingPage />
-  // otherwise,
+  const { currentUser } = useAuth();
+
+  if (!currentUser) return <LandingPage />;
 
   return (
     <SignedInLayout
