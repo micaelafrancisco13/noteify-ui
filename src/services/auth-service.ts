@@ -5,3 +5,6 @@ export interface Auth {
 }
 
 export default create("/auth");
+const currentUserService = create("/users/me");
+
+export { currentUserService };

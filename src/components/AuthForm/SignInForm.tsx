@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import PasswordEyeIcon from "../common/PasswordEyeIcon.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -40,7 +40,6 @@ const schema = z.object({
 export type SignInFormData = z.infer<typeof schema>;
 
 function SignInForm() {
-  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
   const useFormMethods = useForm<SignInFormData>({
@@ -53,10 +52,6 @@ function SignInForm() {
 
   const handleOnSubmitNote = (data: SignInFormData) => {
     signIn(data);
-    if (!isLoggingIn) {
-      const { state } = location;
-      window.location = state ? state.from.pathname : "/";
-    }
   };
 
   return (

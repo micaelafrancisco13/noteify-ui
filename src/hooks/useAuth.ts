@@ -2,11 +2,13 @@ import authService from "../services/auth-service.ts";
 import { SignInFormData } from "../components/AuthForm/SignInForm.tsx";
 import { useState } from "react";
 import { AxiosError } from "axios";
+import { useLocation } from "react-router-dom";
 
 function useAuth() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<AxiosError>();
   const TOKEN_KEY = "token";
+  const location = useLocation();
 
   const signIn = (data: SignInFormData) => {
     setIsLoggingIn(true);
@@ -14,8 +16,9 @@ function useAuth() {
       .create(data)
       .then((res) => {
         localStorage.setItem(TOKEN_KEY, res.data);
-        console.log("res.data", res.data);
         setIsLoggingIn(false);
+        const { state } = location;
+        window.location = state ? state.from.pathname : "/";
       })
       .catch((err) => {
         console.log("Error signing-in", err);
@@ -28,18 +31,7 @@ function useAuth() {
     localStorage.removeItem(TOKEN_KEY);
   };
 
-  const getCurrentUser = () => {
-    authService.endpoint = "/users/me";
-
-    authService
-      .create()
-      .then((res) => {
-        console.log("response.data", res.data);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  };
+  const getCurrentUser = () => {};
 
   const authErrorMessage = error?.message;
   const authStatusCode = error?.response?.status;
