@@ -6,6 +6,3 @@ export interface CurrentUser {
 }
 
 export default create("/auth");
-const currentUserService = create("/users/me");
-
-export { currentUserService };

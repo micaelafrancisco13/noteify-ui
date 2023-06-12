@@ -52,10 +52,9 @@ function App() {
       path: "/auth/sign-out",
       element: <SignOut />,
     },
-
     {
       path: "/not-found",
-      element: <NotFound />,
+      element: currentUser ? withLayout(<NotFound />) : <NotFound />,
     },
     {
       path: "*",
