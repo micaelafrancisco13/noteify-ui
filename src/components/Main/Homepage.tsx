@@ -11,9 +11,9 @@ interface Props {
 }
 
 function Homepage({ drawerToggle, drawerRef, onDrawerToggle }: Props) {
-  const { currentUser } = useAuth();
+  const { getCurrentUser } = useAuth();
 
-  if (!currentUser) return <LandingPage />;
+  if (!getCurrentUser()) return <LandingPage />;
 
   return (
     <SignedInLayout

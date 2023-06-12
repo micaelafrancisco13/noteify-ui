@@ -14,14 +14,11 @@ import Homepage from "./components/Main/Homepage.tsx";
 import NotFound from "./components/NotFound.tsx";
 import SignInForm from "./components/AuthForm/SignInForm.tsx";
 import SignOut from "./components/AuthForm/SignOut.tsx";
-import useAuth from "./hooks/useAuth.ts";
+import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
-  const { currentUser } = useAuth();
-
-  console.log("current user", currentUser);
 
   function withLayout(childNode: ReactNode) {
     return (
@@ -54,18 +51,7 @@ function App() {
       path: "/auth/sign-out",
       element: <SignOut />,
     },
-    {
-      path: "/account",
-      element: withLayout(<Account drawerToggle={drawerToggle} />),
-    },
-    {
-      path: "/notes",
-      element: withLayout(<Notes drawerToggle={drawerToggle} />),
-    },
-    {
-      path: "/notes/:id",
-      element: withLayout(<NoteForm drawerToggle={drawerToggle} />),
-    },
+
     {
       path: "/not-found",
       element: <NotFound />,
@@ -73,6 +59,23 @@ function App() {
     {
       path: "*",
       element: <Navigate to={`/not-found`} replace />,
+    },
+    {
+      element: <PrivateRoutes />,
+      children: [
+        {
+          path: "/account",
+          element: withLayout(<Account drawerToggle={drawerToggle} />),
+        },
+        {
+          path: "/notes",
+          element: withLayout(<Notes drawerToggle={drawerToggle} />),
+        },
+        {
+          path: "/notes/:id",
+          element: withLayout(<NoteForm drawerToggle={drawerToggle} />),
+        },
+      ],
     },
   ]);
 

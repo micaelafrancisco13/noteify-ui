@@ -54,8 +54,8 @@ function SignInForm() {
     signIn(data);
   };
 
-  const { currentUser } = useAuth();
-  if (currentUser) return <Navigate to="/" />;
+  const { getCurrentUser } = useAuth();
+  if (getCurrentUser()) return <Navigate to="/" />;
 
   return (
     <StyledBox>
