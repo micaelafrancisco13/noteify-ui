@@ -1,14 +1,26 @@
-import authService from "../services/auth-service.ts";
+import authService, { CurrentUser } from "../services/auth-service.ts";
 import { SignInFormData } from "../components/AuthForm/SignInForm.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import { useLocation } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import { setJwt } from "../services/api-client.ts";
 
 function useAuth() {
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<AxiosError>();
   const TOKEN_KEY = "token";
-  const location = useLocation();
+
+  setJwt(localStorage.getItem(TOKEN_KEY));
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token) setCurrentUser(jwtDecode(token) as CurrentUser);
+    } catch (ex) {
+      setCurrentUser(null);
+    }
+  }, []);
 
   const signIn = (data: SignInFormData) => {
     setIsLoggingIn(true);
@@ -17,8 +29,6 @@ function useAuth() {
       .then((res) => {
         localStorage.setItem(TOKEN_KEY, res.data);
         setIsLoggingIn(false);
-        const { state } = location;
-        window.location = state ? state.from.pathname : "/";
       })
       .catch((err) => {
         console.log("Error signing-in", err);
@@ -31,15 +41,13 @@ function useAuth() {
     localStorage.removeItem(TOKEN_KEY);
   };
 
-  const getCurrentUser = () => {};
-
   const authErrorMessage = error?.message;
   const authStatusCode = error?.response?.status;
 
   return {
     signIn,
     signOut,
-    getCurrentUser,
+    currentUser,
     isLoggingIn,
     authErrorMessage,
     authStatusCode,

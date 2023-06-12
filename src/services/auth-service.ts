@@ -1,7 +1,8 @@
 import create from "./http-service.ts";
 
-export interface Auth {
-  token: string;
+export interface CurrentUser {
+  _id: string | null;
+  iat: Date;
 }
 
 export default create("/auth");

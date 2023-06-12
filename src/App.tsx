@@ -14,10 +14,14 @@ import Homepage from "./components/Main/Homepage.tsx";
 import NotFound from "./components/NotFound.tsx";
 import SignInForm from "./components/AuthForm/SignInForm.tsx";
 import SignOut from "./components/AuthForm/SignOut.tsx";
+import useAuth from "./hooks/useAuth.ts";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { currentUser } = useAuth();
+
+  console.log("current user", currentUser);
 
   function withLayout(childNode: ReactNode) {
     return (

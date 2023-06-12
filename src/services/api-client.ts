@@ -2,9 +2,6 @@ import axios, { CanceledError } from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/api",
-  headers: {
-    Authorization: localStorage.getItem("token"),
-  },
 });
 
 instance.interceptors.response.use(null, (error) => {
@@ -20,5 +17,10 @@ instance.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
+function setJwt(jwt: string | null) {
+  console.log("setJwt()", jwt);
+  instance.defaults.headers.common["Authorization"] = jwt;
+}
+
 export default instance;
-export { CanceledError };
+export { CanceledError, setJwt };
