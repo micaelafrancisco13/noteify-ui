@@ -3,11 +3,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import { styled } from "@mui/material/styles";
-import accountService from "../../services/account-service.ts";
+import useAccount from "../../hooks/useAccount.ts";
+import CustomButton from "../custom/CustomButton.tsx";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
@@ -23,12 +24,12 @@ const schema = z.object({
 export type PersonalDetailsFormData = z.infer<typeof schema>;
 
 interface Props {
-  submitButton: ReactNode;
   firstName: string;
   lastName: string;
+  drawerToggle: boolean;
 }
 
-function PersonalDetails({ submitButton, firstName, lastName }: Props) {
+function PersonalDetails({ firstName, lastName, drawerToggle }: Props) {
   const [isEditable, setIsEditable] = useState(false);
   const [initialValue, setInitialValue] = useState<PersonalDetailsFormData>();
   const [submitted, setSubmitted] = useState(false);
@@ -51,6 +52,12 @@ function PersonalDetails({ submitButton, firstName, lastName }: Props) {
     setSubmitted(false);
   }, [isEditable, firstName, lastName]);
 
+  const {
+    updatePersonalDetails,
+    isUpdatingPersonalDetails,
+    updatePersonalDetailsError,
+  } = useAccount();
+
   const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
     setIsEditable(false);
     if (
@@ -60,10 +67,7 @@ function PersonalDetails({ submitButton, firstName, lastName }: Props) {
       return;
 
     setSubmitted(true);
-    accountService.update({
-      _id: "personal",
-      ...data,
-    });
+    updatePersonalDetails(data);
   };
 
   return (
@@ -103,7 +107,26 @@ function PersonalDetails({ submitButton, firstName, lastName }: Props) {
                 readOnly: !isEditable,
               }}
             />
-            {isEditable && submitButton}
+            <Box>
+              {isEditable && (
+                <CustomButton
+                  color="accent_pale_green"
+                  type="submit"
+                  variant="contained"
+                  maxWidth="220px"
+                  drawerToggle={drawerToggle}
+                >
+                  {isUpdatingPersonalDetails ? "Submitting..." : "Submit"}
+                </CustomButton>
+              )}
+              {updatePersonalDetailsError && (
+                <Typography
+                  sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+                >
+                  There was an error updating the personal details.
+                </Typography>
+              )}
+            </Box>
           </Stack>
         </form>
       </FormProvider>

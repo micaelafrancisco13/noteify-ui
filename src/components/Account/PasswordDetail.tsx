@@ -3,12 +3,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import { styled } from "@mui/material/styles";
-import { updatePasswordDetail } from "../../services/passwordDetail.ts";
 import PasswordEyeIcon from "../common/PasswordEyeIcon.tsx";
+import CustomButton from "../custom/CustomButton.tsx";
+import useAccount from "../../hooks/useAccount.ts";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
@@ -28,10 +29,10 @@ const schema = z.object({
 export type PasswordDetailFormData = z.infer<typeof schema>;
 
 interface Props {
-  submitButton: ReactNode;
+  drawerToggle: boolean;
 }
 
-function PasswordDetail({ submitButton }: Props) {
+function PasswordDetail({ drawerToggle }: Props) {
   const [isEditable, setIsEditable] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,6 +49,12 @@ function PasswordDetail({ submitButton }: Props) {
       setShowPassword(false);
     }
   }, [isEditable]);
+
+  const {
+    updatePasswordDetail,
+    isUpdatingPasswordDetail,
+    updatePasswordDetailError,
+  } = useAccount();
 
   const handleOnUpdateUser = (data: PasswordDetailFormData) => {
     setIsEditable(false);
@@ -110,7 +117,26 @@ function PasswordDetail({ submitButton }: Props) {
                 ),
               }}
             />
-            {isEditable && submitButton}
+            <Box>
+              {isEditable && (
+                <CustomButton
+                  color="accent_pale_green"
+                  type="submit"
+                  variant="contained"
+                  maxWidth="220px"
+                  drawerToggle={drawerToggle}
+                >
+                  {isUpdatingPasswordDetail ? "Submitting..." : "Submit"}
+                </CustomButton>
+              )}
+              {updatePasswordDetailError && (
+                <Typography
+                  sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+                >
+                  {updatePasswordDetailError.response?.status}
+                </Typography>
+              )}
+            </Box>
           </Stack>
         </form>
       </FormProvider>

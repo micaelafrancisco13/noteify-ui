@@ -3,14 +3,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import { styled } from "@mui/material/styles";
-import {
-  getEmailDetail,
-  updateEmailDetail,
-} from "../../services/emailDetail.ts";
+import CustomButton from "../custom/CustomButton.tsx";
+import useAccount from "../../hooks/useAccount.ts";
 
 const StyledBox = styled(Box)(() => ({
   display: "flex",
@@ -25,12 +23,11 @@ const schema = z.object({
 export type EmailDetailFormData = z.infer<typeof schema>;
 
 interface Props {
-  submitButton: ReactNode;
+  drawerToggle: boolean;
 }
 
-function EmailDetail({ submitButton }: Props) {
+function EmailDetail({ drawerToggle }: Props) {
   const [isEditable, setIsEditable] = useState(false);
-  const [initialValue, setInitialValue] = useState<EmailDetailFormData>();
 
   const useFormMethods = useForm<EmailDetailFormData>({
     defaultValues: { email: "" },
@@ -39,21 +36,23 @@ function EmailDetail({ submitButton }: Props) {
 
   const { handleSubmit, setValue, reset } = useFormMethods;
 
-  useEffect(() => {
-    if (!isEditable) {
-      reset();
+  const {
+    accountDetails,
+    updateEmailDetail,
+    isUpdatingEmailDetail,
+    updateEmailDetailError,
+    setUpdateEmailDetailError,
+  } = useAccount();
 
-      setTimeout(() => {
-        const { email } = getEmailDetail();
-        setInitialValue({ email });
-        setValue("email", email);
-      }, 1000);
-    }
-  }, [isEditable]);
+  useEffect(() => {
+    setValue("email", accountDetails.email);
+  }, [accountDetails.email]);
 
   const handleOnUpdateUser = (data: EmailDetailFormData) => {
     setIsEditable(false);
-    if (initialValue?.email === data.email) return;
+
+    if (data.email === accountDetails.email) return;
+
     updateEmailDetail(data);
   };
 
@@ -66,6 +65,8 @@ function EmailDetail({ submitButton }: Props) {
           aria-label="Edit email address"
           onClick={() => {
             setIsEditable(!isEditable);
+            reset();
+            setUpdateEmailDetailError(undefined);
           }}
         >
           {!isEditable ? <EditIcon /> : <EditOffIcon />}
@@ -79,17 +80,37 @@ function EmailDetail({ submitButton }: Props) {
           noValidate={true}
         >
           <Stack spacing={4}>
-            <CustomTextField
-              autoComplete="username"
-              label="Email address"
-              name="email"
-              variant="filled"
-              type="email"
-              InputProps={{
-                readOnly: !isEditable,
-              }}
-            />
-            {isEditable && submitButton}
+            <Box>
+              <CustomTextField
+                autoComplete="username"
+                label="Email address"
+                name="email"
+                variant="filled"
+                type="email"
+                fullWidth
+                InputProps={{
+                  readOnly: !isEditable,
+                }}
+              />
+              {updateEmailDetailError && (
+                <Typography
+                  sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+                >
+                  {updateEmailDetailError.message}
+                </Typography>
+              )}
+            </Box>
+            {isEditable && (
+              <CustomButton
+                color="accent_pale_green"
+                type="submit"
+                variant="contained"
+                maxWidth="220px"
+                drawerToggle={drawerToggle}
+              >
+                {isUpdatingEmailDetail ? "Submitting..." : "Submit"}
+              </CustomButton>
+            )}
           </Stack>
         </form>
       </FormProvider>
