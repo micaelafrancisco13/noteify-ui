@@ -34,7 +34,7 @@ function EmailDetail({ drawerToggle }: Props) {
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, setValue, reset } = useFormMethods;
+  const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
 
   const {
     accountDetails,
@@ -46,7 +46,10 @@ function EmailDetail({ drawerToggle }: Props) {
 
   useEffect(() => {
     if (!isEditable) setValue("email", accountDetails.email);
-    else setValue("email", "");
+    else {
+      setFocus("email");
+      setValue("email", "");
+    }
   }, [accountDetails.email, isEditable]);
 
   const handleOnUpdateUser = (data: EmailDetailFormData) => {
@@ -105,7 +108,7 @@ function EmailDetail({ drawerToggle }: Props) {
                 </Typography>
               )}
             </Box>
-            {isEditable && (
+            {(isEditable || isUpdatingEmailDetail) && (
               <CustomButton
                 color="accent_pale_green"
                 type="submit"
