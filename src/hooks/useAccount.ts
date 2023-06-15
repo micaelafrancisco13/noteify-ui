@@ -124,6 +124,7 @@ function useAccount() {
     updatePersonalDetails,
     isUpdatingPersonalDetails,
     updatePersonalDetailsError,
+    setUpdatePersonalDetailsError,
 
     updateEmailDetail,
     isUpdatingEmailDetail,

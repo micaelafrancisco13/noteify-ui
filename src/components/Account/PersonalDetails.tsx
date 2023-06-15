@@ -24,15 +24,11 @@ const schema = z.object({
 export type PersonalDetailsFormData = z.infer<typeof schema>;
 
 interface Props {
-  firstName: string;
-  lastName: string;
   drawerToggle: boolean;
 }
 
-function PersonalDetails({ firstName, lastName, drawerToggle }: Props) {
+function PersonalDetails({ drawerToggle }: Props) {
   const [isEditable, setIsEditable] = useState(false);
-  const [initialValue, setInitialValue] = useState<PersonalDetailsFormData>();
-  const [submitted, setSubmitted] = useState(false);
 
   const useFormMethods = useForm<PersonalDetailsFormData>({
     defaultValues: { firstName: "", lastName: "" },
@@ -41,34 +37,39 @@ function PersonalDetails({ firstName, lastName, drawerToggle }: Props) {
 
   const { handleSubmit, setValue, reset } = useFormMethods;
 
-  useEffect(() => {
-    if (!isEditable && !submitted) {
-      reset();
-
-      setInitialValue({ firstName, lastName });
-      setValue("firstName", firstName);
-      setValue("lastName", lastName);
-    }
-    setSubmitted(false);
-  }, [isEditable, firstName, lastName]);
-
   const {
+    accountDetails,
     updatePersonalDetails,
     isUpdatingPersonalDetails,
     updatePersonalDetailsError,
+    setUpdatePersonalDetailsError,
   } = useAccount();
+
+  useEffect(() => {
+    if (!isEditable) {
+      setValue("firstName", accountDetails.firstName);
+      setValue("lastName", accountDetails.lastName);
+    } else {
+      setValue("firstName", "");
+      setValue("lastName", "");
+    }
+  }, [accountDetails.firstName, accountDetails.lastName, isEditable]);
 
   const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
     setIsEditable(false);
+
     if (
-      initialValue?.firstName === data.firstName &&
-      initialValue?.lastName === data.lastName
+      data.firstName === accountDetails.firstName &&
+      data.lastName === accountDetails.lastName
     )
       return;
 
-    setSubmitted(true);
     updatePersonalDetails(data);
   };
+
+  const errorMessage = (updatePersonalDetailsError?.response?.data as string)
+    ? (updatePersonalDetailsError?.response?.data as string)
+    : updatePersonalDetailsError?.message;
 
   return (
     <Box>
@@ -79,6 +80,8 @@ function PersonalDetails({ firstName, lastName, drawerToggle }: Props) {
           aria-label="Edit personal details"
           onClick={() => {
             setIsEditable(!isEditable);
+            reset();
+            setUpdatePersonalDetailsError(undefined);
           }}
         >
           {!isEditable ? <EditIcon /> : <EditOffIcon />}
@@ -99,34 +102,35 @@ function PersonalDetails({ firstName, lastName, drawerToggle }: Props) {
                 readOnly: !isEditable,
               }}
             />
-            <CustomTextField
-              label="Last name"
-              name="lastName"
-              variant="filled"
-              InputProps={{
-                readOnly: !isEditable,
-              }}
-            />
             <Box>
-              {isEditable && (
-                <CustomButton
-                  color="accent_pale_green"
-                  type="submit"
-                  variant="contained"
-                  maxWidth="220px"
-                  drawerToggle={drawerToggle}
-                >
-                  {isUpdatingPersonalDetails ? "Submitting..." : "Submit"}
-                </CustomButton>
-              )}
-              {updatePersonalDetailsError && (
+              <CustomTextField
+                label="Last name"
+                name="lastName"
+                variant="filled"
+                fullWidth
+                InputProps={{
+                  readOnly: !isEditable,
+                }}
+              />
+              {errorMessage && (
                 <Typography
                   sx={{ fontSize: "13px", color: "error.main", my: 1 }}
                 >
-                  There was an error updating the personal details.
+                  {errorMessage}
                 </Typography>
               )}
             </Box>
+            {isEditable && (
+              <CustomButton
+                color="accent_pale_green"
+                type="submit"
+                variant="contained"
+                maxWidth="220px"
+                drawerToggle={drawerToggle}
+              >
+                {isUpdatingPersonalDetails ? "Submitting..." : "Submit"}
+              </CustomButton>
+            )}
           </Stack>
         </form>
       </FormProvider>
