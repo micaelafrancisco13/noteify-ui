@@ -35,7 +35,7 @@ function PersonalDetails({ drawerToggle }: Props) {
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, setValue, reset } = useFormMethods;
+  const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
 
   const {
     accountDetails,
@@ -50,6 +50,7 @@ function PersonalDetails({ drawerToggle }: Props) {
       setValue("firstName", accountDetails.firstName);
       setValue("lastName", accountDetails.lastName);
     } else {
+      setFocus("firstName");
       setValue("firstName", "");
       setValue("lastName", "");
     }
@@ -120,7 +121,7 @@ function PersonalDetails({ drawerToggle }: Props) {
                 </Typography>
               )}
             </Box>
-            {isEditable && (
+            {(isEditable || isUpdatingPersonalDetails) && (
               <CustomButton
                 color="accent_pale_green"
                 type="submit"
