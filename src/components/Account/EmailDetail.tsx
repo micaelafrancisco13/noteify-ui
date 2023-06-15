@@ -45,8 +45,9 @@ function EmailDetail({ drawerToggle }: Props) {
   } = useAccount();
 
   useEffect(() => {
-    setValue("email", accountDetails.email);
-  }, [accountDetails.email]);
+    if (!isEditable) setValue("email", accountDetails.email);
+    else setValue("email", "");
+  }, [accountDetails.email, isEditable]);
 
   const handleOnUpdateUser = (data: EmailDetailFormData) => {
     setIsEditable(false);
@@ -55,6 +56,10 @@ function EmailDetail({ drawerToggle }: Props) {
 
     updateEmailDetail(data);
   };
+
+  const errorMessage = (updateEmailDetailError?.response?.data as string)
+    ? (updateEmailDetailError?.response?.data as string)
+    : updateEmailDetailError?.message;
 
   return (
     <Box>
@@ -92,11 +97,11 @@ function EmailDetail({ drawerToggle }: Props) {
                   readOnly: !isEditable,
                 }}
               />
-              {updateEmailDetailError && (
+              {errorMessage && (
                 <Typography
                   sx={{ fontSize: "13px", color: "error.main", my: 1 }}
                 >
-                  {updateEmailDetailError.message}
+                  {errorMessage}
                 </Typography>
               )}
             </Box>

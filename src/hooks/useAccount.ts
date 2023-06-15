@@ -84,12 +84,9 @@ function useAccount() {
       })
       .then((res) => {
         setAccountDetails(res.data);
-        console.log("success", res.data);
-
         setIsUpdatingEmailDetail(false);
       })
       .catch((err) => {
-        console.log("error", originalAccountDetails);
         setAccountDetails(originalAccountDetails);
         setUpdateEmailDetailError(err);
         setIsUpdatingEmailDetail(false);
