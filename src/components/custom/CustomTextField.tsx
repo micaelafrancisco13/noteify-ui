@@ -16,9 +16,10 @@ function CustomTextField(props: Props) {
   return (
     <Controller
       name={fieldName}
-      render={({ field }) => (
+      render={({ field: { ref, ...otherFieldProps } }) => (
         <TextField
-          {...field}
+          {...otherFieldProps}
+          inputRef={ref}
           {...originalProps}
           id={fieldName}
           error={hasError}

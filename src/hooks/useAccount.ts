@@ -97,6 +97,8 @@ function useAccount() {
     useState(false);
   const [updatePasswordDetailError, setUpdatePasswordDetailError] =
     useState<AxiosError>();
+  const [passwordChangedSuccessPrompt, setPasswordChangedSuccessPrompt] =
+    useState("");
   const updatePasswordDetail = (data: PasswordDetailFormData) => {
     setIsUpdatingPasswordDetail(true);
 
@@ -105,12 +107,11 @@ function useAccount() {
         _id: "password",
         ...data,
       })
-      .then((res) => {
-        setAccountDetails(res.data);
+      .then(() => {
         setIsUpdatingPasswordDetail(false);
+        setPasswordChangedSuccessPrompt("Password was successfully changed!");
       })
       .catch((err) => {
-        setAccountDetails(originalAccountDetails);
         setUpdatePasswordDetailError(err);
         setIsUpdatingPasswordDetail(false);
       });
@@ -134,6 +135,8 @@ function useAccount() {
     updatePasswordDetail,
     isUpdatingPasswordDetail,
     updatePasswordDetailError,
+    setUpdatePasswordDetailError,
+    passwordChangedSuccessPrompt,
   };
 }
 

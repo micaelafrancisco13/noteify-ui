@@ -34,32 +34,40 @@ interface Props {
 
 function PasswordDetail({ drawerToggle }: Props) {
   const [isEditable, setIsEditable] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const useFormMethods = useForm<PasswordDetailFormData>({
     defaultValues: { currentPassword: "", newPassword: "" },
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, reset, watch } = useFormMethods;
-
-  useEffect(() => {
-    if (!isEditable) {
-      reset();
-      setShowPassword(false);
-    }
-  }, [isEditable]);
+  const { handleSubmit, reset, watch, setFocus } = useFormMethods;
 
   const {
     updatePasswordDetail,
     isUpdatingPasswordDetail,
     updatePasswordDetailError,
+    setUpdatePasswordDetailError,
+    passwordChangedSuccessPrompt,
   } = useAccount();
+
+  useEffect(() => {
+    if (!isEditable) {
+      setShowCurrentPassword(false);
+      setShowNewPassword(false);
+    } else setFocus("currentPassword");
+  }, [isEditable]);
 
   const handleOnUpdateUser = (data: PasswordDetailFormData) => {
     setIsEditable(false);
     updatePasswordDetail(data);
+    reset();
   };
+
+  const errorMessage = (updatePasswordDetailError?.response?.data as string)
+    ? (updatePasswordDetailError?.response?.data as string)
+    : updatePasswordDetailError?.message;
 
   return (
     <Box>
@@ -70,6 +78,8 @@ function PasswordDetail({ drawerToggle }: Props) {
           aria-label="Edit password"
           onClick={() => {
             setIsEditable(!isEditable);
+            reset();
+            setUpdatePasswordDetailError(undefined);
           }}
         >
           {!isEditable ? <EditIcon /> : <EditOffIcon />}
@@ -88,55 +98,62 @@ function PasswordDetail({ drawerToggle }: Props) {
               label="Current password"
               name="currentPassword"
               variant="filled"
-              type={showPassword ? "text" : "password"}
+              type={showCurrentPassword ? "text" : "password"}
               InputProps={{
                 readOnly: !isEditable,
                 endAdornment: isEditable && (
                   <PasswordEyeIcon
                     hasInput={watch("currentPassword") !== ""}
-                    showPassword={showPassword}
-                    setShowPassword={(value) => setShowPassword(value)}
-                  />
-                ),
-              }}
-            />
-            <CustomTextField
-              autoComplete="new-password"
-              label="New password"
-              name="newPassword"
-              variant="filled"
-              type={showPassword ? "text" : "password"}
-              InputProps={{
-                readOnly: !isEditable,
-                endAdornment: isEditable && (
-                  <PasswordEyeIcon
-                    hasInput={watch("newPassword") !== ""}
-                    showPassword={showPassword}
-                    setShowPassword={(value) => setShowPassword(value)}
+                    showPassword={showCurrentPassword}
+                    setShowPassword={(value) => setShowCurrentPassword(value)}
                   />
                 ),
               }}
             />
             <Box>
-              {isEditable && (
-                <CustomButton
-                  color="accent_pale_green"
-                  type="submit"
-                  variant="contained"
-                  maxWidth="220px"
-                  drawerToggle={drawerToggle}
-                >
-                  {isUpdatingPasswordDetail ? "Submitting..." : "Submit"}
-                </CustomButton>
-              )}
-              {updatePasswordDetailError && (
+              <CustomTextField
+                autoComplete="new-password"
+                label="New password"
+                name="newPassword"
+                variant="filled"
+                fullWidth
+                type={showNewPassword ? "text" : "password"}
+                InputProps={{
+                  readOnly: !isEditable,
+                  endAdornment: isEditable && (
+                    <PasswordEyeIcon
+                      hasInput={watch("newPassword") !== ""}
+                      showPassword={showNewPassword}
+                      setShowPassword={(value) => setShowNewPassword(value)}
+                    />
+                  ),
+                }}
+              />
+              {errorMessage ? (
                 <Typography
                   sx={{ fontSize: "13px", color: "error.main", my: 1 }}
                 >
-                  {updatePasswordDetailError.response?.status}
+                  {errorMessage}
+                </Typography>
+              ) : (
+                <Typography
+                  sx={{ fontSize: "13px", color: "success.main", my: 1 }}
+                >
+                  {passwordChangedSuccessPrompt}
                 </Typography>
               )}
             </Box>
+            {(isEditable || isUpdatingPasswordDetail) && (
+              <CustomButton
+                color="accent_pale_green"
+                type="submit"
+                variant="contained"
+                maxWidth="220px"
+                drawerToggle={drawerToggle}
+              >
+                {isUpdatingPasswordDetail ? "Submitting..." : "Submit"}
+              </CustomButton>
+            )}
           </Stack>
         </form>
       </FormProvider>
