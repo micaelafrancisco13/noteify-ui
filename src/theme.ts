@@ -37,6 +37,12 @@ const theme = createTheme({
       dark: "#5B3A12",
       contrastText: "#fff",
     },
+    simple_white: {
+      main: "#fff",
+      light: "#fff",
+      dark: "#B2B2B2",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
   },
   components: {
     MuiFormHelperText: {
@@ -80,12 +86,28 @@ const theme = createTheme({
   },
 });
 
+// Extend the existing theme interface
+declare module "@mui/material/styles" {
+  interface Theme {
+    customColors: {
+      simple_white: string;
+      // Add other custom color options if needed
+    };
+  }
+  // Allow the `color` prop to accept custom colors
+  interface IconButtonPropsColorOverrides {
+    simple_white: true;
+    // Add other custom color options if needed
+  }
+}
+
 declare module "@mui/material/styles/createPalette" {
   interface Palette {
     accent_pale_green: PaletteColor;
     accent_green: PaletteColor;
     accent_purple: PaletteColor;
     accent_brown: PaletteColor;
+    simple_white: PaletteColor;
   }
 
   // allow configuration using `createTheme`
@@ -94,6 +116,7 @@ declare module "@mui/material/styles/createPalette" {
     accent_green?: PaletteColorOptions;
     accent_purple?: PaletteColorOptions;
     accent_brown?: PaletteColorOptions;
+    simple_white?: PaletteColorOptions;
   }
 }
 
@@ -104,6 +127,7 @@ declare module "@mui/material/Button" {
     accent_green: true;
     accent_purple: true;
     accent_brown: true;
+    simple_white: true;
   }
 }
 
@@ -113,6 +137,7 @@ declare module "@mui/material/Typography" {
     accent_green: true;
     accent_purple: true;
     accent_brown: true;
+    simple_white: true;
   }
 }
 

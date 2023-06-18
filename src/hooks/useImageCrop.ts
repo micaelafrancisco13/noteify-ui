@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Cropper from "cropperjs";
 
-function useImageCrop(uploadedImage: string) {
-  const imageRef = useRef<HTMLImageElement>(null);
+function useImageCrop(dependencies: any[]) {
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const cropperRef = useRef<Cropper | null>(null);
 
@@ -18,7 +18,7 @@ function useImageCrop(uploadedImage: string) {
     return () => {
       if (cropperRef.current) cropperRef.current.destroy();
     };
-  }, [imageRef, cropperRef, uploadedImage]);
+  }, [imageRef, cropperRef, ...dependencies]);
 
   const handleCrop = () => {
     const cropperData = cropperRef?.current?.getData();
@@ -26,12 +26,15 @@ function useImageCrop(uploadedImage: string) {
     const croppedImageDataURL = canvas?.toDataURL();
 
     if (croppedImageDataURL) setCroppedImage(croppedImageDataURL);
+    handleRemoveCropCanvas();
+  };
 
+  const handleRemoveCropCanvas = () => {
     cropperRef?.current?.destroy(); // Destroy the Cropper.js instance
     imageRef.current?.classList.add("hidden"); // Add a CSS class to hide the image
   };
 
-  return { imageRef, handleCrop, croppedImage };
+  return { imageRef, handleCrop, handleRemoveCropCanvas, croppedImage };
 }
 
 export default useImageCrop;

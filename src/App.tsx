@@ -17,6 +17,7 @@ import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 import useAuth from "./hooks/useAuth.ts";
 import LandingPage from "./components/Main/LandingPage.tsx";
 import DisplayPicture from "./components/DisplayPicture/DisplayPicture.tsx";
+import TestTwo from "./components/test/TestTwo.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -64,6 +65,10 @@ function App() {
       ) : (
         <DisplayPicture />
       ),
+    },
+    {
+      path: "/testt",
+      element: currentUser ? withLayout(<TestTwo />) : <TestTwo />,
     },
     {
       path: "*",

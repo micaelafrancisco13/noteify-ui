@@ -34,7 +34,7 @@ function SideDrawerMenuItems({ dominantItem, menuItems }: Props) {
       {menuItems.map((menuItem, index) => (
         <StyledListButton
           key={index}
-          color={menuItem.color}
+          sx={{ color: menuItem.color }}
           aria-label={menuItem.ariaLabel}
           startIcon={menuItem.startIcon}
           onClick={menuItem.onSelectMenuItem}

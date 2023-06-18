@@ -4,8 +4,6 @@
 
 :root {
     --color-primary: #7deccf;
-    --width-cropped-image: 300px;
-    --height-cropped-image: 300px;
 }
 
 a {
@@ -21,13 +19,8 @@ a {
 }
 
 .display-picture {
-    max-width: 600px;
-    max-height: 540px;
-}
-
-.cropped-image {
-    max-width: var(--width-cropped-image);
-    max-height: var(--height-cropped-image);
+    max-width: 250px;
+    max-height: 250px;
     border-radius: 50%;
 }
 
@@ -35,10 +28,10 @@ a {
     overflow: auto;
 }
 
-/*.cropper-crop-box {*/
-/*    max-width: var(--width-cropped-image);*/
-/*    max-height: var(--height-cropped-image);*/
-/*}*/
+.cropper-crop-box {
+    min-width: 225px;
+    min-height: 225px;
+}
 
 .cropper-view-box,
 .cropper-face,
