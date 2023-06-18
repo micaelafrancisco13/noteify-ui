@@ -90,12 +90,20 @@ const theme = createTheme({
 declare module "@mui/material/styles" {
   interface Theme {
     customColors: {
+      accent_pale_green: string;
+      accent_green: string;
+      accent_purple: string;
+      accent_brown: string;
       simple_white: string;
       // Add other custom color options if needed
     };
   }
   // Allow the `color` prop to accept custom colors
   interface IconButtonPropsColorOverrides {
+    accent_pale_green: true;
+    accent_green: true;
+    accent_purple: true;
+    accent_brown: true;
     simple_white: true;
     // Add other custom color options if needed
   }

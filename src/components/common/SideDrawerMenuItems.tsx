@@ -2,6 +2,8 @@ import { Button, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CustomButton from "../custom/CustomButton.tsx";
 import { ReactNode } from "react";
+import { OverridableStringUnion } from "@mui/types";
+import { ButtonPropsColorOverrides } from "@mui/material/Button/Button";
 
 const StyledListButton = styled(CustomButton)(() => ({
   display: "flex",
@@ -34,7 +36,18 @@ function SideDrawerMenuItems({ dominantItem, menuItems }: Props) {
       {menuItems.map((menuItem, index) => (
         <StyledListButton
           key={index}
-          sx={{ color: menuItem.color }}
+          color={
+            menuItem.color as OverridableStringUnion<
+              | "inherit"
+              | "primary"
+              | "secondary"
+              | "success"
+              | "error"
+              | "info"
+              | "warning",
+              ButtonPropsColorOverrides
+            >
+          }
           aria-label={menuItem.ariaLabel}
           startIcon={menuItem.startIcon}
           onClick={menuItem.onSelectMenuItem}
