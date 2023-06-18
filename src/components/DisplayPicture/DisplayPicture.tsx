@@ -26,6 +26,11 @@ function DisplayPicture() {
     setUploadedImage(croppedImage ? croppedImage : "https://placehold.co/1000");
   };
 
+  const handleApplyCrop = () => {
+    handleCrop();
+    handleModalClose();
+  };
+
   return (
     <Stack spacing={1} justifyContent="center" alignItems="center">
       <Box>
@@ -70,7 +75,7 @@ function DisplayPicture() {
         handleClose={handleModalClose}
         uploadedImage={uploadedImage}
         imageRef={imageRef}
-        handleCrop={handleCrop}
+        handleApplyCrop={handleApplyCrop}
       />
     </Stack>
   );

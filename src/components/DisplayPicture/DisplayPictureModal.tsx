@@ -8,7 +8,7 @@ interface Props {
   handleClose: () => void;
   uploadedImage: string;
   imageRef: RefObject<HTMLImageElement>;
-  handleCrop: () => void;
+  handleApplyCrop: () => void;
 }
 
 function DisplayPictureModal({
@@ -16,7 +16,7 @@ function DisplayPictureModal({
   handleClose,
   uploadedImage,
   imageRef,
-  handleCrop,
+  handleApplyCrop,
 }: Props) {
   return (
     <Dialog
@@ -61,7 +61,7 @@ function DisplayPictureModal({
         </DialogTitle>
         <Box sx={{ textAlign: "right", width: "100%" }}>
           <CustomButton
-            onClick={handleCrop}
+            onClick={handleApplyCrop}
             variant="contained"
             color="simple_white"
             sx={{
