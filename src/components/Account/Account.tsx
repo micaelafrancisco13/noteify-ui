@@ -9,7 +9,7 @@ interface Props {
 
 function Account({ drawerToggle }: Props) {
   return (
-    <Stack spacing={8}>
+    <Stack spacing={8} sx={{ maxWidth: "500px" }}>
       <PersonalDetails drawerToggle={drawerToggle} />
       <EmailDetail drawerToggle={drawerToggle} />
       <PasswordDetail drawerToggle={drawerToggle} />

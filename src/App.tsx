@@ -16,6 +16,7 @@ import SignOut from "./components/AuthForm/SignOut.tsx";
 import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 import useAuth from "./hooks/useAuth.ts";
 import LandingPage from "./components/Main/LandingPage.tsx";
+import DisplayPicture from "./components/DisplayPicture/DisplayPicture.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -55,6 +56,14 @@ function App() {
     {
       path: "/not-found",
       element: currentUser ? withLayout(<NotFound />) : <NotFound />,
+    },
+    {
+      path: "/test",
+      element: currentUser ? (
+        withLayout(<DisplayPicture />)
+      ) : (
+        <DisplayPicture />
+      ),
     },
     {
       path: "*",

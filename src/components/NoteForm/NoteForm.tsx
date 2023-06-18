@@ -229,6 +229,7 @@ function NoteForm({ drawerToggle }: Props) {
               drawerToggle={drawerToggle}
               maxWidth="220px"
               disabled={past || isCreatingNote || isUpdatingNote}
+              sx={{ fontWeight: "700" }}
             >
               {isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}
             </CustomButton>

@@ -2,7 +2,52 @@
     display: none;
 }
 
+:root {
+    --color-primary: #7deccf;
+    --width-cropped-image: 300px;
+    --height-cropped-image: 300px;
+}
+
 a {
     color: inherit;
 }
 
+.img {
+    max-width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    object-fit: contain;
+}
+
+.display-picture {
+    max-width: 600px;
+    max-height: 540px;
+}
+
+.cropped-image {
+    max-width: var(--width-cropped-image);
+    max-height: var(--height-cropped-image);
+    border-radius: 50%;
+}
+
+.cropper-container {
+    overflow: auto;
+}
+
+/*.cropper-crop-box {*/
+/*    max-width: var(--width-cropped-image);*/
+/*    max-height: var(--height-cropped-image);*/
+/*}*/
+
+.cropper-view-box,
+.cropper-face,
+.cropper-line,
+.cropper-point {
+     border-radius: 50%;
+}
+
+.cropper-view-box {
+    box-shadow: 0 0 0 1px var(--color-primary);
+    outline: 0;
+}
