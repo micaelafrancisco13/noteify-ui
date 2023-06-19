@@ -1,4 +1,5 @@
 import apiClient from "./api-client.ts";
+import { AxiosResponse } from "axios";
 
 interface Entity {
   _id?: string;
@@ -36,6 +37,14 @@ class HttpService {
 
   create<T>(entity: T) {
     return apiClient.post(this._endpoint, entity);
+  }
+
+  upload<T>(formData: FormData): Promise<AxiosResponse<T>> {
+    return apiClient.post(this._endpoint, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
   update<T extends Entity>(entity: T) {

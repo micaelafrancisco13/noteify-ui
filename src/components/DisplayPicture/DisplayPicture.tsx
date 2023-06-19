@@ -2,28 +2,36 @@ import "cropperjs/dist/cropper.css";
 import { Box, IconButton, Stack } from "@mui/material";
 import useImageCrop from "../../hooks/useImageCrop.ts";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import useModal from "../../hooks/useModal.ts";
 import DisplayPictureModal from "./DisplayPictureModal.tsx";
+import useDisplayPicture from "../../hooks/useDisplayPicture.ts";
 
 function DisplayPicture() {
-  const [uploadedImage, setUploadedImage] = useState(
-    "https://placehold.co/1000"
-  );
+  const {
+    initialDisplayPicture,
+    displayPicture,
+    setDisplayPicture,
+    updateDisplayPicture,
+  } = useDisplayPicture();
   const { modalToggle, handleOpen, handleClose } = useModal();
   const { imageRef, handleCrop, handleRemoveCropCanvas, croppedImage } =
-    useImageCrop([uploadedImage, modalToggle]);
+    useImageCrop([displayPicture, modalToggle]);
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) setUploadedImage(URL.createObjectURL(file));
-    handleOpen();
+    if (file) {
+      setDisplayPicture(URL.createObjectURL(file));
+      handleOpen();
+      setSelectedFileName(file.name);
+    }
   };
 
   const handleModalClose = () => {
     handleClose();
     handleRemoveCropCanvas();
-    setUploadedImage(croppedImage ? croppedImage : "https://placehold.co/1000");
+    setDisplayPicture(croppedImage ? croppedImage : initialDisplayPicture);
   };
 
   const handleApplyCrop = () => {
@@ -31,14 +39,19 @@ function DisplayPicture() {
     handleModalClose();
   };
 
+  useEffect(() => {
+    if (croppedImage) updateDisplayPicture(croppedImage, selectedFileName);
+  }, [croppedImage]);
+
   return (
     <Stack spacing={1} justifyContent="center" alignItems="center">
       <Box>
         {!croppedImage && !modalToggle && (
           <img
-            src={uploadedImage}
+            src={displayPicture}
             alt="Current display picture"
             className="display-picture"
+            crossOrigin="anonymous"
           />
         )}
         {croppedImage && (
@@ -46,6 +59,7 @@ function DisplayPicture() {
             src={croppedImage}
             alt="Cropped image"
             className="display-picture"
+            crossOrigin="anonymous"
           />
         )}
       </Box>
@@ -73,7 +87,7 @@ function DisplayPicture() {
       <DisplayPictureModal
         modalToggle={modalToggle}
         handleClose={handleModalClose}
-        uploadedImage={uploadedImage}
+        uploadedImage={displayPicture}
         imageRef={imageRef}
         handleApplyCrop={handleApplyCrop}
       />

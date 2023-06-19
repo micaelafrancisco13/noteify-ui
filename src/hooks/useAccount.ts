@@ -17,9 +17,9 @@ function useAccount() {
   const originalAccountDetails = { ...accountDetails };
 
   useEffect(() => {
+    setIsFetchingAccountDetails(true);
     const result = accountService.getOne<Account>();
     if (result) {
-      setIsFetchingAccountDetails(true);
       const { response, cancel } = result;
 
       response
