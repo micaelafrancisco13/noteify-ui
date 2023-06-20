@@ -11,7 +11,7 @@ interface Props {
   drawerRef: RefObject<HTMLDivElement>;
 }
 
-function NavBar({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
+function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   return (
     <>
       <AppBar
@@ -43,4 +43,4 @@ function NavBar({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   );
 }
 
-export default NavBar;
+export default NavBarSignedOut;

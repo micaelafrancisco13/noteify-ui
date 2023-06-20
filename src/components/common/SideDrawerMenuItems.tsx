@@ -14,7 +14,7 @@ const StyledListButton = styled(CustomButton)(() => ({
 export interface DrawerMenuItem {
   color: string;
   ariaLabel: string;
-  startIcon: ReactNode;
+  startIcon?: ReactNode;
   onSelectMenuItem: () => void;
   buttonChildren: ReactNode;
 }

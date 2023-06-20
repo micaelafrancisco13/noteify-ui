@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ReactNode, RefObject } from "react";
-import NavBar from "../NavBar/NavBar.tsx";
+import NavBarSignedIn from "../NavBar/NavBarSignedIn.tsx";
 
 const StyledBox = styled(Box, {
   shouldForwardProp: (prop) =>
@@ -42,13 +42,9 @@ function SignedInLayout({
 }: Props) {
   const drawerWidth = drawerRef.current?.offsetWidth;
 
-  // useEffect(() => {
-  //   if (drawerWidth === undefined) onDrawerToggle(false);
-  // }, [drawerWidth]);
-
   return (
     <>
-      <NavBar
+      <NavBarSignedIn
         drawerToggle={drawerToggle}
         onDrawerToggle={(toggle) => onDrawerToggle(toggle)}
         drawerRef={drawerRef}

@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import NoteIfyLogo from "../../assets/NoteIfy-logo.png";
 import CustomTextField from "../custom/CustomTextField.tsx";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -59,12 +58,6 @@ function SignInForm() {
 
   return (
     <StyledBox>
-      <img
-        width="32px"
-        height="32px"
-        src={NoteIfyLogo}
-        alt="NoteIfy official logo"
-      />
       <Box
         sx={{
           display: "flex",
