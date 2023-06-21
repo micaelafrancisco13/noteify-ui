@@ -1,9 +1,10 @@
-import { AppBar, Box, Toolbar } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import { RefObject } from "react";
 import SideDrawer from "../SideDrawer/SideDrawer.tsx";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import { useNavigate } from "react-router-dom";
+import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
-import HomeButton from "./HomeButton.tsx";
-import SettingsPopup from "./SettingsPopup.tsx";
 
 interface Props {
   drawerToggle: boolean;
@@ -12,6 +13,12 @@ interface Props {
 }
 
 function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
+  const navigate = useNavigate();
+
+  const buttonChildren = ["Sign in", "Start for free"].map((value) => (
+    <Typography>{value}</Typography>
+  ));
+
   return (
     <>
       <AppBar
@@ -23,20 +30,32 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
           disableGutters={true}
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
-          <Box>
-            <ToggleButton
-              drawerToggle={drawerToggle}
-              onDrawerToggle={onDrawerToggle}
-            />
-            <HomeButton />
-          </Box>
-          <SettingsPopup />
+          <Logo />
+          <ToggleButton
+            drawerToggle={drawerToggle}
+            onDrawerToggle={onDrawerToggle}
+          />
         </Toolbar>
       </AppBar>
       <SideDrawer
         drawerToggle={drawerToggle}
         onDrawerToggle={onDrawerToggle}
         drawerRef={drawerRef}
+        menuItems={[
+          {
+            color: "simple_white",
+            ariaLabel: `Sign in to your account`,
+            onSelectMenuItem: () => navigate(`/auth/sign-in`),
+            buttonChildren: buttonChildren[0],
+          },
+          {
+            color: "primary",
+            ariaLabel: `Register an account`,
+            startIcon: <DateRangeOutlinedIcon />,
+            onSelectMenuItem: () => navigate(`/auth/sign-up`),
+            buttonChildren: buttonChildren[1],
+          },
+        ]}
       />
       <Toolbar disableGutters={true} />
     </>

@@ -16,7 +16,7 @@ import SignOut from "./components/AuthForm/SignOut.tsx";
 import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 import useAuth from "./hooks/useAuth.ts";
 import LandingPage from "./components/Main/LandingPage.tsx";
-import DisplayPicture from "./components/DisplayPicture/DisplayPicture.tsx";
+import SignedOutLayout from "./components/Main/SignedOutLayout.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -42,7 +42,13 @@ function App() {
       element: currentUser ? (
         withLayout(<Navigate to="/notes" replace />)
       ) : (
-        <LandingPage />
+        <SignedOutLayout
+          drawerToggle={drawerToggle}
+          onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
+          drawerRef={drawerRef}
+        >
+          <LandingPage />
+        </SignedOutLayout>
       ),
     },
     {
@@ -56,14 +62,6 @@ function App() {
     {
       path: "/not-found",
       element: currentUser ? withLayout(<NotFound />) : <NotFound />,
-    },
-    {
-      path: "/test",
-      element: currentUser ? (
-        withLayout(<DisplayPicture />)
-      ) : (
-        <DisplayPicture />
-      ),
     },
     {
       path: "*",
