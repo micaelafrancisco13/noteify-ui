@@ -86,9 +86,12 @@ function NavBarSignedIn({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         </Toolbar>
       </AppBar>
       <SideDrawer
+        anchor="left"
         drawerToggle={drawerToggle}
         onDrawerToggle={onDrawerToggle}
         drawerRef={drawerRef}
+        stackSpacing={0}
+        stackDirection="column"
         dominantItem={
           <StyledListButton
             color="primary"

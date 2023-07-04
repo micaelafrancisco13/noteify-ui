@@ -74,12 +74,12 @@ const theme = createTheme({
           backgroundColor: props.theme.palette.secondary.dark,
           border: 0,
           width: "100%",
-          [theme.breakpoints.up("sm")]: {
-            maxWidth: theme.spacing(270 / 8),
-          },
-          [theme.breakpoints.up("md")]: {
-            maxWidth: theme.spacing(305 / 8),
-          },
+          // [theme.breakpoints.up("sm")]: {
+          //   maxWidth: theme.spacing(270 / 8),
+          // },
+          // [theme.breakpoints.up("md")]: {
+          //   maxWidth: theme.spacing(305 / 8),
+          // },
         }),
       },
     },
