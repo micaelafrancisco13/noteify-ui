@@ -10,6 +10,7 @@ import { Link, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
 import { z } from "zod";
 import Logo from "../common/Logo.tsx";
+import Landing from "../../assets/Landing.png";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -22,8 +23,6 @@ const StyledImageContainer = styled(Box)(({ theme }) => ({
   display: "none",
   width: "100%",
   maxWidth: "420px",
-  height: "210px",
-  border: "1px solid green",
   [theme.breakpoints.up("md")]: {
     marginLeft: "80px",
     display: "block",
@@ -187,7 +186,9 @@ function SignInForm() {
             </form>
           </FormProvider>
         </Box>
-        <StyledImageContainer />
+        <StyledImageContainer>
+          <img src={Landing} alt="Landing page display picture" />
+        </StyledImageContainer>
       </Box>
     </StyledBox>
   );
