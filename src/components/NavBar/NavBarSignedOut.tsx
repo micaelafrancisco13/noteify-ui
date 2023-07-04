@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { RefObject } from "react";
 import SideDrawer from "../SideDrawer/SideDrawer.tsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
 import { StyledDrawerListButton } from "../common/SideDrawerMenuItems.tsx";
@@ -68,8 +68,9 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
                   key={index}
                   color="simple_white"
                   aria-label={ariaLabel}
+                  component={Link}
+                  to={navigateTo}
                   onClick={() => {
-                    navigate(navigateTo);
                     onDrawerToggle(false);
                   }}
                   sx={{ padding: "9px 14px" }}
@@ -96,10 +97,12 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
                 key={index}
                 color="simple_white"
                 aria-label={ariaLabel}
+                component={Link}
+                to={navigateTo}
                 onClick={() => {
-                  navigate(navigateTo);
                   onDrawerToggle(false);
                 }}
+                sx={{ padding: "9px 14px" }}
               >
                 <Typography fontWeight={700}>{label}</Typography>
               </StyledDrawerListButton>
