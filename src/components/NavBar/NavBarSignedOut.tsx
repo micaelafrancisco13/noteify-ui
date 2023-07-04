@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Divider,
+  Stack,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -11,9 +12,12 @@ import SideDrawer from "../SideDrawer/SideDrawer.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
-import { StyledDrawerListButton } from "../common/SideDrawerMenuItems.tsx";
+import {
+  customVariants,
+  StyledDrawerListButton,
+} from "../common/SideDrawerMenuItems.tsx";
 import { useTheme } from "@mui/material/styles";
-import { navbarLinks } from "../../utils/navbarLinks.ts";
+import { authLinks, NavbarLink, navbarLinks } from "../../utils/navbarLinks.ts";
 
 interface Props {
   drawerToggle: boolean;
@@ -23,9 +27,9 @@ interface Props {
 
 function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
-  const smallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
+  const match = useMediaQuery(useTheme().breakpoints.down("lg"));
 
-  const buttonChildren = ["Sign in", "Start for free"].map((value) => (
+  const buttonChildren = authLinks.map(({ label }) => (
     <Box
       sx={{
         display: "flex",
@@ -35,9 +39,45 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         px: "3px",
       }}
     >
-      <Typography fontWeight={700}>{value}</Typography>
+      <Typography fontWeight={700}>{label}</Typography>
     </Box>
   ));
+
+  const menuItems = authLinks.map(({ color, ariaLabel, navigateTo }, index) => {
+    return {
+      color: color,
+      variant: "contained" as customVariants,
+      ariaLabel: ariaLabel,
+      onSelectMenuItem: () => {
+        navigate(navigateTo);
+        onDrawerToggle(false);
+      },
+      buttonChildren: buttonChildren[index],
+    };
+  });
+
+  const getAllNavbarLinks = (links: NavbarLink[], fontWeight: number) => {
+    return links.map(({ color, ariaLabel, navigateTo, label }, index) => (
+      <StyledDrawerListButton
+        key={index}
+        color={
+          label === "Sign in" ? (match ? "paper_gray" : "simple_white") : color
+        }
+        variant={label === "Start for free" ? "contained" : "text"}
+        aria-label={ariaLabel}
+        component={Link}
+        to={navigateTo}
+        onClick={() => {
+          onDrawerToggle(false);
+        }}
+        sx={{ padding: "10px 18px", borderRadius: "10px" }}
+      >
+        <Typography fontWeight={label === "Start for free" ? 600 : fontWeight}>
+          {label}
+        </Typography>
+      </StyledDrawerListButton>
+    ));
+  };
 
   return (
     <>
@@ -55,33 +95,22 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
           }}
         >
           <Logo />
-
-          {smallScreen ? (
+          {match ? (
             <ToggleButton
               drawerToggle={drawerToggle}
               onDrawerToggle={onDrawerToggle}
             />
           ) : (
-            <>
-              {navbarLinks.map(({ ariaLabel, navigateTo, label }, index) => (
-                <StyledDrawerListButton
-                  key={index}
-                  color="simple_white"
-                  aria-label={ariaLabel}
-                  component={Link}
-                  to={navigateTo}
-                  onClick={() => {
-                    onDrawerToggle(false);
-                  }}
-                  sx={{ padding: "9px 14px" }}
-                >
-                  <Typography fontWeight={700}>{label}</Typography>
-                </StyledDrawerListButton>
-              ))}
-            </>
+            <Stack direction="row">
+              {getAllNavbarLinks(navbarLinks, 400)}
+              <Divider orientation="vertical" flexItem sx={{ mx: "8px" }} />
+              <Stack direction="row" spacing={1.5}>
+                {getAllNavbarLinks(authLinks, 400)}
+              </Stack>
+            </Stack>
           )}
         </Toolbar>
-        {smallScreen && <Divider />}
+        {match && <Divider />}
       </AppBar>
       <SideDrawer
         anchor="top"
@@ -90,47 +119,8 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         stackSpacing={2}
         stackDirection="row"
         drawerRef={drawerRef}
-        dominantItem={
-          <>
-            {navbarLinks.map(({ ariaLabel, navigateTo, label }, index) => (
-              <StyledDrawerListButton
-                key={index}
-                color="simple_white"
-                aria-label={ariaLabel}
-                component={Link}
-                to={navigateTo}
-                onClick={() => {
-                  onDrawerToggle(false);
-                }}
-                sx={{ padding: "9px 14px" }}
-              >
-                <Typography fontWeight={700}>{label}</Typography>
-              </StyledDrawerListButton>
-            ))}
-          </>
-        }
-        menuItems={[
-          {
-            color: "simple_white",
-            variant: "outlined",
-            ariaLabel: `Sign in to your account`,
-            onSelectMenuItem: () => {
-              navigate(`/auth/sign-in`);
-              onDrawerToggle(false);
-            },
-            buttonChildren: buttonChildren[0],
-          },
-          {
-            color: "primary",
-            variant: "outlined",
-            ariaLabel: `Register an account`,
-            onSelectMenuItem: () => {
-              navigate(`/auth/sign-up`);
-              onDrawerToggle(false);
-            },
-            buttonChildren: buttonChildren[1],
-          },
-        ]}
+        dominantItem={<>{getAllNavbarLinks(navbarLinks, 700)}</>}
+        menuItems={menuItems}
       />
       <Toolbar disableGutters={true} />
     </>

@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, PaletteColor } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -43,6 +43,12 @@ const theme = createTheme({
       dark: "#B2B2B2",
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
+    paper_gray: {
+      main: "#252525",
+      light: "#505050",
+      dark: "#191919",
+      contrastText: "#fff",
+    },
   },
   components: {
     MuiFormHelperText: {
@@ -80,6 +86,7 @@ declare module "@mui/material/styles" {
       accent_purple: string;
       accent_brown: string;
       simple_white: string;
+      paper_gray: string;
       // Add other custom color options if needed
     };
   }
@@ -90,6 +97,7 @@ declare module "@mui/material/styles" {
     accent_purple: true;
     accent_brown: true;
     simple_white: true;
+    paper_gray: true;
     // Add other custom color options if needed
   }
 }
@@ -101,6 +109,7 @@ declare module "@mui/material/styles/createPalette" {
     accent_purple: PaletteColor;
     accent_brown: PaletteColor;
     simple_white: PaletteColor;
+    paper_gray: PaletteColor;
   }
 
   // allow configuration using `createTheme`
@@ -110,6 +119,7 @@ declare module "@mui/material/styles/createPalette" {
     accent_purple?: PaletteColorOptions;
     accent_brown?: PaletteColorOptions;
     simple_white?: PaletteColorOptions;
+    paper_gray?: PaletteColorOptions;
   }
 }
 
@@ -121,6 +131,7 @@ declare module "@mui/material/Button" {
     accent_purple: true;
     accent_brown: true;
     simple_white: true;
+    paper_gray: true;
   }
 }
 
@@ -131,6 +142,7 @@ declare module "@mui/material/Typography" {
     accent_purple: true;
     accent_brown: true;
     simple_white: true;
+    paper_gray: true;
   }
 }
 

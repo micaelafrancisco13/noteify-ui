@@ -7,16 +7,13 @@ function Logo() {
     <Box
       sx={{
         display: "flex",
+        width: "28px",
+        height: "28px",
       }}
       component={Link}
       to="/"
     >
-      <img
-        width="28px"
-        height="28px"
-        src={NoteIfyLogo}
-        alt="NoteIfy official logo"
-      />
+      <img src={NoteIfyLogo} alt="NoteIfy official logo" />
     </Box>
   );
 }

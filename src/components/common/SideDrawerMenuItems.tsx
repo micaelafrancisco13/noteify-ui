@@ -10,6 +10,24 @@ import { ReactNode } from "react";
 import { OverridableStringUnion } from "@mui/types";
 import { ButtonPropsColorOverrides } from "@mui/material/Button/Button";
 
+export type customColors = OverridableStringUnion<
+  | "inherit"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "error"
+  | "info"
+  | "warning",
+  ButtonPropsColorOverrides
+>;
+
+export type customVariants =
+  | OverridableStringUnion<
+      "text" | "contained" | "outlined",
+      ButtonPropsVariantOverrides
+    >
+  | undefined;
+
 export const StyledDrawerListButton = styled(CustomButton)(() => ({
   display: "flex",
   justifyContent: "flex-start",
@@ -17,8 +35,8 @@ export const StyledDrawerListButton = styled(CustomButton)(() => ({
 })) as typeof Button;
 
 export interface DrawerMenuItem {
-  color: string;
-  variant?: string;
+  color: customColors;
+  variant?: customVariants;
   ariaLabel: string;
   startIcon?: ReactNode;
   onSelectMenuItem: () => void;
@@ -51,26 +69,8 @@ function SideDrawerMenuItems({
           <StyledDrawerListButton
             fullWidth
             key={index}
-            variant={
-              menuItem.variant as
-                | OverridableStringUnion<
-                    "text" | "contained" | "outlined",
-                    ButtonPropsVariantOverrides
-                  >
-                | undefined
-            }
-            color={
-              menuItem.color as OverridableStringUnion<
-                | "inherit"
-                | "primary"
-                | "secondary"
-                | "success"
-                | "error"
-                | "info"
-                | "warning",
-                ButtonPropsColorOverrides
-              >
-            }
+            variant={menuItem.variant}
+            color={menuItem.color}
             aria-label={menuItem.ariaLabel}
             startIcon={menuItem.startIcon}
             onClick={menuItem.onSelectMenuItem}

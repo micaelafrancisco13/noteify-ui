@@ -68,7 +68,7 @@ function SignInForm() {
 
   return (
     <StyledBox>
-      <Box sx={{ px: "8px" }}>
+      <Box sx={{ px: { xs: "8px", sm: 0 } }}>
         <Logo />
       </Box>
       <Box
