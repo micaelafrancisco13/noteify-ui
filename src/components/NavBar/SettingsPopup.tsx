@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Typography } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AnchorMenu from "../common/AnchorMenu.tsx";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,7 @@ function SettingsPopup() {
       buttonChildren={
         <IconButton size="small">
           <StyledAvatar aria-label="Display image">
-            <Typography>M</Typography>
+            {/*<Typography>{avatarInitialName?.toUpperCase()}</Typography>*/}
           </StyledAvatar>
         </IconButton>
       }

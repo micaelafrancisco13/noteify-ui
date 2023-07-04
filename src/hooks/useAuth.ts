@@ -22,6 +22,7 @@ function useAuth() {
         window.location.assign("/");
       })
       .catch((err) => {
+        console.log("err.response", err.response);
         setError(err);
         setIsLoggingIn(false);
       });
@@ -40,7 +41,6 @@ function useAuth() {
     }
   };
 
-  const authErrorMessage = error?.message;
   const authStatusCode = error?.response?.status;
 
   return {
@@ -48,7 +48,7 @@ function useAuth() {
     signOut,
     getCurrentUser,
     isLoggingIn,
-    authErrorMessage,
+    error,
     authStatusCode,
   };
 }

@@ -1,14 +1,14 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CustomTextField from "../custom/CustomTextField.tsx";
-import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PasswordEyeIcon from "../common/PasswordEyeIcon.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
 import { Link, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
+import { z } from "zod";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -46,8 +46,17 @@ function SignInForm() {
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, watch, reset } = useFormMethods;
-  const { signIn, isLoggingIn } = useAuth();
+  const { handleSubmit, watch, setError, reset } = useFormMethods;
+  const { signIn, isLoggingIn, error } = useAuth();
+
+  useEffect(() => {
+    if (error && error.response) {
+      setError("email", {
+        type: "custom",
+        message: error.response.data as string,
+      });
+    }
+  }, [error]);
 
   const handleOnSubmitNote = (data: SignInFormData) => {
     signIn(data);

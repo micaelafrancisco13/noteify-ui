@@ -75,8 +75,6 @@ function useAccount() {
       email: data.email,
     });
 
-    console.log("data.email", data.email);
-
     accountService
       .update({
         _id: "email",
@@ -117,10 +115,13 @@ function useAccount() {
       });
   };
 
+  const firstNameInitial = accountDetails?.firstName[0];
+
   return {
     accountDetails,
     isFetchingAccountDetails,
     error,
+    firstNameInitial,
 
     updatePersonalDetails,
     isUpdatingPersonalDetails,
