@@ -1,10 +1,19 @@
-import { AppBar, Box, Divider, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Divider,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { RefObject } from "react";
 import SideDrawer from "../SideDrawer/SideDrawer.tsx";
 import { useNavigate } from "react-router-dom";
 import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
 import { StyledDrawerListButton } from "../common/SideDrawerMenuItems.tsx";
+import { useTheme } from "@mui/material/styles";
+import { navbarLinks } from "../../utils/navbarLinks.ts";
 
 interface Props {
   drawerToggle: boolean;
@@ -14,6 +23,7 @@ interface Props {
 
 function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
+  const smallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
 
   const buttonChildren = ["Sign in", "Start for free"].map((value) => (
     <Box
@@ -45,12 +55,32 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
           }}
         >
           <Logo />
-          <ToggleButton
-            drawerToggle={drawerToggle}
-            onDrawerToggle={onDrawerToggle}
-          />
+
+          {smallScreen ? (
+            <ToggleButton
+              drawerToggle={drawerToggle}
+              onDrawerToggle={onDrawerToggle}
+            />
+          ) : (
+            <>
+              {navbarLinks.map(({ ariaLabel, navigateTo, label }, index) => (
+                <StyledDrawerListButton
+                  key={index}
+                  color="simple_white"
+                  aria-label={ariaLabel}
+                  onClick={() => {
+                    navigate(navigateTo);
+                    onDrawerToggle(false);
+                  }}
+                  sx={{ padding: "9px 14px" }}
+                >
+                  <Typography fontWeight={700}>{label}</Typography>
+                </StyledDrawerListButton>
+              ))}
+            </>
+          )}
         </Toolbar>
-        <Divider />
+        {smallScreen && <Divider />}
       </AppBar>
       <SideDrawer
         anchor="top"
@@ -61,16 +91,19 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         drawerRef={drawerRef}
         dominantItem={
           <>
-            <StyledDrawerListButton
-              color="simple_white"
-              aria-label="About the developer"
-              onClick={() => {
-                navigate(`/auth/sign-in`);
-                onDrawerToggle(false);
-              }}
-            >
-              <Typography fontWeight={700}>About the developer</Typography>
-            </StyledDrawerListButton>
+            {navbarLinks.map(({ ariaLabel, navigateTo, label }, index) => (
+              <StyledDrawerListButton
+                key={index}
+                color="simple_white"
+                aria-label={ariaLabel}
+                onClick={() => {
+                  navigate(navigateTo);
+                  onDrawerToggle(false);
+                }}
+              >
+                <Typography fontWeight={700}>{label}</Typography>
+              </StyledDrawerListButton>
+            ))}
           </>
         }
         menuItems={[
