@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ButtonPropsVariantOverrides,
   Divider,
@@ -11,7 +10,7 @@ import { ReactNode } from "react";
 import { OverridableStringUnion } from "@mui/types";
 import { ButtonPropsColorOverrides } from "@mui/material/Button/Button";
 
-const StyledListButton = styled(CustomButton)(() => ({
+export const StyledDrawerListButton = styled(CustomButton)(() => ({
   display: "flex",
   justifyContent: "flex-start",
   textTransform: "none",
@@ -40,49 +39,46 @@ function SideDrawerMenuItems({
   menuItems,
 }: Props) {
   return (
-    <Stack
-      paddingX={18 / 8}
-      paddingY={30 / 8}
-      spacing={stackSpacing}
-      direction={stackDirection}
-    >
+    <Stack paddingX={18 / 8} paddingY={30 / 8}>
       {dominantItem && (
-        <Box>
+        <>
           {dominantItem}
-          <Divider sx={{ my: 2 }} />
-        </Box>
+          <Divider sx={{ my: 2.5 }} />
+        </>
       )}
-      {menuItems.map((menuItem, index) => (
-        <StyledListButton
-          fullWidth
-          key={index}
-          variant={
-            menuItem.variant as
-              | OverridableStringUnion<
-                  "text" | "contained" | "outlined",
-                  ButtonPropsVariantOverrides
-                >
-              | undefined
-          }
-          color={
-            menuItem.color as OverridableStringUnion<
-              | "inherit"
-              | "primary"
-              | "secondary"
-              | "success"
-              | "error"
-              | "info"
-              | "warning",
-              ButtonPropsColorOverrides
-            >
-          }
-          aria-label={menuItem.ariaLabel}
-          startIcon={menuItem.startIcon}
-          onClick={menuItem.onSelectMenuItem}
-        >
-          {menuItem.buttonChildren}
-        </StyledListButton>
-      ))}
+      <Stack spacing={stackSpacing} direction={stackDirection}>
+        {menuItems.map((menuItem, index) => (
+          <StyledDrawerListButton
+            fullWidth
+            key={index}
+            variant={
+              menuItem.variant as
+                | OverridableStringUnion<
+                    "text" | "contained" | "outlined",
+                    ButtonPropsVariantOverrides
+                  >
+                | undefined
+            }
+            color={
+              menuItem.color as OverridableStringUnion<
+                | "inherit"
+                | "primary"
+                | "secondary"
+                | "success"
+                | "error"
+                | "info"
+                | "warning",
+                ButtonPropsColorOverrides
+              >
+            }
+            aria-label={menuItem.ariaLabel}
+            startIcon={menuItem.startIcon}
+            onClick={menuItem.onSelectMenuItem}
+          >
+            {menuItem.buttonChildren}
+          </StyledDrawerListButton>
+        ))}
+      </Stack>{" "}
     </Stack>
   );
 }

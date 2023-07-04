@@ -1,5 +1,6 @@
 import { IconButton } from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 interface Props {
   drawerToggle: boolean;
@@ -12,7 +13,7 @@ function ToggleButton({ drawerToggle, onDrawerToggle }: Props) {
       aria-label="Toggle side drawer"
       onClick={() => onDrawerToggle(!drawerToggle)}
     >
-      <MenuOutlinedIcon />
+      {drawerToggle ? <CloseOutlinedIcon /> : <MenuOutlinedIcon />}
     </IconButton>
   );
 }

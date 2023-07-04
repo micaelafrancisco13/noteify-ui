@@ -1,9 +1,10 @@
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Divider, Toolbar, Typography } from "@mui/material";
 import { RefObject } from "react";
 import SideDrawer from "../SideDrawer/SideDrawer.tsx";
 import { useNavigate } from "react-router-dom";
 import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
+import { StyledDrawerListButton } from "../common/SideDrawerMenuItems.tsx";
 
 interface Props {
   drawerToggle: boolean;
@@ -49,6 +50,7 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
             onDrawerToggle={onDrawerToggle}
           />
         </Toolbar>
+        <Divider />
       </AppBar>
       <SideDrawer
         anchor="top"
@@ -57,6 +59,20 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
         stackSpacing={2}
         stackDirection="row"
         drawerRef={drawerRef}
+        dominantItem={
+          <>
+            <StyledDrawerListButton
+              color="simple_white"
+              aria-label="About the developer"
+              onClick={() => {
+                navigate(`/auth/sign-in`);
+                onDrawerToggle(false);
+              }}
+            >
+              <Typography fontWeight={700}>About the developer</Typography>
+            </StyledDrawerListButton>
+          </>
+        }
         menuItems={[
           {
             color: "simple_white",

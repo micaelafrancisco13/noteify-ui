@@ -44,7 +44,6 @@ function SideDrawer({
   stackDirection,
   menuItems,
 }: Props) {
-  console.log("anchor", anchor);
   return (
     <>
       <StyledDrawer
