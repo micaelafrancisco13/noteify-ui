@@ -73,7 +73,11 @@ function NavBarSignedIn({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
       >
         <Toolbar
           disableGutters={true}
-          sx={{ display: "flex", justifyContent: "space-between" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            background: (theme) => theme.palette.secondary.main,
+          }}
         >
           <Box>
             <ToggleButton

@@ -53,33 +53,18 @@ const theme = createTheme({
         subheader: { fontSize: "12.5px" },
       },
     },
-    MuiAppBar: {
-      styleOverrides: {
-        root: (props) => ({
-          backgroundColor: props.theme.palette.secondary.main, // Access theme.palette to get the desired color
-        }),
-      },
-    },
     MuiToolbar: {
       styleOverrides: {
-        root: (props) => ({
+        root: () => ({
           padding: "8px 24px",
-          backgroundColor: props.theme.palette.secondary.main, // Access theme.palette to get the desired color
         }),
       },
     },
     MuiDrawer: {
       styleOverrides: {
-        paper: (props) => ({
-          backgroundColor: props.theme.palette.secondary.dark,
+        paper: () => ({
           border: 0,
           width: "100%",
-          // [theme.breakpoints.up("sm")]: {
-          //   maxWidth: theme.spacing(270 / 8),
-          // },
-          // [theme.breakpoints.up("md")]: {
-          //   maxWidth: theme.spacing(305 / 8),
-          // },
         }),
       },
     },

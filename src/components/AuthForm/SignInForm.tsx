@@ -9,6 +9,7 @@ import CustomButton from "../custom/CustomButton.tsx";
 import { Link, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
 import { z } from "zod";
+import Logo from "../common/Logo.tsx";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -67,6 +68,9 @@ function SignInForm() {
 
   return (
     <StyledBox>
+      <Box sx={{ px: "8px" }}>
+        <Logo />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -124,7 +128,12 @@ function SignInForm() {
                     type="submit"
                     variant="contained"
                     fullWidth
-                    sx={{ textTransform: "none", fontWeight: 700 }}
+                    sx={{
+                      textTransform: "none",
+                      fontWeight: 700,
+                      height: "48px",
+                      fontSize: "18px",
+                    }}
                     disabled={isLoggingIn}
                   >
                     {isLoggingIn ? "Signing in..." : "Sign in"}

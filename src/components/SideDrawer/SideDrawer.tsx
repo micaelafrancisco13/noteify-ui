@@ -13,6 +13,7 @@ const StyledDrawer = styled(Drawer, {
   anchor: Anchor;
 }>(({ theme, anchor }) => ({
   "& .MuiDrawer-paper": {
+    background: anchor !== "top" && theme.palette.secondary.dark,
     [theme.breakpoints.up("sm")]: {
       maxWidth: anchor === "top" ? "100%" : theme.spacing(270 / 8),
     },

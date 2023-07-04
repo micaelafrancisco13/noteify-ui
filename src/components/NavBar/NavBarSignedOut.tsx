@@ -4,7 +4,6 @@ import SideDrawer from "../SideDrawer/SideDrawer.tsx";
 import { useNavigate } from "react-router-dom";
 import Logo from "../common/Logo.tsx";
 import ToggleButton from "./ToggleButton.tsx";
-import { useTheme } from "@mui/material/styles";
 
 interface Props {
   drawerToggle: boolean;
@@ -14,12 +13,18 @@ interface Props {
 
 function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
-  const theme = useTheme();
-  console.log("theme", theme.palette.simple_white.dark);
 
   const buttonChildren = ["Sign in", "Start for free"].map((value) => (
-    <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-      <Typography>{value}</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        py: "5px",
+        px: "3px",
+      }}
+    >
+      <Typography fontWeight={700}>{value}</Typography>
     </Box>
   ));
 
@@ -27,12 +32,16 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
     <>
       <AppBar
         elevation={0}
-        position={"fixed"}
+        position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar
           disableGutters={true}
-          sx={{ display: "flex", justifyContent: "space-between" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <Logo />
           <ToggleButton
@@ -53,14 +62,20 @@ function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
             color: "simple_white",
             variant: "outlined",
             ariaLabel: `Sign in to your account`,
-            onSelectMenuItem: () => navigate(`/auth/sign-in`),
+            onSelectMenuItem: () => {
+              navigate(`/auth/sign-in`);
+              onDrawerToggle(false);
+            },
             buttonChildren: buttonChildren[0],
           },
           {
             color: "primary",
             variant: "outlined",
             ariaLabel: `Register an account`,
-            onSelectMenuItem: () => navigate(`/auth/sign-up`),
+            onSelectMenuItem: () => {
+              navigate(`/auth/sign-up`);
+              onDrawerToggle(false);
+            },
             buttonChildren: buttonChildren[1],
           },
         ]}

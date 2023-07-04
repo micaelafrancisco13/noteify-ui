@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonPropsVariantOverrides,
   Divider,
@@ -46,10 +47,10 @@ function SideDrawerMenuItems({
       direction={stackDirection}
     >
       {dominantItem && (
-        <>
+        <Box>
           {dominantItem}
           <Divider sx={{ my: 2 }} />
-        </>
+        </Box>
       )}
       {menuItems.map((menuItem, index) => (
         <StyledListButton
