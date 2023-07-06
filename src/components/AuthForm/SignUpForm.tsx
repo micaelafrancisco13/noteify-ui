@@ -10,7 +10,7 @@ import { Link, Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.ts";
 import { z } from "zod";
 import Logo from "../common/Logo.tsx";
-import Image from "../../assets/SignIn.png";
+import Image from "../../assets/SignUp.png";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -30,6 +30,8 @@ const StyledImageContainer = styled(Box)(({ theme }) => ({
 }));
 
 const schema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }).max(255),
+  lastName: z.string().min(1, { message: "Last name is required" }).max(255),
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(1, {
     message: "Password is required",
@@ -38,11 +40,11 @@ const schema = z.object({
 
 export type SignInFormData = z.infer<typeof schema>;
 
-function SignInForm() {
+function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const useFormMethods = useForm<SignInFormData>({
-    defaultValues: { email: "", password: "" },
+    defaultValues: { firstName: "", lastName: "", email: "", password: "" },
     resolver: zodResolver(schema),
   });
 
@@ -86,7 +88,7 @@ function SignInForm() {
           }}
         >
           <Typography fontWeight="700" fontSize="30px" sx={{ mt: 5.5, mb: 11 }}>
-            Sign in
+            Sign up
           </Typography>
           <FormProvider {...useFormMethods}>
             <form
@@ -97,6 +99,8 @@ function SignInForm() {
               autoComplete="off"
             >
               <Stack spacing={4}>
+                <CustomTextField label="First name" name="firstName" />
+                <CustomTextField label="Last name" name="lastName" />
                 <CustomTextField
                   autoComplete="username"
                   label="Email address"
@@ -131,17 +135,10 @@ function SignInForm() {
                     }}
                     disabled={isLoggingIn}
                   >
-                    {isLoggingIn ? "Signing in..." : "Sign in"}
+                    {isLoggingIn ? "Signing up..." : "Sign up"}
                   </CustomButton>
-                  <Typography
-                    component={Link}
-                    to={"/some-forgot-password-page"}
-                    sx={{ fontSize: "13px", textDecoration: "underline" }}
-                  >
-                    Forgot your password?
-                  </Typography>
                   <Typography sx={{ fontSize: "13px" }}>
-                    By signing in, you agree to NoteIfy's{" "}
+                    By signing up, you agree to NoteIfy's{" "}
                     <span
                       style={{
                         textDecoration: "underline",
@@ -166,8 +163,8 @@ function SignInForm() {
               <Typography
                 sx={{ fontSize: "13px", textAlign: "center", py: "32px" }}
               >
-                Don't have an account?{" "}
-                <Box component={Link} to={"/auth/sign-up"}>
+                Already signed up?{" "}
+                <Box component={Link} to={"/auth/sign-in"}>
                   <span
                     style={{
                       textDecoration: "underline",
@@ -175,7 +172,7 @@ function SignInForm() {
                       fontSize: "14px",
                     }}
                   >
-                    Sign up
+                    Go to sign up
                   </span>
                 </Box>
               </Typography>
@@ -190,4 +187,4 @@ function SignInForm() {
   );
 }
 
-export default SignInForm;
+export default SignUpForm;

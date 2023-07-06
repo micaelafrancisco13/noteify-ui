@@ -17,6 +17,7 @@ import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 import useAuth from "./hooks/useAuth.ts";
 import LandingPage from "./components/Main/LandingPage.tsx";
 import SignedOutLayout from "./components/Main/SignedOutLayout.tsx";
+import SignUpForm from "./components/AuthForm/SignUpForm.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -54,6 +55,10 @@ function App() {
     {
       path: "/auth/sign-in",
       element: <SignInForm />,
+    },
+    {
+      path: "/auth/sign-up",
+      element: <SignUpForm />,
     },
     {
       path: "/auth/sign-out",
