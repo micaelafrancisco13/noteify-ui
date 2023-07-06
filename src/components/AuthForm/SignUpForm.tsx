@@ -11,7 +11,7 @@ import useAuth from "../../hooks/useAuth.ts";
 import { z } from "zod";
 import Logo from "../common/Logo.tsx";
 import Image from "../../assets/SignUp.png";
-import useAccount from "../../hooks/useAccount.ts";
+import useUser from "../../hooks/useUser.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -54,7 +54,7 @@ function SignUpForm() {
     createAnAccount,
     isCreatingAnAccount,
     createAnAccountError: error,
-  } = useAccount();
+  } = useUser();
 
   useEffect(() => {
     if (error && error.response) {
