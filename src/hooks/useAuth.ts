@@ -28,6 +28,10 @@ function useAuth() {
       });
   };
 
+  const signInUponRegistration = (jwt: string) => {
+    localStorage.setItem(TOKEN_KEY, jwt);
+  };
+
   const signOut = () => {
     localStorage.removeItem(TOKEN_KEY);
   };
@@ -45,6 +49,7 @@ function useAuth() {
 
   return {
     signIn,
+    signInUponRegistration,
     signOut,
     getCurrentUser,
     isLoggingIn,

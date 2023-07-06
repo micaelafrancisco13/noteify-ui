@@ -9,4 +9,4 @@ export interface User {
   dateLoggedIn: string;
 }
 
-export default create("/users/me");
+export default create("/users");
