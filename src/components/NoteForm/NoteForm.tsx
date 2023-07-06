@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import CustomDatePicker from "../custom/CustomDatePicker.tsx";
 import SwitchComponent from "../common/SwitchComponent.tsx";
 import CustomButton from "../custom/CustomButton.tsx";
-import { format, isBefore, startOfDay } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { Note } from "../../services/note-service.ts";
 import useNotes from "../../hooks/useNotes.ts";
 import useCategories from "../../hooks/useCategories.ts";
@@ -130,10 +130,11 @@ function NoteForm({ drawerToggle }: Props) {
 
   const dateCreated = watch("dateCreated");
   const dateLastModified = watch("dateLastModified");
-  const past = isBefore(
-    startOfDay(new Date(originalUpcomingDate)),
-    startOfDay(new Date())
-  );
+  // const past = isBefore(
+  //   startOfDay(new Date(originalUpcomingDate)),
+  //   startOfDay(new Date())
+  // );
+  // console.log("archive note?", past);
 
   return (
     <>
@@ -146,20 +147,25 @@ function NoteForm({ drawerToggle }: Props) {
           autoComplete="off"
         >
           <Stack spacing={4}>
+            {/*{past && (*/}
+            {/*  <Typography color={"primary"}>*/}
+            {/*    Archived notes cannot be edited but they can be deleted.*/}
+            {/*  </Typography>*/}
+            {/*)}*/}
             <CustomTextField
               label="Title"
-              InputProps={{
-                readOnly: past,
-              }}
+              // InputProps={{
+              //   readOnly: past,
+              // }}
             />
             <Stack spacing={1}>
               <CustomTextField
                 label="Description"
                 multiline
                 rows={7}
-                InputProps={{
-                  readOnly: past,
-                }}
+                // InputProps={{
+                //   readOnly: past,
+                // }}
               />
               {dateCreated && dateLastModified && (
                 <Stack sx={{ color: "#E0E0E0" }}>
@@ -178,22 +184,33 @@ function NoteForm({ drawerToggle }: Props) {
                 </Stack>
               )}
             </Stack>
-            {!past ? (
-              <CustomRadioGroup label="Category" name="categoryId">
-                {categories.map((c) => (
-                  <FormControlLabel
-                    key={c._id}
-                    value={c._id}
-                    control={<Radio />}
-                    label={c.name}
-                  />
-                ))}
-              </CustomRadioGroup>
-            ) : (
-              <Typography variant="body2">Category: {categoryName}</Typography>
-            )}
+            <CustomRadioGroup label="Category" name="categoryId">
+              {categories.map((c) => (
+                <FormControlLabel
+                  key={c._id}
+                  value={c._id}
+                  control={<Radio />}
+                  label={c.name}
+                />
+              ))}
+            </CustomRadioGroup>
+            {/*{!past ? (*/}
+            {/*  <CustomRadioGroup label="Category" name="categoryId">*/}
+            {/*    {categories.map((c) => (*/}
+            {/*      <FormControlLabel*/}
+            {/*        key={c._id}*/}
+            {/*        value={c._id}*/}
+            {/*        control={<Radio />}*/}
+            {/*        label={c.name}*/}
+            {/*      />*/}
+            {/*    ))}*/}
+            {/*  </CustomRadioGroup>*/}
+            {/*) : (*/}
+            {/*  <Typography variant="body2">Category: {categoryName}</Typography>*/}
+            {/*)}*/}
             <Grid container>
-              {(id === "new" || !past) && (
+              {id === "new" && (
+                // {(id === "new" || !past) && (
                 <Grid
                   item
                   sm={drawerToggle ? 12 : 6}
@@ -217,7 +234,7 @@ function NoteForm({ drawerToggle }: Props) {
                   <CustomDatePicker
                     label="Date of task"
                     name="upcomingDate"
-                    past={past}
+                    // past={past}
                   />
                 )}
               </Grid>
@@ -227,7 +244,8 @@ function NoteForm({ drawerToggle }: Props) {
               variant="contained"
               drawerToggle={drawerToggle}
               maxWidth="220px"
-              disabled={past || isCreatingNote || isUpdatingNote}
+              disabled={isCreatingNote || isUpdatingNote}
+              // disabled={past || isCreatingNote || isUpdatingNote}
               sx={{ fontWeight: "700" }}
             >
               {isCreatingNote || isUpdatingNote ? "Submitting..." : "Submit"}
