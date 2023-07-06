@@ -26,31 +26,33 @@ function App() {
   const currentUser = getCurrentUser();
 
   function withLayout(childNode: ReactNode) {
+    if (currentUser)
+      return (
+        <SignedInLayout
+          drawerToggle={drawerToggle}
+          drawerRef={drawerRef}
+          onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
+        >
+          {childNode}
+        </SignedInLayout>
+      );
     return (
-      <SignedInLayout
+      <SignedOutLayout
         drawerToggle={drawerToggle}
-        drawerRef={drawerRef}
         onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
+        drawerRef={drawerRef}
       >
         {childNode}
-      </SignedInLayout>
+      </SignedOutLayout>
     );
   }
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: currentUser ? (
-        withLayout(<Navigate to="/notes" replace />)
-      ) : (
-        <SignedOutLayout
-          drawerToggle={drawerToggle}
-          onDrawerToggle={(toggle) => setDrawerToggle(toggle)}
-          drawerRef={drawerRef}
-        >
-          <LandingPage />
-        </SignedOutLayout>
-      ),
+      element: currentUser
+        ? withLayout(<Navigate to="/notes" replace />)
+        : withLayout(<LandingPage />),
     },
     {
       path: "/auth/sign-in",
@@ -66,7 +68,7 @@ function App() {
     },
     {
       path: "/not-found",
-      element: currentUser ? withLayout(<NotFound />) : <NotFound />,
+      element: withLayout(<NotFound />),
     },
     {
       path: "*",

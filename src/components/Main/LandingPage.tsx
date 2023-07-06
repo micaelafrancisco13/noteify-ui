@@ -6,14 +6,18 @@ import { useTheme } from "@mui/material/styles";
 
 function LandingPage() {
   const { color, ariaLabel, navigateTo, label } = authLinks[1];
-  const match = useMediaQuery(useTheme().breakpoints.down("lg"));
+  const match = useMediaQuery(useTheme().breakpoints.up("sm"));
 
   return (
     <Box
       sx={{
         paddingX: "16px",
         display: "flex",
-        height: `calc(100vh - ${match ? "24px" : "64px"})`,
+        height: `calc(${
+          useMediaQuery(useTheme().breakpoints.between("sm", "md"))
+            ? "60vh"
+            : "100vh"
+        } - ${match ? "64px" : "56px"})`,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
@@ -55,17 +59,6 @@ function LandingPage() {
           <Typography fontWeight={600}>{label}</Typography>
         </StyledDrawerListButton>
       </Box>
-      {/*<Box*/}
-      {/*  sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}*/}
-      {/*>*/}
-      {/*  <Box*/}
-      {/*    sx={{*/}
-      {/*      maxWidth: "760px",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <img src={Landing} alt="Landing page display picture" />*/}
-      {/*  </Box>*/}
-      {/*</Box>*/}
     </Box>
   );
 }
