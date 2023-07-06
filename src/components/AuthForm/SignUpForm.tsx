@@ -11,6 +11,7 @@ import useAuth from "../../hooks/useAuth.ts";
 import { z } from "zod";
 import Logo from "../common/Logo.tsx";
 import Image from "../../assets/SignUp.png";
+import useAccount from "../../hooks/useAccount.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "16px",
@@ -38,18 +39,22 @@ const schema = z.object({
   }),
 });
 
-export type SignInFormData = z.infer<typeof schema>;
+export type SignUpFormData = z.infer<typeof schema>;
 
 function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const useFormMethods = useForm<SignInFormData>({
+  const useFormMethods = useForm<SignUpFormData>({
     defaultValues: { firstName: "", lastName: "", email: "", password: "" },
     resolver: zodResolver(schema),
   });
 
   const { handleSubmit, watch, setError, reset } = useFormMethods;
-  const { signIn, isLoggingIn, error } = useAuth();
+  const {
+    createAnAccount,
+    isCreatingAnAccount,
+    createAnAccountError: error,
+  } = useAccount();
 
   useEffect(() => {
     if (error && error.response) {
@@ -60,8 +65,8 @@ function SignUpForm() {
     }
   }, [error]);
 
-  const handleOnSubmitNote = (data: SignInFormData) => {
-    signIn(data);
+  const handleOnSubmitNote = (data: SignUpFormData) => {
+    createAnAccount(data);
   };
 
   const { getCurrentUser } = useAuth();
@@ -81,7 +86,6 @@ function SignUpForm() {
       >
         <Box
           sx={{
-            // height: `100vh`,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-around",
@@ -133,9 +137,9 @@ function SignUpForm() {
                       height: "48px",
                       fontSize: "18px",
                     }}
-                    disabled={isLoggingIn}
+                    disabled={isCreatingAnAccount}
                   >
-                    {isLoggingIn ? "Signing up..." : "Sign up"}
+                    {isCreatingAnAccount ? "Signing up..." : "Sign up"}
                   </CustomButton>
                   <Typography sx={{ fontSize: "13px" }}>
                     By signing up, you agree to NoteIfy's{" "}
