@@ -35,8 +35,6 @@ function useAvatarInitialName() {
     else setAvatarInitialName(avatarInitialName);
   };
 
-  console.log("useAvatarInitialName", avatarInitialName);
-
   const avatarInitialNameErrorMessage = error?.message;
   const avatarInitialNameStatusCode = error?.response?.status;
 

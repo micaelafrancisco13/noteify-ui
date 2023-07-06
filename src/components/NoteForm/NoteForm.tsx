@@ -87,7 +87,6 @@ function NoteForm({ drawerToggle }: Props) {
 
   useEffect(() => {
     if (id) {
-      console.log("<NoteForm/>");
       setInitialFormState();
 
       if (id === "new") return;

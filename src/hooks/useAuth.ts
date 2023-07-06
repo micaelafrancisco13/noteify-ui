@@ -22,7 +22,6 @@ function useAuth() {
         window.location.assign("/");
       })
       .catch((err) => {
-        console.log("err.response", err.response);
         setError(err);
         setIsLoggingIn(false);
       });
