@@ -34,8 +34,8 @@ const schema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }).max(255),
   lastName: z.string().min(1, { message: "Last name is required" }).max(255),
   email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(1, {
-    message: "Password is required",
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
   }),
 });
 
@@ -176,7 +176,7 @@ function SignUpForm() {
                       fontSize: "14px",
                     }}
                   >
-                    Go to sign up
+                    Go to sign in
                   </span>
                 </Box>
               </Typography>
