@@ -8,12 +8,12 @@ export interface NavbarLink {
 }
 
 export const navbarLinks: NavbarLink[] = [
-  {
-    color: "simple_white",
-    ariaLabel: "Features",
-    navigateTo: "/features",
-    label: "Features",
-  },
+  // {
+  //   color: "simple_white",
+  //   ariaLabel: "Features",
+  //   navigateTo: "/features",
+  //   label: "Features",
+  // },
   {
     color: "simple_white",
     ariaLabel: "About the developer",

@@ -17,7 +17,11 @@ function NotFound() {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="500px"
-        height={`calc(100vh - ${match ? "64px" : "56px"})`}
+        height={`calc(${
+          useMediaQuery(useTheme().breakpoints.between("sm", "md"))
+            ? "60vh"
+            : "100vh"
+        } - ${match ? "64px" : "56px"})`}
         viewBox="0 0 500 500"
       >
         <g fill="#ebebeb" opacity="0.4">
