@@ -71,8 +71,8 @@ function NoteForm({ drawerToggle }: Props) {
   const { handleSubmit, reset, resetField, setValue, watch } = useFormMethods;
 
   const [upcoming, setUpcoming] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
-  const [originalUpcomingDate, setOriginalUpcomingDate] = useState("");
+  const [, setCategoryName] = useState("");
+  const [, setOriginalUpcomingDate] = useState("");
 
   const { categories } = useCategories();
   const {

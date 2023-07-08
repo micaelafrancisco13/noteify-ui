@@ -18,6 +18,7 @@ import useAuth from "./hooks/useAuth.ts";
 import LandingPage from "./components/Main/LandingPage.tsx";
 import SignedOutLayout from "./components/Main/SignedOutLayout.tsx";
 import SignUpForm from "./components/AuthForm/SignUpForm.tsx";
+import AboutTheDev from "./components/AboutTheDev/AboutTheDev.tsx";
 
 function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
@@ -53,6 +54,10 @@ function App() {
       element: currentUser
         ? withLayout(<Navigate to="/notes" replace />)
         : withLayout(<LandingPage />),
+    },
+    {
+      path: "/about-the-developer",
+      element: withLayout(<AboutTheDev />),
     },
     {
       path: "/auth/sign-in",
