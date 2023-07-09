@@ -43,6 +43,7 @@ class HttpService {
     return apiClient.post(this._endpoint, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        "Cache-Control": "no-cache",
       },
     });
   }

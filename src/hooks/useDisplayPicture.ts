@@ -48,6 +48,7 @@ function useDisplayPicture() {
     axios
       .get(uploadedImage, {
         responseType: "blob",
+        headers: { "Cache-Control": "no-cache" },
       })
       .then((res) => {
         const formData = new FormData();
