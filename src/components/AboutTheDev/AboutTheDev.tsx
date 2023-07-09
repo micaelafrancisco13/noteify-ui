@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import DisplayImage from "./DisplayImage.tsx";
 import { styled, useTheme } from "@mui/material/styles";
 import SocialMedia from "../common/SocialMedia.tsx";
+import { MyLink, myLinks } from "../../utils/myLinks.ts";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import LanguageIcon from "@mui/icons-material/Language";
 
@@ -21,14 +22,21 @@ function AboutTheDev() {
   const heightConstraint = useMediaQuery(
     useTheme().breakpoints.between("sm", "md")
   );
+
   const { getCurrentUser } = useAuth();
   if (getCurrentUser()) return <Navigate to="/" />;
+
   const doubleBreak = (
     <>
       <br />
       <br />
     </>
   );
+
+  const icons = [<LinkedInIcon />, <LanguageIcon />];
+  const myLinksWithIcon: MyLink[] = myLinks.map((link, index) => {
+    return { ...link, socialIcon: icons[index] };
+  });
 
   return (
     <StyledBox>
@@ -63,18 +71,17 @@ function AboutTheDev() {
               free to explore one of my social media profiles provided below.
             </Typography>
             <Stack direction="row" justifyContent={match ? "left" : "center"}>
-              <SocialMedia
-                link="https://www.linkedin.com/in/micaelafrancisco13/"
-                linkTitle={`Developer's LinkedIn`}
-                buttonTitle="LinkedIn"
-                socialIcon={<LinkedInIcon />}
-              />
-              <SocialMedia
-                link="https://micaelafrancisco.vercel.app/"
-                linkTitle={`Developer's Portfolio`}
-                buttonTitle="Portfolio"
-                socialIcon={<LanguageIcon />}
-              />
+              {myLinksWithIcon.map(
+                ({ link, linkTitle, buttonTitle, socialIcon }, index) => (
+                  <SocialMedia
+                    key={index}
+                    link={link}
+                    linkTitle={linkTitle}
+                    buttonTitle={buttonTitle}
+                    socialIcon={socialIcon}
+                  />
+                )
+              )}
             </Stack>
           </Stack>
         </Grid>

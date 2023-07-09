@@ -28,7 +28,6 @@ interface Props {
 function NavBarSignedOut({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
   const navigate = useNavigate();
   const match = useMediaQuery(useTheme().breakpoints.down("md"));
-  console.log("match", match);
 
   const buttonChildren = authLinks.map(({ label }) => (
     <Box

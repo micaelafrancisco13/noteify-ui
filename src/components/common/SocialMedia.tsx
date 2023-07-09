@@ -1,14 +1,7 @@
-import { ReactNode } from "react";
 import { IconButton } from "@mui/material";
+import { MyLink } from "../../utils/myLinks.ts";
 
-interface Props {
-  link: string;
-  linkTitle: string;
-  buttonTitle: string;
-  socialIcon: ReactNode;
-}
-
-function SocialMedia({ link, linkTitle, buttonTitle, socialIcon }: Props) {
+function SocialMedia({ link, linkTitle, buttonTitle, socialIcon }: MyLink) {
   return (
     <a href={link} target="_blank" rel="noreferrer" title={linkTitle}>
       <IconButton title={buttonTitle}>{socialIcon}</IconButton>
