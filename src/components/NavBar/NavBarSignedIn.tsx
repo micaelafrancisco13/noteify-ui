@@ -86,7 +86,7 @@ function NavBarSignedIn({ drawerToggle, onDrawerToggle, drawerRef }: Props) {
             />
             <HomeButton />
           </Box>
-          <SettingsPopup />
+          <SettingsPopup onDrawerToggle={onDrawerToggle} />
         </Toolbar>
       </AppBar>
       <SideDrawer

@@ -1,5 +1,5 @@
-import { Avatar, IconButton } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Avatar, IconButton, useMediaQuery } from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
 import AnchorMenu from "../common/AnchorMenu.tsx";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,12 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   color: theme.palette.accent_pale_green.main,
 }));
 
-function SettingsPopup() {
+interface Props {
+  onDrawerToggle: (toggle: boolean) => void;
+}
+
+function SettingsPopup({ onDrawerToggle }: Props) {
+  const match = useMediaQuery(useTheme().breakpoints.up("sm"));
   const navigate = useNavigate();
 
   const menu = [
@@ -27,12 +32,14 @@ function SettingsPopup() {
       name: "Account",
       execute() {
         navigate("/account");
+        if (!match) onDrawerToggle(false);
       },
     },
     {
       name: "Log out",
       execute() {
         navigate("/auth/sign-out");
+        if (!match) onDrawerToggle(false);
       },
     },
   ];
