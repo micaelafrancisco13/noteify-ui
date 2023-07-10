@@ -19,9 +19,6 @@ const StyledImageContainer = styled(Box)(() => ({
 
 function AboutTheDev() {
   const match = useMediaQuery(useTheme().breakpoints.up("sm"));
-  const heightConstraint = useMediaQuery(
-    useTheme().breakpoints.between("sm", "md")
-  );
 
   const { getCurrentUser } = useAuth();
   if (getCurrentUser()) return <Navigate to="/" />;
@@ -45,9 +42,7 @@ function AboutTheDev() {
         justifyContent="center"
         alignItems="center"
         sx={{
-          height: `calc(${heightConstraint ? "60vh" : "100vh"} - ${
-            match ? "88px" : "72px"
-          })`,
+          height: `calc(100vh - 88px)`,
         }}
         spacing={4}
       >
@@ -70,7 +65,11 @@ function AboutTheDev() {
               internship. If you'd like to learn more about me and my work, feel
               free to explore one of my social media profiles provided below.
             </Typography>
-            <Stack direction="row" justifyContent={match ? "left" : "center"}>
+            <Stack
+              direction="row"
+              justifyContent={match ? "left" : "center"}
+              spacing={1}
+            >
               {myLinksWithIcon.map(
                 ({ link, linkTitle, buttonTitle, socialIcon }, index) => (
                   <SocialMedia
