@@ -38,7 +38,10 @@ function useNotes(id?: string | undefined) {
   }, [id]);
 
   const [isCreatingNote, setIsCreatingNote] = useState(false);
-  const createNote = (data: NoteFormData, navigate: NavigateFunction) => {
+  const createNote = (
+    data: NoteFormData & { timezone: string },
+    navigate: NavigateFunction
+  ) => {
     console.log("Note form data", data);
     setIsCreatingNote(true);
     noteService
@@ -54,7 +57,10 @@ function useNotes(id?: string | undefined) {
   };
 
   const [isUpdatingNote, setIsUpdatingNote] = useState(false);
-  const updateNote = (note: NoteFormData, navigate: NavigateFunction) => {
+  const updateNote = (
+    note: NoteFormData & { timezone: string },
+    navigate: NavigateFunction
+  ) => {
     setIsUpdatingNote(true);
     noteService
       .update({

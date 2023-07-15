@@ -124,8 +124,12 @@ function NoteForm({ drawerToggle }: Props) {
   };
 
   const handleOnSubmitNote = (data: NoteFormData) => {
-    if (id === "new") createNote(data, navigate);
-    else updateNote(data, navigate);
+    const withTimezone = {
+      ...data,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+    if (id === "new") createNote(withTimezone, navigate);
+    else updateNote(withTimezone, navigate);
   };
 
   const dateCreated = watch("dateCreated");
@@ -135,11 +139,9 @@ function NoteForm({ drawerToggle }: Props) {
   //   startOfDay(new Date())
   // );
   // console.log("archive note?", past);
-  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <>
-      <p>{userTimezone}</p>
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
