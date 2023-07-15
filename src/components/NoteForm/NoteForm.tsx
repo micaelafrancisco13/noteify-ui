@@ -135,9 +135,11 @@ function NoteForm({ drawerToggle }: Props) {
   //   startOfDay(new Date())
   // );
   // console.log("archive note?", past);
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <>
+      <p>{userTimezone}</p>
       <FormProvider {...useFormMethods}>
         <form
           onSubmit={handleSubmit((data) => {
