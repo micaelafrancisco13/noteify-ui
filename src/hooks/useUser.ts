@@ -11,9 +11,10 @@ function useUser() {
   const { signInUponRegistration } = useAuth();
 
   const createAnAccount = (data: SignUpFormData) => {
+    const { confirmPassword, ...rest } = data;
     setIsCreatingAnAccount(true);
     userService
-      .create(data)
+      .create(rest)
       .then((res) => {
         setIsCreatingAnAccount(false);
         const token = res.headers.authorization;

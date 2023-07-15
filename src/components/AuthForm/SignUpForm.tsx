@@ -29,22 +29,38 @@ const StyledImageContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const schema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }).max(255),
-  lastName: z.string().min(1, { message: "Last name is required" }).max(255),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long",
-  }),
-});
+const schema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, { message: "First name is required" })
+      .max(255),
+    lastName: z.string().min(1, { message: "Last name is required" }).max(255),
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z.string().min(8, {
+      message: "Password must be at least 8 characters long",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export type SignUpFormData = z.infer<typeof schema>;
 
 function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const useFormMethods = useForm<SignUpFormData>({
-    defaultValues: { firstName: "", lastName: "", email: "", password: "" },
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
     resolver: zodResolver(schema),
   });
 
@@ -121,6 +137,22 @@ function SignUpForm() {
                         showPassword={showPassword}
                         hasInput={watch("password") !== ""}
                         setShowPassword={(value) => setShowPassword(value)}
+                      />
+                    ),
+                  }}
+                />
+                <CustomTextField
+                  label="Confirm password"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <PasswordEyeIcon
+                        showPassword={showConfirmPassword}
+                        hasInput={watch("confirmPassword") !== ""}
+                        setShowPassword={(value) =>
+                          setShowConfirmPassword(value)
+                        }
                       />
                     ),
                   }}
