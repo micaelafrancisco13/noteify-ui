@@ -42,7 +42,6 @@ function useNotes(id?: string | undefined) {
     data: NoteFormData & { timezone: string },
     navigate: NavigateFunction
   ) => {
-    console.log("Note form data", data);
     setIsCreatingNote(true);
     noteService
       .create(data)
