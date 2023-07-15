@@ -68,6 +68,7 @@ function useNotes(id?: string | undefined) {
         description: note.description,
         categoryId: note.categoryId,
         upcomingDate: note.upcomingDate,
+        timezone: note.timezone,
       })
       .then(() => {
         setIsUpdatingNote(false);
