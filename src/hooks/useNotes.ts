@@ -39,6 +39,7 @@ function useNotes(id?: string | undefined) {
 
   const [isCreatingNote, setIsCreatingNote] = useState(false);
   const createNote = (data: NoteFormData, navigate: NavigateFunction) => {
+    console.log("Note form data", data);
     setIsCreatingNote(true);
     noteService
       .create(data)
