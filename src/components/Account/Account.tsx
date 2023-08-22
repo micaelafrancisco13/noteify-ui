@@ -1,13 +1,13 @@
 import PersonalDetails from "./PersonalDetails.tsx";
 import EmailDetail from "./EmailDetail.tsx";
 import PasswordDetail from "./PasswordDetail.tsx";
-import {Grid, Stack} from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 interface Props {
     drawerToggle: boolean;
 }
 
-function Account({drawerToggle}: Props) {
+function Account({ drawerToggle }: Props) {
     return (
         <Grid
             container
@@ -23,8 +23,8 @@ function Account({drawerToggle}: Props) {
                 item
                 xs={12}
                 md={6}
-                order={{xs: 1, md: drawerToggle ? 1 : 2, lg: 2}}
-                sx={{width: "100%"}}
+                order={{ xs: 1, md: drawerToggle ? 1 : 2, lg: 2 }}
+                sx={{ width: "100%" }}
             >
                 {/*<DisplayPicture />*/}
             </Grid>
@@ -32,8 +32,8 @@ function Account({drawerToggle}: Props) {
                 item
                 xs={12}
                 md={6}
-                order={{xs: 2, md: drawerToggle ? 2 : 1, lg: 1}}
-                sx={{width: "100%"}}
+                order={{ xs: 2, md: drawerToggle ? 2 : 1, lg: 1 }}
+                sx={{ width: "100%" }}
             >
                 <Stack spacing={8}>
                     <PersonalDetails drawerToggle={drawerToggle}/>

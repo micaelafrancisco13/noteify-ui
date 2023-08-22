@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import useAuth from "../../hooks/useAuth.ts";
 
 function SignOut() {
-  const { signOut } = useAuth();
+    const { signOut } = useAuth();
 
-  useEffect(() => {
-    signOut();
+    useEffect(() => {
+        signOut();
 
-    window.location.assign("/");
-  }, []);
+        window.location.assign("/");
+    }, []);
 
-  return null;
+    return null;
 }
 
 export default SignOut;

@@ -1,27 +1,43 @@
-import authService from "../services/auth-service.ts";
-import {SignInFormData} from "../components/AuthForm/SignInForm.tsx";
-import {useState} from "react";
-import {AxiosError} from "axios";
-import {setJwt} from "../services/api-client.ts";
-import {useKeycloak} from "@react-keycloak/web";
-
-// import keycloakClient from "../services/keycloak-client.ts";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import { setJwt } from "../services/api-client.ts";
+import { UserManager } from "oidc-client-ts";
+import jwtDecode from "jwt-decode";
 
 function useAuth() {
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [error, setError] = useState<AxiosError>();
     const TOKEN_KEY = "keycloak_token";
+    const userManager = new UserManager({
+        authority: "http://localhost:8000",
+        metadata: {
+            authorization_endpoint:
+                "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/auth",
+            token_endpoint:
+                "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/token",
+        },
+        redirect_uri: "http://localhost:5173/callback",
+        client_id: "noteify-react-client",
+    });
 
     setJwt(localStorage.getItem(TOKEN_KEY));
 
-    const signIn = (data: SignInFormData) => {
+    const signIn = () => {
+        console.log("should login");
+        userManager.signinRedirect().then((response) => {
+            console.log(response);
+        });
+    };
+
+    const signInCallback = () => {
         setIsLoggingIn(true);
-        authService
-            .create(data)
-            .then((res) => {
-                localStorage.setItem(TOKEN_KEY, res.data);
+        userManager
+            .signinRedirectCallback()
+            .then((response) => {
+                localStorage.setItem("oidc_response", response.toStorageString());
+                localStorage.setItem(TOKEN_KEY, `${response.token_type} ${response.access_token}`);
                 setIsLoggingIn(false);
-                window.location.assign("/");
+                window.location.assign("/notes");
             })
             .catch((err) => {
                 setError(err);
@@ -29,26 +45,17 @@ function useAuth() {
             });
     };
 
-    const signInUponRegistration = (jwt: string) => {
-        localStorage.setItem(TOKEN_KEY, jwt);
-    };
-    const {keycloak} = useKeycloak();
-
     const signOut = () => {
-        keycloak.logout().then(response => {
-            localStorage.removeItem(TOKEN_KEY);
-        }).catch(exception => {
-
-        })
+        localStorage.removeItem(TOKEN_KEY);
     };
 
     const getCurrentUser = () => {
-        console.log("keycloak.token", keycloak.token);
-        if (keycloak.authenticated) {
-            localStorage.setItem(TOKEN_KEY, `Bearer ${keycloak.token}`);
-            return keycloak.token;
+        try {
+            const token = localStorage.getItem(TOKEN_KEY);
+            if (token) return jwtDecode(token);
+        } catch (ex) {
+            return null;
         }
-        return null;
     };
 
     const authStatusCode = error?.response?.status;
@@ -80,7 +87,7 @@ function useAuth() {
 
     return {
         signIn,
-        signInUponRegistration,
+        signInCallback,
         signOut,
         getCurrentUser,
         isLoggingIn,

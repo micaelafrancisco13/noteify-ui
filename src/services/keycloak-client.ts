@@ -1,4 +1,4 @@
-import Keycloak, {KeycloakInitOptions} from 'keycloak-js';
+import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
 
 export const keycloakConfig = new Keycloak({
     url: 'http://localhost:8000',

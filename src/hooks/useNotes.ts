@@ -5,118 +5,118 @@ import { NoteFormData } from "../components/NoteForm/NoteForm.tsx";
 import { NavigateFunction } from "react-router-dom";
 
 function useNotes(id?: string | undefined) {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [currentNote, setCurrentNote] = useState<Note>();
-  const [error, setError] = useState<AxiosError>();
-  const originalNotes = [...notes];
+    const [notes, setNotes] = useState<Note[]>([]);
+    const [currentNote, setCurrentNote] = useState<Note>();
+    const [error, setError] = useState<AxiosError>();
+    const originalNotes = [...notes];
 
-  const [isFetchingNotes, setIsFetchingNotes] = useState(false);
-  useEffect(() => {
-    setIsFetchingNotes(true);
-    let result;
+    const [isFetchingNotes, setIsFetchingNotes] = useState(false);
+    useEffect(() => {
+        setIsFetchingNotes(true);
+        let result;
 
-    if (!id) result = noteService.getAll<Note>();
-    else result = noteService.getOne<Note>(id);
+        if (!id) result = noteService.getAll<Note>();
+        else result = noteService.getOne<Note>(id);
 
-    if (result) {
-      const { response, cancel } = result;
+        if (result) {
+            const { response, cancel } = result;
 
-      response
-        .then((res) => {
-          if (!id) setNotes(res.data as Note[]);
-          else setCurrentNote(res.data as Note);
-          setIsFetchingNotes(false);
-        })
-        .catch((err) => {
-          if (err instanceof CanceledError) return;
-          setError(err);
-          setIsFetchingNotes(false);
-        });
+            response
+                .then((res) => {
+                    if (!id) setNotes(res.data as Note[]);
+                    else setCurrentNote(res.data as Note);
+                    setIsFetchingNotes(false);
+                })
+                .catch((err) => {
+                    if (err instanceof CanceledError) return;
+                    setError(err);
+                    setIsFetchingNotes(false);
+                });
 
-      return () => cancel();
-    }
-  }, [id]);
+            return () => cancel();
+        }
+    }, [id]);
 
-  const [isCreatingNote, setIsCreatingNote] = useState(false);
-  const createNote = (
-    data: NoteFormData & { timezone: string },
-    navigate: NavigateFunction
-  ) => {
-    setIsCreatingNote(true);
-    noteService
-      .create(data)
-      .then(() => {
-        setIsCreatingNote(false);
-        navigate("/");
-      })
-      .catch((err) => {
-        setIsCreatingNote(false);
-        setError(err);
-      });
-  };
+    const [isCreatingNote, setIsCreatingNote] = useState(false);
+    const createNote = (
+        data: NoteFormData & { timezone: string },
+        navigate: NavigateFunction
+    ) => {
+        setIsCreatingNote(true);
+        noteService
+            .create(data)
+            .then(() => {
+                setIsCreatingNote(false);
+                navigate("/");
+            })
+            .catch((err) => {
+                setIsCreatingNote(false);
+                setError(err);
+            });
+    };
 
-  const [isUpdatingNote, setIsUpdatingNote] = useState(false);
-  const updateNote = (
-    note: NoteFormData & { timezone: string },
-    navigate: NavigateFunction
-  ) => {
-    setIsUpdatingNote(true);
-    noteService
-      .update({
-        _id: note._id,
-        title: note.title,
-        description: note.description,
-        categoryId: note.categoryId,
-        upcomingDate: note.upcomingDate,
-        timezone: note.timezone,
-      })
-      .then(() => {
-        setIsUpdatingNote(false);
-        navigate("/");
-      })
-      .catch((err) => {
-        setIsUpdatingNote(false);
-        setError(err);
-      });
-  };
+    const [isUpdatingNote, setIsUpdatingNote] = useState(false);
+    const updateNote = (
+        note: NoteFormData & { timezone: string },
+        navigate: NavigateFunction
+    ) => {
+        setIsUpdatingNote(true);
+        noteService
+            .update({
+                _id: note._id,
+                title: note.title,
+                description: note.description,
+                categoryId: note.categoryId,
+                upcomingDate: note.upcomingDate,
+                timezone: note.timezone,
+            })
+            .then(() => {
+                setIsUpdatingNote(false);
+                navigate("/");
+            })
+            .catch((err) => {
+                setIsUpdatingNote(false);
+                setError(err);
+            });
+    };
 
-  const [isDeletingNote, setIsDeletingNote] = useState(false);
-  const deleteNote = (idToBeDeleted: string) => {
-    setIsDeletingNote(true);
-    setNotes(notes.filter((n) => n._id !== idToBeDeleted));
-    noteService
-      .delete(idToBeDeleted)
-      .then(() => {
-        setIsDeletingNote(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setNotes(originalNotes);
-        setIsDeletingNote(false);
-      });
-  };
+    const [isDeletingNote, setIsDeletingNote] = useState(false);
+    const deleteNote = (idToBeDeleted: string) => {
+        setIsDeletingNote(true);
+        setNotes(notes.filter((n) => n._id !== idToBeDeleted));
+        noteService
+            .delete(idToBeDeleted)
+            .then(() => {
+                setIsDeletingNote(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setNotes(originalNotes);
+                setIsDeletingNote(false);
+            });
+    };
 
-  const noteErrorMessage = error?.message;
-  const noteStatusCode = error?.response?.status;
+    const noteErrorMessage = error?.message;
+    const noteStatusCode = error?.response?.status;
 
-  return {
-    notes,
-    setNotes,
-    currentNote,
-    isFetchingNotes,
+    return {
+        notes,
+        setNotes,
+        currentNote,
+        isFetchingNotes,
 
-    createNote,
-    isCreatingNote,
+        createNote,
+        isCreatingNote,
 
-    updateNote,
-    isUpdatingNote,
+        updateNote,
+        isUpdatingNote,
 
-    deleteNote,
-    isDeletingNote,
+        deleteNote,
+        isDeletingNote,
 
-    noteErrorMessage,
-    noteStatusCode,
-  };
+        noteErrorMessage,
+        noteStatusCode,
+    };
 }
 
 export default useNotes;

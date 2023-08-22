@@ -11,119 +11,119 @@ import CustomButton from "../custom/CustomButton.tsx";
 import useAccount from "../../hooks/useAccount.ts";
 
 const StyledBox = styled(Box)(() => ({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
 }));
 
 const schema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+    email: z.string().email({ message: "Invalid email address" }),
 });
 
 export type EmailDetailFormData = z.infer<typeof schema>;
 
 interface Props {
-  drawerToggle: boolean;
+    drawerToggle: boolean;
 }
 
 function EmailDetail({ drawerToggle }: Props) {
-  const [isEditable, setIsEditable] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
 
-  const useFormMethods = useForm<EmailDetailFormData>({
-    defaultValues: { email: "" },
-    resolver: zodResolver(schema),
-  });
+    const useFormMethods = useForm<EmailDetailFormData>({
+        defaultValues: { email: "" },
+        resolver: zodResolver(schema),
+    });
 
-  const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
+    const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
 
-  const {
-    accountDetails,
-    updateEmailDetail,
-    isUpdatingEmailDetail,
-    updateEmailDetailError,
-    setUpdateEmailDetailError,
-  } = useAccount();
+    const {
+        accountDetails,
+        updateEmailDetail,
+        isUpdatingEmailDetail,
+        updateEmailDetailError,
+        setUpdateEmailDetailError,
+    } = useAccount();
 
-  useEffect(() => {
-    if (!isEditable) setValue("email", accountDetails.email);
-    else {
-      setFocus("email");
-      setValue("email", "");
-    }
-  }, [accountDetails.email, isEditable]);
+    useEffect(() => {
+        if (!isEditable) setValue("email", accountDetails.email);
+        else {
+            setFocus("email");
+            setValue("email", "");
+        }
+    }, [accountDetails.email, isEditable]);
 
-  const handleOnUpdateUser = (data: EmailDetailFormData) => {
-    setIsEditable(false);
+    const handleOnUpdateUser = (data: EmailDetailFormData) => {
+        setIsEditable(false);
 
-    if (data.email === accountDetails.email) return;
+        if (data.email === accountDetails.email) return;
 
-    updateEmailDetail(data);
-  };
+        updateEmailDetail(data);
+    };
 
-  const errorMessage = (updateEmailDetailError?.response?.data as string)
-    ? (updateEmailDetailError?.response?.data as string)
-    : updateEmailDetailError?.message;
+    const errorMessage = (updateEmailDetailError?.response?.data as string)
+        ? (updateEmailDetailError?.response?.data as string)
+        : updateEmailDetailError?.message;
 
-  return (
-    <Box>
-      <StyledBox>
-        <Typography>Email address</Typography>
-        <IconButton
-          size="small"
-          aria-label="Edit email address"
-          onClick={() => {
-            setIsEditable(!isEditable);
-            reset();
-            setUpdateEmailDetailError(undefined);
-          }}
-        >
-          {!isEditable ? <EditIcon /> : <EditOffIcon />}
-        </IconButton>
-      </StyledBox>
-      <Divider sx={{ my: 1, mb: 4 }} />
-      <FormProvider {...useFormMethods}>
-        <form
-          onSubmit={handleSubmit((data) => handleOnUpdateUser(data))}
-          autoComplete="off"
-          noValidate={true}
-        >
-          <Stack spacing={4}>
-            <Box>
-              <CustomTextField
-                autoComplete="username"
-                label="Email address"
-                name="email"
-                variant="filled"
-                type="email"
-                fullWidth
-                InputProps={{
-                  readOnly: !isEditable,
-                }}
-              />
-              {errorMessage && (
-                <Typography
-                  sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+    return (
+        <Box>
+            <StyledBox>
+                <Typography>Email address</Typography>
+                <IconButton
+                    size="small"
+                    aria-label="Edit email address"
+                    onClick={() => {
+                        setIsEditable(!isEditable);
+                        reset();
+                        setUpdateEmailDetailError(undefined);
+                    }}
                 >
-                  {errorMessage}
-                </Typography>
-              )}
-            </Box>
-            {(isEditable || isUpdatingEmailDetail) && (
-              <CustomButton
-                color="accent_pale_green"
-                type="submit"
-                variant="contained"
-                maxWidth="220px"
-                drawerToggle={drawerToggle}
-              >
-                {isUpdatingEmailDetail ? "Submitting..." : "Submit"}
-              </CustomButton>
-            )}
-          </Stack>
-        </form>
-      </FormProvider>
-    </Box>
-  );
+                    {!isEditable ? <EditIcon/> : <EditOffIcon/>}
+                </IconButton>
+            </StyledBox>
+            <Divider sx={{ my: 1, mb: 4 }}/>
+            <FormProvider {...useFormMethods}>
+                <form
+                    onSubmit={handleSubmit((data) => handleOnUpdateUser(data))}
+                    autoComplete="off"
+                    noValidate={true}
+                >
+                    <Stack spacing={4}>
+                        <Box>
+                            <CustomTextField
+                                autoComplete="username"
+                                label="Email address"
+                                name="email"
+                                variant="filled"
+                                type="email"
+                                fullWidth
+                                InputProps={{
+                                    readOnly: !isEditable,
+                                }}
+                            />
+                            {errorMessage && (
+                                <Typography
+                                    sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+                                >
+                                    {errorMessage}
+                                </Typography>
+                            )}
+                        </Box>
+                        {(isEditable || isUpdatingEmailDetail) && (
+                            <CustomButton
+                                color="accent_pale_green"
+                                type="submit"
+                                variant="contained"
+                                maxWidth="220px"
+                                drawerToggle={drawerToggle}
+                            >
+                                {isUpdatingEmailDetail ? "Submitting..." : "Submit"}
+                            </CustomButton>
+                        )}
+                    </Stack>
+                </form>
+            </FormProvider>
+        </Box>
+    );
 }
 
 export default EmailDetail;
