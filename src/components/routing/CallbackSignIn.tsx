@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useAuth from "../../hooks/useAuth.ts";
 import { Navigate } from "react-router-dom";
 
-function Callback() {
+function CallbackSignIn() {
     const { signInCallback, getCurrentUser } = useAuth();
 
     useEffect(() => {
@@ -18,4 +18,4 @@ function Callback() {
     );
 }
 
-export default Callback;
+export default CallbackSignIn;

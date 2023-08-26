@@ -14,7 +14,7 @@ import LandingPage from "./components/Main/LandingPage.tsx";
 import SignedOutLayout from "./components/Main/SignedOutLayout.tsx";
 import SignUpForm from "./components/AuthForm/SignUpForm.tsx";
 import AboutTheDev from "./components/AboutTheDev/AboutTheDev.tsx";
-import Callback from "./components/routing/Callback.tsx";
+import CallbackSignIn from "./components/routing/CallbackSignIn.tsx";
 import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
 
 function App() {
@@ -55,8 +55,8 @@ function App() {
                 : withLayout(<LandingPage/>),
         },
         {
-            path: "/callback",
-            element: <Callback/>
+            path: "/callback-sign-in",
+            element: <CallbackSignIn/>
         },
         {
             path: "/about-the-developer",
