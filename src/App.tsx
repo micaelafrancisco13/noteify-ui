@@ -16,6 +16,7 @@ import SignUpForm from "./components/AuthForm/SignUpForm.tsx";
 import AboutTheDev from "./components/AboutTheDev/AboutTheDev.tsx";
 import CallbackSignIn from "./components/routing/CallbackSignIn.tsx";
 import PrivateRoutes from "./components/routing/PrivateRoutes.tsx";
+import CallbackSignOut from "./components/routing/CallbackSignOut.tsx";
 
 function App() {
     const [drawerToggle, setDrawerToggle] = useState(false);
@@ -57,6 +58,10 @@ function App() {
         {
             path: "/callback-sign-in",
             element: <CallbackSignIn/>
+        },
+        {
+            path: "/callback-sign-out",
+            element: <CallbackSignOut/>
         },
         {
             path: "/about-the-developer",

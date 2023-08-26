@@ -6,6 +6,7 @@ import jwtDecode from "jwt-decode";
 
 function useAuth() {
     const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [error, setError] = useState<AxiosError>();
     const TOKEN_KEY = "keycloak_token";
     const userManager = new UserManager({
@@ -15,8 +16,10 @@ function useAuth() {
                 "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/auth",
             token_endpoint:
                 "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/token",
+            end_session_endpoint: "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/logout"
         },
         redirect_uri: "http://localhost:5173/callback-sign-in",
+        post_logout_redirect_uri: "http://localhost:5173/callback-sign-out",
         client_id: "noteify-react-client",
     });
 
@@ -24,9 +27,9 @@ function useAuth() {
 
     const signIn = () => {
         console.log("should login");
-        userManager.signinRedirect().then((response) => {
-            console.log(response);
-        });
+        userManager.signinRedirect()
+            .then((response) =>  console.log(response))
+            .catch((exception) => console.log(exception));
     };
 
     const signInCallback = () => {
@@ -47,6 +50,25 @@ function useAuth() {
 
     const signOut = () => {
         localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem("oidc_response");
+        userManager.signoutRedirect()
+            .then((response) =>  console.log(response))
+            .catch((exception) => console.log(exception));
+    };
+
+    const signOutCallback = () => {
+        setIsLoggingOut(true);
+        userManager
+            .signoutRedirectCallback()
+            .then((response) => {
+                console.log(response);
+                setIsLoggingOut(false);
+                window.location.assign("/");
+            })
+            .catch((err) => {
+                setError(err);
+                setIsLoggingOut(false);
+            });
     };
 
     const getCurrentUser = () => {
@@ -89,8 +111,10 @@ function useAuth() {
         signIn,
         signInCallback,
         signOut,
+        signOutCallback,
         getCurrentUser,
         isLoggingIn,
+        isLoggingOut,
         error,
         authStatusCode,
     };
