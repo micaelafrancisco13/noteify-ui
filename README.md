@@ -1,2 +1,3 @@
-﻿# get-done-ui
+﻿# noteify-ui
+
 # vite
