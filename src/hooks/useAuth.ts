@@ -36,7 +36,6 @@ function useAuth() {
         userManager
             .signinRedirectCallback()
             .then((response) => {
-                localStorage.setItem("oidc_response", response.toStorageString());
                 localStorage.setItem(TOKEN_KEY, `${response.token_type} ${response.access_token}`);
                 setIsLoggingIn(false);
                 window.location.assign("/notes");
@@ -49,7 +48,6 @@ function useAuth() {
 
     const signOut = () => {
         localStorage.removeItem(TOKEN_KEY);
-        localStorage.removeItem("oidc_response");
         userManager.signoutRedirect()
             .then((response) =>  console.log(response))
             .catch((exception) => console.log(exception));
