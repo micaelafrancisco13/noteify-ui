@@ -16,7 +16,7 @@ function useAuth() {
             token_endpoint:
                 "http://localhost:8000/realms/noteify-realm/protocol/openid-connect/token",
         },
-        redirect_uri: "http://localhost:5173/callback",
+        redirect_uri: "http://localhost:5173/callback-sign-in",
         client_id: "noteify-react-client",
     });
 
