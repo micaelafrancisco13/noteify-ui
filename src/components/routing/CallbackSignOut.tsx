@@ -6,7 +6,6 @@ function CallbackSignOut() {
     const { signOutCallback } = useAuth();
 
     useEffect(() => {
-        console.log("callback callback")
         signOutCallback();
     }, []);
 

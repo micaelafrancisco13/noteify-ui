@@ -7,7 +7,6 @@ function CallbackSignIn() {
     const { signInCallback, getCurrentUser } = useAuth();
 
     useEffect(() => {
-        console.log("callback callback")
         signInCallback();
     }, []);
 

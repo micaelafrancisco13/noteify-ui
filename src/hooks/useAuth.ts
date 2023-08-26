@@ -26,7 +26,6 @@ function useAuth() {
     setJwt(localStorage.getItem(TOKEN_KEY));
 
     const signIn = () => {
-        console.log("should login");
         userManager.signinRedirect()
             .then((response) =>  console.log(response))
             .catch((exception) => console.log(exception));
@@ -81,31 +80,6 @@ function useAuth() {
     };
 
     const authStatusCode = error?.response?.status;
-
-    // const hasRun = useRef(false);
-    // useEffect(() => {
-    //   if (!keycloakClient) {
-    //     console.log("init");
-    //     keycloakClient.init({
-    //       onLoad: 'check-sso',
-    //       silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-    //       pkceMethod: 'S256',
-    //       checkLoginIframe: false
-    //     })
-    //         .then((authenticated) => {
-    //           if (!authenticated)
-    //             console.log("User is not authenticated!");
-    //           else
-    //             localStorage.setItem(TOKEN_KEY, keycloakClient.token as string);
-    //         })
-    //         .catch(console.error);
-    //   }
-    //
-    // }, [keycloakClient]);
-    //
-    // const redirectSignIn = () => {
-    //   window.location.href = keycloakClient.createLoginUrl();
-    // }
 
     return {
         signIn,
