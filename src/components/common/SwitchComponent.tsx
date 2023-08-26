@@ -1,24 +1,24 @@
 import { FormControlLabel, Switch } from "@mui/material";
 
 interface Props {
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
+    label: string;
+    checked: boolean;
+    onChange: (value: boolean) => void;
 }
 
 function SwitchComponent({ label, checked, onChange }: Props) {
-  return (
-    <FormControlLabel
-      control={
-        <Switch
-          checked={checked}
-          onChange={(event) => onChange(event.target.checked)}
-          inputProps={{ "aria-label": label }}
+    return (
+        <FormControlLabel
+            control={
+                <Switch
+                    checked={checked}
+                    onChange={(event) => onChange(event.target.checked)}
+                    inputProps={{ "aria-label": label }}
+                />
+            }
+            label={label}
         />
-      }
-      label={label}
-    />
-  );
+    );
 }
 
 export default SwitchComponent;

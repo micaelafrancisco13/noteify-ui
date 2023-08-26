@@ -11,132 +11,132 @@ import useAccount from "../../hooks/useAccount.ts";
 import CustomButton from "../custom/CustomButton.tsx";
 
 const StyledBox = styled(Box)(() => ({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
 }));
 
 const schema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }).max(255),
-  lastName: z.string().min(1, { message: "Last name is required" }).max(255),
+    firstName: z.string().min(1, { message: "First name is required" }).max(255),
+    lastName: z.string().min(1, { message: "Last name is required" }).max(255),
 });
 
 export type PersonalDetailsFormData = z.infer<typeof schema>;
 
 interface Props {
-  drawerToggle: boolean;
+    drawerToggle: boolean;
 }
 
 function PersonalDetails({ drawerToggle }: Props) {
-  const [isEditable, setIsEditable] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
 
-  const useFormMethods = useForm<PersonalDetailsFormData>({
-    defaultValues: { firstName: "", lastName: "" },
-    resolver: zodResolver(schema),
-  });
+    const useFormMethods = useForm<PersonalDetailsFormData>({
+        defaultValues: { firstName: "", lastName: "" },
+        resolver: zodResolver(schema),
+    });
 
-  const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
+    const { handleSubmit, setValue, reset, setFocus } = useFormMethods;
 
-  const {
-    accountDetails,
-    updatePersonalDetails,
-    isUpdatingPersonalDetails,
-    updatePersonalDetailsError,
-    setUpdatePersonalDetailsError,
-  } = useAccount();
+    const {
+        accountDetails,
+        updatePersonalDetails,
+        isUpdatingPersonalDetails,
+        updatePersonalDetailsError,
+        setUpdatePersonalDetailsError,
+    } = useAccount();
 
-  useEffect(() => {
-    if (!isEditable) {
-      setValue("firstName", accountDetails.firstName);
-      setValue("lastName", accountDetails.lastName);
-    } else {
-      setFocus("firstName");
-      setValue("firstName", "");
-      setValue("lastName", "");
-    }
-  }, [accountDetails.firstName, accountDetails.lastName, isEditable]);
+    useEffect(() => {
+        if (!isEditable) {
+            setValue("firstName", accountDetails.firstName);
+            setValue("lastName", accountDetails.lastName);
+        } else {
+            setFocus("firstName");
+            setValue("firstName", "");
+            setValue("lastName", "");
+        }
+    }, [accountDetails.firstName, accountDetails.lastName, isEditable]);
 
-  const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
-    setIsEditable(false);
+    const handleOnUpdateUser = (data: PersonalDetailsFormData) => {
+        setIsEditable(false);
 
-    if (
-      data.firstName === accountDetails.firstName &&
-      data.lastName === accountDetails.lastName
-    )
-      return;
+        if (
+            data.firstName === accountDetails.firstName &&
+            data.lastName === accountDetails.lastName
+        )
+            return;
 
-    updatePersonalDetails(data);
-  };
+        updatePersonalDetails(data);
+    };
 
-  const errorMessage = (updatePersonalDetailsError?.response?.data as string)
-    ? (updatePersonalDetailsError?.response?.data as string)
-    : updatePersonalDetailsError?.message;
+    const errorMessage = (updatePersonalDetailsError?.response?.data as string)
+        ? (updatePersonalDetailsError?.response?.data as string)
+        : updatePersonalDetailsError?.message;
 
-  return (
-    <Box>
-      <StyledBox>
-        <Typography>Personal Details</Typography>
-        <IconButton
-          size="small"
-          aria-label="Edit personal details"
-          onClick={() => {
-            setIsEditable(!isEditable);
-            reset();
-            setUpdatePersonalDetailsError(undefined);
-          }}
-        >
-          {!isEditable ? <EditIcon /> : <EditOffIcon />}
-        </IconButton>
-      </StyledBox>
-      <Divider sx={{ my: 1, mb: 4 }} />
-      <FormProvider {...useFormMethods}>
-        <form
-          onSubmit={handleSubmit((data) => handleOnUpdateUser(data))}
-          autoComplete="off"
-        >
-          <Stack spacing={4}>
-            <CustomTextField
-              label="First name"
-              name="firstName"
-              variant="filled"
-              InputProps={{
-                readOnly: !isEditable,
-              }}
-            />
-            <Box>
-              <CustomTextField
-                label="Last name"
-                name="lastName"
-                variant="filled"
-                fullWidth
-                InputProps={{
-                  readOnly: !isEditable,
-                }}
-              />
-              {errorMessage && (
-                <Typography
-                  sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+    return (
+        <Box>
+            <StyledBox>
+                <Typography>Personal Details</Typography>
+                <IconButton
+                    size="small"
+                    aria-label="Edit personal details"
+                    onClick={() => {
+                        setIsEditable(!isEditable);
+                        reset();
+                        setUpdatePersonalDetailsError(undefined);
+                    }}
                 >
-                  {errorMessage}
-                </Typography>
-              )}
-            </Box>
-            {(isEditable || isUpdatingPersonalDetails) && (
-              <CustomButton
-                color="accent_pale_green"
-                type="submit"
-                variant="contained"
-                maxWidth="220px"
-                drawerToggle={drawerToggle}
-              >
-                {isUpdatingPersonalDetails ? "Submitting..." : "Submit"}
-              </CustomButton>
-            )}
-          </Stack>
-        </form>
-      </FormProvider>
-    </Box>
-  );
+                    {!isEditable ? <EditIcon/> : <EditOffIcon/>}
+                </IconButton>
+            </StyledBox>
+            <Divider sx={{ my: 1, mb: 4 }}/>
+            <FormProvider {...useFormMethods}>
+                <form
+                    onSubmit={handleSubmit((data) => handleOnUpdateUser(data))}
+                    autoComplete="off"
+                >
+                    <Stack spacing={4}>
+                        <CustomTextField
+                            label="First name"
+                            name="firstName"
+                            variant="filled"
+                            InputProps={{
+                                readOnly: !isEditable,
+                            }}
+                        />
+                        <Box>
+                            <CustomTextField
+                                label="Last name"
+                                name="lastName"
+                                variant="filled"
+                                fullWidth
+                                InputProps={{
+                                    readOnly: !isEditable,
+                                }}
+                            />
+                            {errorMessage && (
+                                <Typography
+                                    sx={{ fontSize: "13px", color: "error.main", my: 1 }}
+                                >
+                                    {errorMessage}
+                                </Typography>
+                            )}
+                        </Box>
+                        {(isEditable || isUpdatingPersonalDetails) && (
+                            <CustomButton
+                                color="accent_pale_green"
+                                type="submit"
+                                variant="contained"
+                                maxWidth="220px"
+                                drawerToggle={drawerToggle}
+                            >
+                                {isUpdatingPersonalDetails ? "Submitting..." : "Submit"}
+                            </CustomButton>
+                        )}
+                    </Stack>
+                </form>
+            </FormProvider>
+        </Box>
+    );
 }
 
 export default PersonalDetails;

@@ -6,139 +6,139 @@ import { EmailDetailFormData } from "../components/Account/EmailDetail.tsx";
 import { PasswordDetailFormData } from "../components/Account/PasswordDetail.tsx";
 
 function useAccount() {
-  const [accountDetails, setAccountDetails] = useState<Account>({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
-  const [isFetchingAccountDetails, setIsFetchingAccountDetails] =
-    useState(false);
-  const [error, setError] = useState<AxiosError>();
-  const originalAccountDetails = { ...accountDetails };
+    const [accountDetails, setAccountDetails] = useState<Account>({
+        firstName: "",
+        lastName: "",
+        email: "",
+    });
+    const [isFetchingAccountDetails, setIsFetchingAccountDetails] =
+        useState(false);
+    const [error, setError] = useState<AxiosError>();
+    const originalAccountDetails = { ...accountDetails };
 
-  useEffect(() => {
-    setIsFetchingAccountDetails(true);
-    const result = accountService.getOne<Account>();
-    if (result) {
-      const { response, cancel } = result;
+    useEffect(() => {
+        setIsFetchingAccountDetails(true);
+        const result = accountService.getOne<Account>();
+        if (result) {
+            const { response, cancel } = result;
 
-      response
-        .then((res) => {
-          setAccountDetails(res.data);
-          setIsFetchingAccountDetails(false);
-        })
-        .catch((err) => {
-          setError(err);
-          setIsFetchingAccountDetails(false);
+            response
+                .then((res) => {
+                    setAccountDetails(res.data);
+                    setIsFetchingAccountDetails(false);
+                })
+                .catch((err) => {
+                    setError(err);
+                    setIsFetchingAccountDetails(false);
+                });
+
+            return () => cancel();
+        }
+    }, []);
+
+    const [isUpdatingPersonalDetails, setIsUpdatingPersonalDetails] =
+        useState(false);
+    const [updatePersonalDetailsError, setUpdatePersonalDetailsError] =
+        useState<AxiosError>();
+    const updatePersonalDetails = (data: PersonalDetailsFormData) => {
+        setIsUpdatingPersonalDetails(true);
+        setAccountDetails({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: accountDetails.email,
         });
 
-      return () => cancel();
-    }
-  }, []);
+        accountService
+            .update({
+                _id: "personal",
+                ...data,
+            })
+            .then((res) => {
+                setAccountDetails(res.data);
+                setIsUpdatingPersonalDetails(false);
+            })
+            .catch((err) => {
+                setAccountDetails(originalAccountDetails);
+                setUpdatePersonalDetailsError(err);
+                setIsUpdatingPersonalDetails(false);
+            });
+    };
 
-  const [isUpdatingPersonalDetails, setIsUpdatingPersonalDetails] =
-    useState(false);
-  const [updatePersonalDetailsError, setUpdatePersonalDetailsError] =
-    useState<AxiosError>();
-  const updatePersonalDetails = (data: PersonalDetailsFormData) => {
-    setIsUpdatingPersonalDetails(true);
-    setAccountDetails({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: accountDetails.email,
-    });
+    const [isUpdatingEmailDetail, setIsUpdatingEmailDetail] = useState(false);
+    const [updateEmailDetailError, setUpdateEmailDetailError] =
+        useState<AxiosError>();
+    const updateEmailDetail = (data: EmailDetailFormData) => {
+        setIsUpdatingEmailDetail(true);
+        setAccountDetails({
+            firstName: accountDetails.firstName,
+            lastName: accountDetails.lastName,
+            email: data.email,
+        });
 
-    accountService
-      .update({
-        _id: "personal",
-        ...data,
-      })
-      .then((res) => {
-        setAccountDetails(res.data);
-        setIsUpdatingPersonalDetails(false);
-      })
-      .catch((err) => {
-        setAccountDetails(originalAccountDetails);
-        setUpdatePersonalDetailsError(err);
-        setIsUpdatingPersonalDetails(false);
-      });
-  };
+        accountService
+            .update({
+                _id: "email",
+                ...data,
+            })
+            .then((res) => {
+                setAccountDetails(res.data);
+                setIsUpdatingEmailDetail(false);
+            })
+            .catch((err) => {
+                setAccountDetails(originalAccountDetails);
+                setUpdateEmailDetailError(err);
+                setIsUpdatingEmailDetail(false);
+            });
+    };
 
-  const [isUpdatingEmailDetail, setIsUpdatingEmailDetail] = useState(false);
-  const [updateEmailDetailError, setUpdateEmailDetailError] =
-    useState<AxiosError>();
-  const updateEmailDetail = (data: EmailDetailFormData) => {
-    setIsUpdatingEmailDetail(true);
-    setAccountDetails({
-      firstName: accountDetails.firstName,
-      lastName: accountDetails.lastName,
-      email: data.email,
-    });
+    const [isUpdatingPasswordDetail, setIsUpdatingPasswordDetail] =
+        useState(false);
+    const [updatePasswordDetailError, setUpdatePasswordDetailError] =
+        useState<AxiosError>();
+    const [passwordChangedSuccessPrompt, setPasswordChangedSuccessPrompt] =
+        useState("");
+    const updatePasswordDetail = (data: PasswordDetailFormData) => {
+        setIsUpdatingPasswordDetail(true);
 
-    accountService
-      .update({
-        _id: "email",
-        ...data,
-      })
-      .then((res) => {
-        setAccountDetails(res.data);
-        setIsUpdatingEmailDetail(false);
-      })
-      .catch((err) => {
-        setAccountDetails(originalAccountDetails);
-        setUpdateEmailDetailError(err);
-        setIsUpdatingEmailDetail(false);
-      });
-  };
+        accountService
+            .update({
+                _id: "password",
+                ...data,
+            })
+            .then(() => {
+                setIsUpdatingPasswordDetail(false);
+                setPasswordChangedSuccessPrompt("Password was successfully changed!");
+            })
+            .catch((err) => {
+                setUpdatePasswordDetailError(err);
+                setIsUpdatingPasswordDetail(false);
+            });
+    };
 
-  const [isUpdatingPasswordDetail, setIsUpdatingPasswordDetail] =
-    useState(false);
-  const [updatePasswordDetailError, setUpdatePasswordDetailError] =
-    useState<AxiosError>();
-  const [passwordChangedSuccessPrompt, setPasswordChangedSuccessPrompt] =
-    useState("");
-  const updatePasswordDetail = (data: PasswordDetailFormData) => {
-    setIsUpdatingPasswordDetail(true);
+    const firstNameInitial = accountDetails?.firstName[0];
 
-    accountService
-      .update({
-        _id: "password",
-        ...data,
-      })
-      .then(() => {
-        setIsUpdatingPasswordDetail(false);
-        setPasswordChangedSuccessPrompt("Password was successfully changed!");
-      })
-      .catch((err) => {
-        setUpdatePasswordDetailError(err);
-        setIsUpdatingPasswordDetail(false);
-      });
-  };
+    return {
+        accountDetails,
+        isFetchingAccountDetails,
+        error,
+        firstNameInitial,
 
-  const firstNameInitial = accountDetails?.firstName[0];
+        updatePersonalDetails,
+        isUpdatingPersonalDetails,
+        updatePersonalDetailsError,
+        setUpdatePersonalDetailsError,
 
-  return {
-    accountDetails,
-    isFetchingAccountDetails,
-    error,
-    firstNameInitial,
+        updateEmailDetail,
+        isUpdatingEmailDetail,
+        updateEmailDetailError,
+        setUpdateEmailDetailError,
 
-    updatePersonalDetails,
-    isUpdatingPersonalDetails,
-    updatePersonalDetailsError,
-    setUpdatePersonalDetailsError,
-
-    updateEmailDetail,
-    isUpdatingEmailDetail,
-    updateEmailDetailError,
-    setUpdateEmailDetailError,
-
-    updatePasswordDetail,
-    isUpdatingPasswordDetail,
-    updatePasswordDetailError,
-    setUpdatePasswordDetailError,
-    passwordChangedSuccessPrompt,
-  };
+        updatePasswordDetail,
+        isUpdatingPasswordDetail,
+        updatePasswordDetailError,
+        setUpdatePasswordDetailError,
+        passwordChangedSuccessPrompt,
+    };
 }
 
 export default useAccount;

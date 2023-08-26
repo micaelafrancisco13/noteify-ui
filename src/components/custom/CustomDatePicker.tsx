@@ -5,45 +5,45 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 type Props = DatePickerProps<Date> & {
-  label: string;
-  name?: string;
-  past?: boolean;
+    label: string;
+    name?: string;
+    past?: boolean;
 };
 
 function CustomDatePicker(props: Props) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+    const {
+        control,
+        formState: { errors },
+    } = useFormContext();
 
-  const fieldName = props.name ? props.name : props.label.toLowerCase();
-  const hasError = Boolean(errors[fieldName]);
+    const fieldName = props.name ? props.name : props.label.toLowerCase();
+    const hasError = Boolean(errors[fieldName]);
 
-  return (
-    <Controller
-      name={fieldName}
-      render={({ field }) => (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              {...field}
-              {...props}
-              slotProps={{
-                textField: {
-                  error: hasError,
-                  helperText: hasError
-                    ? `${errors[fieldName]?.message}.`
-                    : null,
-                },
-              }}
-              readOnly={props.past}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-      )}
-      control={control}
-    />
-  );
+    return (
+        <Controller
+            name={fieldName}
+            render={({ field }) => (
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                            {...field}
+                            {...props}
+                            slotProps={{
+                                textField: {
+                                    error: hasError,
+                                    helperText: hasError
+                                        ? `${errors[fieldName]?.message}.`
+                                        : null,
+                                },
+                            }}
+                            readOnly={props.past}
+                        />
+                    </DemoContainer>
+                </LocalizationProvider>
+            )}
+            control={control}
+        />
+    );
 }
 
 export default CustomDatePicker;
